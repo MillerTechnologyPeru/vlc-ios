@@ -23,7 +23,8 @@ extension Notification.Name {
     static let VLCDisableGroupingDidChangeNotification = Notification.Name("disableGroupingDidChangeNotfication")
 }
 
-class SettingsController: UITableViewController {
+@ObjCImplementation(extensions: ["Extension"])
+class SettingsController: UITableViewControllerMethods {
     private let cellReuseIdentifier = "settingsCell"
     private let sectionHeaderReuseIdentifier = "sectionHeaderReuseIdentifier"
     private let sectionFooterReuseIdentifier = "sectionFooterReuseIdentifier"
@@ -50,29 +51,25 @@ class SettingsController: UITableViewController {
         return PresentationTheme.current.colors.statusBarStyle
     }
 
-    @objc init(mediaLibraryService: MediaLibraryService) {
+    init(mediaLibraryService: MediaLibraryService) {
         self.mediaLibraryService = mediaLibraryService
-        super.init(style: .grouped)
+        objcInit("initWithStyle:", .grouped)
         self.mediaLibraryService.deviceBackupDelegate = self
         setupTabBarItem()
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     deinit {
         SettingsSpecifierCache.purge()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         setup()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
         PlaybackService.sharedInstance().playerDisplayController.isMiniPlayerVisible ? miniPlayerIsShown() : miniPlayerIsHidden()
     }
 
@@ -111,19 +108,19 @@ class SettingsController: UITableViewController {
 
     private func addObservers() {
         notificationCenter.addObserver(self,
-                                       selector: #selector(reloadSettingsSections),
+                                       selector: ObjC.selector("reloadSettingsSections"),
                                        name: UserDefaults.didChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(themeDidChange),
+                                       selector: ObjC.selector("themeDidChange"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsShown),
+                                       selector: ObjC.selector("miniPlayerIsShown"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerDisplayMiniPlayer),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsHidden),
+                                       selector: ObjC.selector("miniPlayerIsHidden"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerHideMiniPlayer),
                                        object: nil)
     }
@@ -141,14 +138,14 @@ class SettingsController: UITableViewController {
         if navigationController?.presentingViewController != nil {
             let closeButton = UIBarButtonItem(barButtonSystemItem: .close,
                                               target: self,
-                                              action: #selector(dismissSettings))
+                                              action: ObjC.selector("dismissSettings"))
             closeButton.tintColor = PresentationTheme.current.colors.orangeUI
             closeButton.accessibilityIdentifier = VLCAccessibilityIdentifier.done
             navigationItem.leftBarButtonItem = closeButton
         }
     }
 
-    @objc private func dismissSettings() {
+    @ObjCMethod private func dismissSettings() {
         dismiss(animated: true)
     }
 
@@ -162,7 +159,7 @@ class SettingsController: UITableViewController {
 
     // MARK: - Observer & BarButton Actions
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         view.backgroundColor = PresentationTheme.current.colors.background
         setNavBarAppearance()
 #if os(iOS)
@@ -178,14 +175,14 @@ class SettingsController: UITableViewController {
         reloadSettingsSections()
     }
 
-    @objc private func miniPlayerIsShown() {
+    @ObjCMethod private func miniPlayerIsShown() {
         tableView.contentInset = UIEdgeInsets(top: 0,
                                               left: 0,
                                               bottom: CGFloat(AudioMiniPlayer.height),
                                               right: 0)
     }
 
-    @objc private func miniPlayerIsHidden() {
+    @ObjCMethod private func miniPlayerIsHidden() {
         tableView.contentInset = UIEdgeInsets(top: 0,
                                               left: 0,
                                               bottom: 0,
@@ -386,8 +383,9 @@ class SettingsController: UITableViewController {
     }
 }
 
+@ObjCExtension("Extension")
 extension SettingsController {
-    @objc func reloadSettingsSections() {
+    @ObjCMethod func reloadSettingsSections() {
         settingsSections = SettingsSection
             .sections(isLabActivated: isLabActivated,
                       isBackingUp: isBackingUp,
@@ -395,15 +393,15 @@ extension SettingsController {
                       isTapSwipeEqual: userDefaults.bool(forKey: kVLCSettingPlaybackTapSwipeEqual))
     }
 
-    override func numberOfSections(in _: UITableView) -> Int {
+    @ObjCMethod("numberOfSectionsInTableView:") func numberOfSections(in _: UITableView) -> Int {
         settingsSections.count
     }
 
-    override func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
         settingsSections[section].items.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as? SettingsCell else {
             return UITableViewCell()
         }
@@ -417,7 +415,7 @@ extension SettingsController {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
         let section = settingsSections[indexPath.section]
@@ -449,7 +447,7 @@ extension SettingsController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    @ObjCMethod("tableView:viewForHeaderInSection:") func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderReuseIdentifier) as? SettingsHeaderView,
               let title = settingsSections[section].title else {
             return nil
@@ -459,7 +457,7 @@ extension SettingsController {
         return headerView
     }
 
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    @ObjCMethod("tableView:viewForFooterInSection:") func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionFooterReuseIdentifier) as? SettingsFooterView else {
             return nil
         }
@@ -468,19 +466,19 @@ extension SettingsController {
         return section == tableView.numberOfSections - 1 ? nil : footerView
     }
 
-    override func tableView(_: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    @ObjCMethod("tableView:heightForHeaderInSection:") func tableView(_: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return settingsSections[section].title != nil ? 64 : 0
     }
 
-    override func tableView(_: UITableView, heightForFooterInSection _: Int) -> CGFloat {
+    @ObjCMethod("tableView:heightForFooterInSection:") func tableView(_: UITableView, heightForFooterInSection _: Int) -> CGFloat {
         return 25
     }
 
-    override func tableView(_: UITableView, estimatedHeightForRowAt _: IndexPath) -> CGFloat {
+    @ObjCMethod("tableView:estimatedHeightForRowAtIndexPath:") func tableView(_: UITableView, estimatedHeightForRowAt _: IndexPath) -> CGFloat {
         return 64
     }
 
-    override func tableView(_: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    @ObjCMethod("tableView:heightForRowAtIndexPath:") func tableView(_: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         SettingsCell.height(for: settingsSections[indexPath.section].items[indexPath.item],
                             width: tableView.bounds.width)
     }
