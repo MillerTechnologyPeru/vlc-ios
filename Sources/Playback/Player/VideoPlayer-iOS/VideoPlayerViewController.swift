@@ -16,16 +16,15 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-@objc(VLCVideoPlayerViewControllerDelegate)
 protocol VideoPlayerViewControllerDelegate: AnyObject {
     func videoPlayerViewControllerDidMinimize(_ videoPlayerViewController: VideoPlayerViewController)
     func videoPlayerViewControllerShouldBeDisplayed(_ videoPlayerViewController: VideoPlayerViewController) -> Bool
     func videoPlayerViewControllerShouldSwitchPlayer(_ videoPlayerViewController: VideoPlayerViewController)
 }
 
-@objc(VLCVideoPlayerViewController)
+@ObjCImplementation("VLCVideoPlayerViewController", protocols: ["UIDocumentPickerDelegate"], extensions: ["Extension", "Extension2", "UIDocumentPickerDelegate"])
 class VideoPlayerViewController: PlayerViewController {
-    @objc weak var delegate: VideoPlayerViewControllerDelegate?
+    weak var delegate: VideoPlayerViewControllerDelegate?
 
     // MARK: - Constants
 
@@ -47,7 +46,7 @@ class VideoPlayerViewController: PlayerViewController {
 
     private var orientations = UIInterfaceOrientationMask.allButUpsideDown
 
-    @objc override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         get { return self.orientations }
         set { self.orientations = newValue }
     }
@@ -204,7 +203,7 @@ class VideoPlayerViewController: PlayerViewController {
         switchControlUtility.isUserInteractionEnabled = true
         switchControlUtility.isAccessibilityElement = true
         switchControlUtility.addTarget(self,
-                                       action: #selector(handleTapOnVideo),
+                                       action: ObjC.selector("handleTapOnVideo"),
                                        for: .touchUpInside)
 
         return switchControlUtility
@@ -221,14 +220,14 @@ class VideoPlayerViewController: PlayerViewController {
 
     private lazy var tapOnVideoRecognizer: UITapGestureRecognizer = {
         let tapOnVideoRecognizer = UITapGestureRecognizer(target: self,
-                                                          action: #selector(handleTapOnVideo))
+                                                          action: ObjC.selector("handleTapOnVideo"))
         tapOnVideoRecognizer.require(toFail: doubleTapGestureRecognizer)
         return tapOnVideoRecognizer
     }()
 
     private lazy var upSwipeRecognizer: UISwipeGestureRecognizer = {
         var upSwipeRecognizer = UISwipeGestureRecognizer(target: self,
-                                                         action: #selector(handleSwipeGestures(recognizer:)))
+                                                         action: ObjC.selector("handleSwipeGesturesRecognizer:"))
         upSwipeRecognizer.direction = .up
         upSwipeRecognizer.numberOfTouchesRequired = 2
         return upSwipeRecognizer
@@ -236,19 +235,19 @@ class VideoPlayerViewController: PlayerViewController {
 
     private lazy var downSwipeRecognizer: UISwipeGestureRecognizer = {
         var downSwipeRecognizer = UISwipeGestureRecognizer(target: self,
-                                                           action: #selector(handleSwipeGestures(recognizer:)))
+                                                           action: ObjC.selector("handleSwipeGesturesRecognizer:"))
         downSwipeRecognizer.direction = .down
         downSwipeRecognizer.numberOfTouchesRequired = 2
         return downSwipeRecognizer
     }()
 
     private lazy var longPressGestureRecognizer: UILongPressGestureRecognizer = {
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: ObjC.selector("handleLongPressGesture:"))
         return longPressRecognizer
     }()
 
     private lazy var snapshotTapRecognizer: UITapGestureRecognizer = {
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(handleSnapshotGesture(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: ObjC.selector("handleSnapshotGesture:"))
         recognizer.numberOfTouchesRequired = 3
         return recognizer
     }()
@@ -267,7 +266,7 @@ class VideoPlayerViewController: PlayerViewController {
     // MARK: - Init methods
 
 #if os(iOS)
-    @objc init(mediaLibraryService: MediaLibraryService,
+    init(mediaLibraryService: MediaLibraryService,
                rendererDiscovererManager: VLCRendererDiscovererManager,
                playerController: PlayerController) {
         super.init(mediaLibraryService: mediaLibraryService,
@@ -283,7 +282,7 @@ class VideoPlayerViewController: PlayerViewController {
         volumeControlView.delegate = self
     }
 #else
-    @objc override init(mediaLibraryService: MediaLibraryService, playerController: PlayerController) {
+    override init(mediaLibraryService: MediaLibraryService, playerController: PlayerController) {
         super.init(mediaLibraryService: mediaLibraryService, playerController: playerController)
 
         self.playerController.delegate = self
@@ -291,9 +290,6 @@ class VideoPlayerViewController: PlayerViewController {
     }
 #endif
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -372,8 +368,8 @@ class VideoPlayerViewController: PlayerViewController {
 #endif
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @ObjCMethod("viewWillDisappear:") func viewWillDisappear(_ animated: Bool) {
+        callSuper("viewWillDisappear:", animated)
         if playbackService.videoOutputView == videoOutputView && !playbackService.isPlayingOnExternalScreen() {
             playbackService.videoOutputView = nil
         }
@@ -484,37 +480,37 @@ class VideoPlayerViewController: PlayerViewController {
             .create(name: NSLocalizedString("PLAY_PAUSE_BUTTON", comment: ""),
                     image: UIImage(systemName: "playpause"),
                     target: self,
-                    selector: #selector(handleAccessibilityPlayPause))
+                    selector: ObjC.selector("handleAccessibilityPlayPause"))
 
         let close = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("STOP_BUTTON", comment: ""),
                     image: UIImage(systemName: "xmark"),
                     target: self,
-                    selector: #selector(handleAccessibilityClose))
+                    selector: ObjC.selector("handleAccessibilityClose"))
 
         let forward = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("FWD_BUTTON", comment: ""),
                     image: UIImage(systemName: "plus.arrow.trianglehead.clockwise"),
                     target: self,
-                    selector: #selector(handleAccessibilityForward))
+                    selector: ObjC.selector("handleAccessibilityForward"))
 
         let backward = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("BWD_BUTTON", comment: ""),
                     image: UIImage(systemName: "minus.arrow.trianglehead.counterclockwise"),
                     target: self,
-                    selector: #selector(handleAccessibilityBackward))
+                    selector: ObjC.selector("handleAccessibilityBackward"))
 
         let next = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("NEXT_HINT", comment: ""),
                     image: UIImage(systemName: "forward.end"),
                     target: self,
-                    selector: #selector(handleAccessibilityNext))
+                    selector: ObjC.selector("handleAccessibilityNext"))
 
         let prev = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("PREVIOUS_HINT", comment: ""),
                     image: UIImage(systemName: "backward.end"),
                     target: self,
-                    selector: #selector(handleAccessibilityPrev))
+                    selector: ObjC.selector("handleAccessibilityPrev"))
 
 
         accessibilityCustomActions = [playPause, close, forward, backward, next, prev]
@@ -584,7 +580,7 @@ class VideoPlayerViewController: PlayerViewController {
         playModeUpdated()
     }
 
-    @objc func setupQueueViewController(qvc: QueueViewController) {
+    @ObjCMethod func setupQueueViewController(qvc: QueueViewController) {
         queueViewController = qvc
         queueViewController?.delegate = self
     }
@@ -746,39 +742,39 @@ class VideoPlayerViewController: PlayerViewController {
 
     // MARK: - Accessibility
 
-    @objc private func handleAccessibilityPlayPause() -> Bool {
+    @ObjCMethod private func handleAccessibilityPlayPause() -> Bool {
         togglePlayPause()
         return true
     }
 
-    @objc private func handleAccessibilityClose() -> Bool {
+    @ObjCMethod private func handleAccessibilityClose() -> Bool {
         playbackService.stopPlayback()
         return true
     }
 
-    @objc private func handleAccessibilityForward() -> Bool {
+    @ObjCMethod private func handleAccessibilityForward() -> Bool {
         jumpForwards()
         return true
     }
 
-    @objc private func handleAccessibilityBackward() -> Bool {
+    @ObjCMethod private func handleAccessibilityBackward() -> Bool {
         jumpBackwards()
         return true
     }
 
-    @objc private func handleAccessibilityNext() -> Bool {
+    @ObjCMethod private func handleAccessibilityNext() -> Bool {
         playbackService.next()
         return true
     }
 
-    @objc private func handleAccessibilityPrev() -> Bool {
+    @ObjCMethod private func handleAccessibilityPrev() -> Bool {
         playbackService.previous()
         return true
     }
 
     // MARK: - Gesture handlers
 
-    @objc override func handlePinchGesture(recognizer: UIPinchGestureRecognizer) {
+    @ObjCMethod override func handlePinchGesture(recognizer: UIPinchGestureRecognizer) {
         if playbackService.currentMediaIs360Video {
             let zoom: CGFloat = MediaProjection.FOV.default * -(ZOOM_SENSITIVITY * recognizer.velocity / view.bounds.width)
             if playbackService.updateViewpoint(0, pitch: 0,
@@ -839,7 +835,7 @@ class VideoPlayerViewController: PlayerViewController {
         super.handleSwipeGestures(recognizer: recognizer)
     }
 
-    @objc func handleTapOnVideo() {
+    @ObjCMethod func handleTapOnVideo() {
         dismissOverlayCard()
 
         if UserDefaults.standard.bool(forKey: kVLCSettingPauseWhenShowingControls) && playbackService.isPlaying {
@@ -851,7 +847,7 @@ class VideoPlayerViewController: PlayerViewController {
         setControlsHidden(!playerController.isControlsHidden, animated: true)
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if playbackService.isPlaying && playerController.isControlsHidden && overlayCardView == nil {
             setControlsHidden(false, animated: true)
         }
@@ -859,7 +855,7 @@ class VideoPlayerViewController: PlayerViewController {
         videoPlayerButtons()
     }
 
-    @objc private func handleLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
+    @ObjCMethod private func handleLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
         guard playerController.isSpeedUpGestureEnabled,
               playbackService.isPlaying else {
             return
@@ -908,7 +904,7 @@ class VideoPlayerViewController: PlayerViewController {
 
     // MARK: - Snapshot Gesture
 
-    @objc private func handleSnapshotGesture(_ sender: UITapGestureRecognizer) {
+    @ObjCMethod private func handleSnapshotGesture(_ sender: UITapGestureRecognizer) {
         guard UserDefaults.standard.bool(forKey: kVLCSettingSnapshotGesture) else { return }
 
         playbackService.saveSnapshot { [weak self] success, error in
@@ -943,7 +939,7 @@ class VideoPlayerViewController: PlayerViewController {
     }
 
 #if os(iOS)
-    @objc func systemVolumeDidChange(notification: NSNotification) {
+    @ObjCMethod func systemVolumeDidChange(notification: NSNotification) {
         let volumelevel = notification.userInfo?["AVSystemController_AudioVolumeNotificationParameter"]
         UIView.transition(with: volumeControlView, duration: 0.4,
                           options: .transitionCrossDissolve,
@@ -956,8 +952,8 @@ class VideoPlayerViewController: PlayerViewController {
 
     // MARK: - Public helpers
 
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
+    @ObjCMethod("viewSafeAreaInsetsDidChange") func viewSafeAreaInsetsDidChange() {
+        callSuper("viewSafeAreaInsetsDidChange")
 
         if UIDevice.current.userInterfaceIdiom != .phone {
             return
@@ -1014,7 +1010,7 @@ class VideoPlayerViewController: PlayerViewController {
 #endif
     }
 
-    @objc override func updatePlayerControls() {
+    @ObjCMethod override func updatePlayerControls() {
         videoPlayerControls.shouldEnableSeekButtons(playbackService.mediaList.count == 1)
     }
 
@@ -1102,7 +1098,7 @@ class VideoPlayerViewController: PlayerViewController {
         }
     }
 
-    @objc private func handleIdleTimerExceeded() {
+    @ObjCMethod private func handleIdleTimerExceeded() {
         guard Thread.isMainThread else {
             DispatchQueue.main.async {
                 self.handleIdleTimerExceeded()
@@ -1128,7 +1124,7 @@ class VideoPlayerViewController: PlayerViewController {
         guard let safeIdleTimer = idleTimer else {
             idleTimer = Timer.scheduledTimer(timeInterval: interval,
                                              target: self,
-                                             selector: #selector(handleIdleTimerExceeded),
+                                             selector: ObjC.selector("handleIdleTimerExceeded"),
                                              userInfo: nil,
                                              repeats: false)
             return
@@ -1539,8 +1535,9 @@ extension VideoPlayerViewController {
 
 // MARK: - Download More SPU
 
+@ObjCExtension("Extension")
 extension VideoPlayerViewController {
-    @objc func downloadMoreSPU() {
+    @ObjCMethod func downloadMoreSPU() {
         let targetViewController: VLCPlaybackInfoSubtitlesFetcherViewController =
         VLCPlaybackInfoSubtitlesFetcherViewController(nibName: nil,
                                                       bundle: nil)
@@ -1605,6 +1602,7 @@ extension VideoPlayerViewController: TrackSelectorViewDelegate {
 
 // MARK: - Delay
 
+@ObjCExtension("Extension2")
 extension VideoPlayerViewController {
     func showDelayView(for kind: PlaybackDelayView.Kind) {
         if let delayView = delayView, delayView.kind == kind {
@@ -1621,16 +1619,16 @@ extension VideoPlayerViewController {
     override var keyCommands: [UIKeyCommand]? {
         var commands = super.keyCommands ?? []
 
-        let decreaseAudioDelay = UIKeyCommand(input: "j", modifierFlags: [], action: #selector(keyDecreaseAudioDelay))
+        let decreaseAudioDelay = UIKeyCommand(input: "j", modifierFlags: [], action: ObjC.selector("keyDecreaseAudioDelay"))
         decreaseAudioDelay.discoverabilityTitle = NSLocalizedString("KEY_DECREASE_AUDIO_DELAY", comment: "")
-        let increaseAudioDelay = UIKeyCommand(input: "k", modifierFlags: [], action: #selector(keyIncreaseAudioDelay))
+        let increaseAudioDelay = UIKeyCommand(input: "k", modifierFlags: [], action: ObjC.selector("keyIncreaseAudioDelay"))
         increaseAudioDelay.discoverabilityTitle = NSLocalizedString("KEY_INCREASE_AUDIO_DELAY", comment: "")
         commands += [decreaseAudioDelay, increaseAudioDelay]
 
         if !playbackService.metadata.isAudioOnly {
-            let decreaseSubtitleDelay = UIKeyCommand(input: "g", modifierFlags: [], action: #selector(keyDecreaseSubtitleDelay))
+            let decreaseSubtitleDelay = UIKeyCommand(input: "g", modifierFlags: [], action: ObjC.selector("keyDecreaseSubtitleDelay"))
             decreaseSubtitleDelay.discoverabilityTitle = NSLocalizedString("KEY_DECREASE_SUBTITLE_DELAY", comment: "")
-            let increaseSubtitleDelay = UIKeyCommand(input: "h", modifierFlags: [], action: #selector(keyIncreaseSubtitleDelay))
+            let increaseSubtitleDelay = UIKeyCommand(input: "h", modifierFlags: [], action: ObjC.selector("keyIncreaseSubtitleDelay"))
             increaseSubtitleDelay.discoverabilityTitle = NSLocalizedString("KEY_INCREASE_SUBTITLE_DELAY", comment: "")
             commands += [decreaseSubtitleDelay, increaseSubtitleDelay]
         }
@@ -1638,19 +1636,19 @@ extension VideoPlayerViewController {
         return commands
     }
 
-    @objc func keyDecreaseAudioDelay() {
+    @ObjCMethod func keyDecreaseAudioDelay() {
         nudgeDelayFromKeyboard(kind: .audio, increasing: false)
     }
 
-    @objc func keyIncreaseAudioDelay() {
+    @ObjCMethod func keyIncreaseAudioDelay() {
         nudgeDelayFromKeyboard(kind: .audio, increasing: true)
     }
 
-    @objc func keyDecreaseSubtitleDelay() {
+    @ObjCMethod func keyDecreaseSubtitleDelay() {
         nudgeDelayFromKeyboard(kind: .subtitle, increasing: false)
     }
 
-    @objc func keyIncreaseSubtitleDelay() {
+    @ObjCMethod func keyIncreaseSubtitleDelay() {
         nudgeDelayFromKeyboard(kind: .subtitle, increasing: true)
     }
 
@@ -1664,12 +1662,12 @@ extension VideoPlayerViewController {
         delayViewHideTimer?.invalidate()
         delayViewHideTimer = Timer.scheduledTimer(timeInterval: 4,
                                                   target: self,
-                                                  selector: #selector(delayViewHideTimerFired),
+                                                  selector: ObjC.selector("delayViewHideTimerFired"),
                                                   userInfo: nil,
                                                   repeats: false)
     }
 
-    @objc private func delayViewHideTimerFired() {
+    @ObjCMethod private func delayViewHideTimerFired() {
         dismissOverlayCard()
     }
 }
@@ -1691,8 +1689,9 @@ extension VideoPlayerViewController: PlaybackDelayViewDelegate {
 
 // MARK: - UIDocumentPickerViewDelegate
 
-extension VideoPlayerViewController: UIDocumentPickerDelegate {
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+@ObjCExtension("UIDocumentPickerDelegate")
+extension VideoPlayerViewController {
+    @ObjCMethod("documentPicker:didPickDocumentsAtURLs:") func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let mediaURL = playbackService.currentlyPlayingMedia?.url,
               let fileURL = urls.first else {
             return
@@ -1748,7 +1747,7 @@ extension VideoPlayerViewController: UIDocumentPickerDelegate {
         }
     }
 
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+    @ObjCMethod("documentPickerWasCancelled:") func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         externalTrackRequestIsAudio = nil
     }
 }
