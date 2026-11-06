@@ -1,0 +1,4 @@
+module CVLCiOS6 {
+    header "VLCiOS6SDK.h"
+    export *
+}

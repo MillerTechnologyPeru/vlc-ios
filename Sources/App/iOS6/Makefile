@@ -47,7 +47,7 @@ SWIFTUI_MAKE = $(MAKE) -C $(SWIFT_IOS6)/SwiftUI APP=$(APP) APP_DIR=$(CURDIR) BUI
                APP_SRCS="$(APP_SRCS)" LDFLAGS="$(LDFLAGS)" \
                SSH_CONF=$(SSH_CONF) SSH_HOST=$(SSH_HOST)
 
-.PHONY: all install run media autoplay log clean
+.PHONY: all install run media autoplay log census clean
 
 all: $(SHARED_LINKS)
 	$(SWIFTUI_MAKE) all
@@ -85,6 +85,11 @@ autoplay:
 	@test -n "$(FILE)" || { echo 'usage: make autoplay FILE=movie.mp4'; exit 2; }
 	ssh -F $(SSH_CONF) $(SSH_HOST) "printf '%s' '$(FILE)' > $(DOCUMENTS)/.autoplay && chown mobile $(DOCUMENTS)/.autoplay && killall $(APP) 2>/dev/null; true"
 	$(SWIFTUI_MAKE) run
+
+# Type-checks VLC's iOS Swift with Embedded Swift against the iOS 6 SDK
+# overlays (SDK/) and summarizes the errors left
+census:
+	SWIFT_IOS6=$(SWIFT_IOS6) SDK/census.sh $(BUILD)/census
 
 # The app's and libvlc's log
 log:

@@ -57,3 +57,18 @@ name only), against iOS 6's own link stubs, and checks the app's imports
 against what iOS 6.1.6 exports before it's installed. The app is about 40 MB,
 more than an iPod's system partition usually has free, so `make install`
 puts it in `/var/stash/Applications` with a link in `/Applications`.
+
+## Porting the iOS app
+
+`SDK/` is the start of an iOS 6 SDK for VLC's own iOS sources, in Embedded
+Swift. Its `Foundation` module combines Swift-iOS6's Objective-C wrappers,
+[swift-embedded-foundation](https://github.com/PureSwift/swift-embedded-foundation)'s
+value types (`URL`, `Data`, `Date`, `IndexPath`…) and an overlay with
+Foundation's Swift API for the classes (`Bundle`, `UserDefaults`,
+`NotificationCenter`, `FileManager`, `DispatchQueue`, `NSLocalizedString`).
+`UIKit` re-exports it, and `VLCiOS6` is imported into every file in place of
+the bridging header.
+
+`make census` type-checks the app's 192 iOS Swift files against it and
+lists the errors left by kind and the names most wanted. It needs
+swift-embedded-foundation beside this repository (or `FOUNDATION_EMBEDDED`).
