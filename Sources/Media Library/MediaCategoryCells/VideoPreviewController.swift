@@ -12,7 +12,8 @@
 import UIKit
 import VLCKit
 
-final class VideoPreviewController: UIViewController {
+@ObjCImplementation(protocols: ["VLCMediaPlayerDelegate"])
+final class VideoPreviewController: UIViewControllerMethods {
     private let media: VLCMLMedia
     private let thumbnail: UIImage?
     private let videoView = UIView()
@@ -34,31 +35,30 @@ final class VideoPreviewController: UIViewController {
         } else {
             self.thumbnailRatio = 9.0 / 16.0
         }
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) not supported") }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         embedInfoPreview()
         setupVideoOverlay()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         let width = view.frame.width
         let thumbHeight = min(thumbnailRatio * width, 400)
         preferredContentSize = CGSize(width: width, height: thumbHeight + 147)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
         startPreview()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
+        callSuper("viewDidDisappear:", animated)
         guard let player = mediaPlayer else { return }
         mediaPlayer = nil
         player.delegate = nil
@@ -122,7 +122,7 @@ final class VideoPreviewController: UIViewController {
 
 // MARK: - VLCMediaPlayerDelegate
 
-extension VideoPreviewController: VLCMediaPlayerDelegate {
+extension VideoPreviewController {
     func mediaPlayerStateChanged(_ newState: VLCMediaPlayerState) {
         DispatchQueue.main.async {
             self.mediaPlayer?.audio?.isMuted = true
