@@ -12,9 +12,9 @@
 
 import Foundation
 
-@objc(VLCPlaybackServiceAdjustFilter)
-final class PlaybackServiceAdjustFilter: NSObject {
-    @objc let mediaPlayerAdjustFilter: VLCFilter
+@ObjCImplementation("VLCPlaybackServiceAdjustFilter")
+final class PlaybackServiceAdjustFilter: NSObjectMethods {
+    let mediaPlayerAdjustFilter: VLCFilter
     let contrast: Parameter
     let brightness: Parameter
     let hue: Parameter
@@ -22,11 +22,11 @@ final class PlaybackServiceAdjustFilter: NSObject {
     let gamma: Parameter
 
     @available(*, unavailable)
-    private override init() {
+    private init() {
         fatalError("\(#function) has not been implemented")
+        objcInit()
     }
 
-    @objc(initWithMediaPlayerAdjustFilter:)
     init(_ mediaPlayerAdjustFilter: VLCAdjustFilter) {
         self.mediaPlayerAdjustFilter = mediaPlayerAdjustFilter
         contrast = Parameter(mediaPlayerAdjustFilter.contrast)
@@ -34,6 +34,7 @@ final class PlaybackServiceAdjustFilter: NSObject {
         hue = Parameter(mediaPlayerAdjustFilter.hue)
         saturation = Parameter(mediaPlayerAdjustFilter.saturation)
         gamma = Parameter(mediaPlayerAdjustFilter.gamma)
+        objcInit()
     }
 
     var isEnabled: Bool {
