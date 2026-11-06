@@ -23,7 +23,8 @@ enum TrackSelectorAssignment {
     case secondary
 }
 
-final class TrackSelectorCell: UITableViewCell {
+@ObjCImplementation
+final class TrackSelectorCell: UITableViewCellMethods {
     static let identifier = "TrackSelectorCell"
 
     weak var delegate: TrackSelectorCellDelegate?
@@ -55,8 +56,8 @@ final class TrackSelectorCell: UITableViewCell {
         return label
     }()
 
-    private lazy var primaryPill = makePill(action: #selector(didTapPrimaryPill))
-    private lazy var secondaryPill = makePill(action: #selector(didTapSecondaryPill))
+    private lazy var primaryPill = makePill(action: ObjC.selector("didTapPrimaryPill"))
+    private lazy var secondaryPill = makePill(action: ObjC.selector("didTapSecondaryPill"))
 
     private let selectionCapsule: UIView = {
         let view = UIView()
@@ -72,17 +73,14 @@ final class TrackSelectorCell: UITableViewCell {
     private var labelLeadingWithCheck: NSLayoutConstraint!
     private var labelLeadingNoCheck: NSLayoutConstraint!
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         setupView()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         nameLabel.text = nil
         metaLabel.text = nil
         delegate = nil
@@ -132,8 +130,8 @@ final class TrackSelectorCell: UITableViewCell {
         labelTrailingToContent.isActive = true
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         selectionCapsule.roundCorners(radius: selectionCapsule.bounds.height / 2)
     }
 
@@ -236,11 +234,11 @@ final class TrackSelectorCell: UITableViewCell {
         }
     }
 
-    @objc private func didTapPrimaryPill() {
+    @ObjCMethod private func didTapPrimaryPill() {
         delegate?.trackSelectorCellDidTogglePrimary(self)
     }
 
-    @objc private func didTapSecondaryPill() {
+    @ObjCMethod private func didTapSecondaryPill() {
         delegate?.trackSelectorCellDidToggleSecondary(self)
     }
 }
