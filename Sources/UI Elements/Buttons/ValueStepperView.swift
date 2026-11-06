@@ -18,7 +18,8 @@ protocol ValueStepperViewDelegate: AnyObject {
     func valueStepperViewDidTapValue(_ stepperView: ValueStepperView)
 }
 
-final class ValueStepperView: UIView {
+@ObjCImplementation
+final class ValueStepperView: UIViewMethods {
     weak var delegate: ValueStepperViewDelegate?
 
     private let decreaseButton = AutoRepeatButton(type: .custom)
@@ -28,7 +29,7 @@ final class ValueStepperView: UIView {
 
     init(buttonSize: CGFloat, valuePointSize: CGFloat) {
         self.buttonSize = buttonSize
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
 
         if let titleLabel = valueButton.titleLabel {
@@ -38,9 +39,9 @@ final class ValueStepperView: UIView {
             titleLabel.adjustsFontSizeToFitWidth = true
             titleLabel.minimumScaleFactor = 0.5
         }
-        valueButton.addTarget(self, action: #selector(didTapValue), for: .touchUpInside)
-        decreaseButton.addTarget(self, action: #selector(didDecrement), for: .valueChanged)
-        increaseButton.addTarget(self, action: #selector(didIncrement), for: .valueChanged)
+        valueButton.addTarget(self, action: ObjC.selector("didTapValue"), for: .touchUpInside)
+        decreaseButton.addTarget(self, action: ObjC.selector("didDecrement"), for: .valueChanged)
+        increaseButton.addTarget(self, action: ObjC.selector("didIncrement"), for: .valueChanged)
 
         for subview in [decreaseButton, valueButton, increaseButton] {
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -73,18 +74,15 @@ final class ValueStepperView: UIView {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(accessibilityDisplayOptionsChanged),
+                                       selector: ObjC.selector("accessibilityDisplayOptionsChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(accessibilityDisplayOptionsChanged),
+                                       selector: ObjC.selector("accessibilityDisplayOptionsChanged"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func update(valueText: String, isModified: Bool) {
         let colors = PresentationTheme.currentExcludingWhite.colors
@@ -114,11 +112,11 @@ final class ValueStepperView: UIView {
         })
     }
 
-    override func accessibilityIncrement() {
+    @ObjCMethod("accessibilityIncrement") func accessibilityIncrement() {
         delegate?.valueStepperViewDidIncrement(self)
     }
 
-    override func accessibilityDecrement() {
+    @ObjCMethod("accessibilityDecrement") func accessibilityDecrement() {
         delegate?.valueStepperViewDidDecrement(self)
     }
 
@@ -138,19 +136,19 @@ final class ValueStepperView: UIView {
         }
     }
 
-    @objc private func didDecrement() {
+    @ObjCMethod private func didDecrement() {
         delegate?.valueStepperViewDidDecrement(self)
     }
 
-    @objc private func didIncrement() {
+    @ObjCMethod private func didIncrement() {
         delegate?.valueStepperViewDidIncrement(self)
     }
 
-    @objc private func didTapValue() {
+    @ObjCMethod private func didTapValue() {
         delegate?.valueStepperViewDidTapValue(self)
     }
 
-    @objc private func accessibilityDisplayOptionsChanged() {
+    @ObjCMethod private func accessibilityDisplayOptionsChanged() {
         styleButtons()
     }
 }
