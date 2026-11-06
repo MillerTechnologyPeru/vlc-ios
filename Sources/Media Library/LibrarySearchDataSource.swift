@@ -10,7 +10,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class LibrarySearchDataSource: NSObject {
+@ObjCImplementation
+class LibrarySearchDataSource: NSObjectMethods {
 
     var searchData = [VLCMLObject]()
     var isSearching: Bool = false
@@ -19,7 +20,7 @@ class LibrarySearchDataSource: NSObject {
 
     init(model: MediaLibraryBaseModel) {
         self.model = model
-        super.init()
+        objcInit("init")
         shouldReloadFor(searchString: "")
     }
 
