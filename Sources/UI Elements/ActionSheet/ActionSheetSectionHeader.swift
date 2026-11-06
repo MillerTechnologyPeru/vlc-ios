@@ -9,7 +9,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class ActionSheetSectionHeader: UIView {
+@ObjCImplementation
+class ActionSheetSectionHeader: UIViewMethods {
     public var accessoryViewsDelegate: ActionSheetAccessoryViewsDelegate? {
         didSet {
             updateAccessoryViews()
@@ -61,14 +62,14 @@ class ActionSheetSectionHeader: UIView {
         return previousButton
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupStackView()
         setupSeparator()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init?(coder aDecoder: NSCoder) {
+        objcInit("initWithCoder:", aDecoder)
         setupStackView()
         setupSeparator()
     }
