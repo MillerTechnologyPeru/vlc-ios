@@ -29,7 +29,7 @@ class MediaViewController: VLCPagingViewController<VLCLabelCell> {
     private lazy var regroupButton: UIBarButtonItem = {
         var regroup = UIBarButtonItem(image: UIImage(named: "regroupMediaGroups"),
                                      style: .plain, target: self,
-                                     action: #selector(handleRegroup))
+                                     action: ObjC.selector("handleRegroup"))
         regroup.tintColor = PresentationTheme.current.colors.orangeUI
         regroup.accessibilityLabel = NSLocalizedString("BUTTON_REGROUP", comment: "")
         regroup.accessibilityHint = NSLocalizedString("BUTTON_REGROUP_HINT", comment: "")
@@ -39,7 +39,7 @@ class MediaViewController: VLCPagingViewController<VLCLabelCell> {
     private lazy var selectAllButton: UIBarButtonItem = {
         var selectAll = UIBarButtonItem(image: UIImage(named: "emptySelectAll"),
                                         style: .plain, target: self,
-                                        action: #selector(handleSelectAll))
+                                        action: ObjC.selector("handleSelectAll"))
         selectAll.accessibilityLabel = NSLocalizedString("BUTTON_SELECT_ALL", comment: "")
         selectAll.accessibilityHint = NSLocalizedString("BUTTON_SELECT_ALL_HINT", comment: "")
         return selectAll
@@ -61,7 +61,7 @@ class MediaViewController: VLCPagingViewController<VLCLabelCell> {
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(customSetEditing))
+        return UIBarButtonItem(barButtonSystemItem: .done, target: self, action: ObjC.selector("customSetEditing"))
     }()
 
     private lazy var appMenuButton: UIBarButtonItem = {
@@ -74,7 +74,7 @@ class MediaViewController: VLCPagingViewController<VLCLabelCell> {
     init(mediaLibraryService: MediaLibraryService) {
         self.mediaLibraryService = mediaLibraryService
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .VLCThemeDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"), name: .VLCThemeDidChangeNotification, object: nil)
     }
 
     override func viewDidLoad() {
@@ -119,7 +119,7 @@ class MediaViewController: VLCPagingViewController<VLCLabelCell> {
         updateButtonsFor(viewControllers[currentIndex])
     }
 
-    @objc private func updateTheme() {
+    @ObjCMethod private func updateTheme() {
         if containerView != nil {
             containerView.backgroundColor = PresentationTheme.current.colors.background
         }
@@ -294,7 +294,7 @@ extension MediaViewController: MediaCategoryViewControllerDelegate {
 // MARK: - Edit
 
 extension MediaViewController {
-    @objc private func customSetEditing() {
+    @ObjCMethod private func customSetEditing() {
         isEditing = !isEditing
         var rightButtons: [UIBarButtonItem] = [menuButton]
 
@@ -365,7 +365,7 @@ extension MediaViewController {
 // MARK: - Sort
 
 extension MediaViewController {
-    @objc func handleRegroup() {
+    @ObjCMethod func handleRegroup() {
         if let mediaCategoryViewController = viewControllers[currentIndex] as? MediaCategoryViewController {
             guard mediaCategoryViewController.model is MediaGroupViewModel else {
                 assertionFailure("MediaViewController: handleRegroup: Mismatching model can't regroup.")
@@ -375,13 +375,13 @@ extension MediaViewController {
         }
     }
     
-    @objc func handleHistory() {
+    @ObjCMethod func handleHistory() {
         let mediaType: VLCMLMediaType = viewControllers[currentIndex] is MovieCategoryViewController ? .video : .audio
         let historyView = HistoryCategoryViewController(mediaLibraryService, mediaType: mediaType)
         navigationController?.pushViewController(historyView, animated: true)
     }
 
-    @objc func handleFolders() {
+    @ObjCMethod func handleFolders() {
         if let mediaCategoryViewController = viewControllers[currentIndex] as? MediaCategoryViewController {
             let isFolder = UserDefaults.standard.bool(forKey: KVLCFolderViewLayout)
             mediaCategoryViewController.handleLayoutChange(gridLayout: true, isFolder: !isFolder)
@@ -396,7 +396,7 @@ extension MediaViewController {
         present(documentPicker, animated: true)
     }
 
-    @objc func handleSelectAll() {
+    @ObjCMethod func handleSelectAll() {
         let controller: MediaCategoryViewController
         if let mediaCategoryViewController = navigationController?.viewControllers.last as? CollectionCategoryViewController {
             controller = mediaCategoryViewController
