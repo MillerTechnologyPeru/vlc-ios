@@ -16,31 +16,28 @@ extension Notification.Name {
     static let VLCDidRemoveMediaFromQueue = Notification.Name("didRemoveMediaFromQueue")
 }
 
-@objc(VLCQueueViewControllerDelegate)
 protocol QueueViewControllerDelegate {
-    @objc optional func queueViewControllerDidDisappear(_ queueViewController: QueueViewController?)
+    optional func queueViewControllerDidDisappear(_ queueViewController: QueueViewController?)
 }
 
-class QueueViewFlowLayout: UICollectionViewFlowLayout {
-    override init() {
-        super.init()
+@ObjCImplementation
+class QueueViewFlowLayout: UICollectionViewFlowLayoutMethods {
+    init() {
+        objcInit("init")
         self.minimumLineSpacing = 10
         self.minimumInteritemSpacing = 0
         self.sectionHeadersPinToVisibleBounds = true
         self.scrollDirection = .vertical
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    @ObjCMethod("shouldInvalidateLayoutForBoundsChange:") func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
 }
 
-@objc(VLCQueueViewController)
-class QueueViewController: UIViewController {
+@ObjCImplementation("VLCQueueViewController", protocols: ["UICollectionViewDelegateFlowLayout", "UICollectionViewDelegate", "UIScrollViewDelegate", "UICollectionViewDataSource", "UICollectionViewDragDelegate", "UICollectionViewDropDelegate"], extensions: ["Extension", "UICollectionViewDelegateFlowLayout", "UICollectionViewDelegate", "UIScrollViewDelegate", "UICollectionViewDataSource", "UICollectionViewDragDelegate", "UICollectionViewDropDelegate"])
+class QueueViewController: UIViewControllerMethods {
     @IBOutlet weak var queueCollectionView: UICollectionView!
     @IBOutlet weak var topView: UIVisualEffectView!
     @IBOutlet weak var grabberView: UIView!
@@ -120,59 +117,59 @@ class QueueViewController: UIViewController {
 
     private let animationDuration = 0.2
 
-    @objc weak var delegate: QueueViewControllerDelegate?
+    weak var delegate: QueueViewControllerDelegate?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return PresentationTheme.darkTheme.colors.statusBarStyle
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         initViews()
 
         let defaultCenter: NotificationCenter = NotificationCenter.default
         defaultCenter.addObserver(self,
-                                  selector: #selector(themeDidChange),
+                                  selector: ObjC.selector("themeDidChange"),
                                   name: .VLCThemeDidChangeNotification,
                                   object: nil)
 #if os(iOS)
         defaultCenter.addObserver(self,
-                                  selector: #selector(deviceOrientationDidChange),
+                                  selector: ObjC.selector("deviceOrientationDidChange:"),
                                   name: UIDevice.orientationDidChangeNotification,
                                   object: nil)
 #endif
         defaultCenter.addObserver(self,
-                                  selector: #selector(reload),
+                                  selector: ObjC.selector("reload"),
                                   name: Notification.Name(VLCPlaybackServiceShuffleModeUpdated),
                                   object: nil)
         for name in [VLCPlaybackServicePlaybackDidMoveOnToNextItem,
                      VLCPlaybackServicePlaybackDidResume,
                      VLCPlaybackServicePlaybackDidPause] {
             defaultCenter.addObserver(self,
-                                      selector: #selector(reload),
+                                      selector: ObjC.selector("reload"),
                                       name: Notification.Name(name),
                                       object: nil)
         }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @ObjCMethod("viewWillDisappear:") func viewWillDisappear(_ animated: Bool) {
+        callSuper("viewWillDisappear:", animated)
         if let delegate = delegate as? VideoPlayerViewController {
             delegate.queueViewControllerDidDisappear(self)
         }
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
+        callSuper("viewDidDisappear:", animated)
         view.alpha = 0.0
         topView.isHidden = true
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
     }
 
-    override func didMove(toParent parent: UIViewController?) {
+    @ObjCMethod("didMoveToParentViewController:") func didMove(toParent parent: UIViewController?) {
         let playerDisplayController = parent as? VLCPlayerDisplayController
 
         if let parent = parent {
@@ -253,20 +250,20 @@ class QueueViewController: UIViewController {
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
 
         topConstraint?.constant = topConstraintConstant
         reload()
     }
 
-    @objc init(medialibraryService: MediaLibraryService) {
+    init(medialibraryService: MediaLibraryService) {
         self.medialibraryService = medialibraryService
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
         view.alpha = 0.0
     }
 
-    @objc func show() {
+    @ObjCMethod func show() {
         UIView.animate(withDuration: animationDuration, animations: {
             self.view.alpha = 1.0
             self.darkOverlayView.isHidden = false
@@ -275,7 +272,7 @@ class QueueViewController: UIViewController {
         }
     }
 
-    @objc func hide() {
+    @ObjCMethod func hide() {
         if let parent = parent as? VLCPlayerDisplayController {
             guard !parent.hintingPlayqueue else {
                 return
@@ -310,9 +307,6 @@ class QueueViewController: UIViewController {
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     @IBAction func didDrag(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
@@ -362,7 +356,7 @@ class QueueViewController: UIViewController {
         })
     }
 
-    @objc func dismissPlayqueue() {
+    @ObjCMethod func dismissPlayqueue() {
         if let parent = parent {
             bottomConstraint?.constant = view.frame.height - view.safeAreaInsets.bottom
             UIView.animate(withDuration: animationDuration, animations: {
@@ -381,11 +375,11 @@ class QueueViewController: UIViewController {
         darkOverlayView.alpha = darkOverlayAlpha
     }
 
-    @objc func deviceOrientationDidChange(_ notification: Notification) {
+    @ObjCMethod func deviceOrientationDidChange(_ notification: Notification) {
         queueCollectionView.collectionViewLayout.invalidateLayout()
     }
 
-    @objc func reload() {
+    @ObjCMethod func reload() {
         currentlyPlayingMedia = playbackService.currentlyPlayingMedia
         queueCollectionView.reloadData()
         queueCollectionView.collectionViewLayout.invalidateLayout()
@@ -409,7 +403,7 @@ private extension QueueViewController {
 
         closeButton.setTitle("", for: .normal)
         closeButton.tintColor = .white
-        closeButton.addTarget(self, action: #selector(dismissPlayqueue), for: .touchUpInside)
+        closeButton.addTarget(self, action: ObjC.selector("dismissPlayqueue"), for: .touchUpInside)
         closeButton.layer.cornerRadius = 12
     }
 
@@ -422,7 +416,7 @@ private extension QueueViewController {
         darkOverlayView.alpha = darkOverlayAlpha
         darkOverlayView.isHidden = true
         darkOverlayView.isUserInteractionEnabled = true
-        darkOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissPlayqueue)))
+        darkOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: ObjC.selector("dismissPlayqueue")))
         darkOverlayView.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -467,8 +461,9 @@ private extension QueueViewController {
 
 // MARK: - Private handlers
 
+@ObjCExtension("Extension")
 private extension QueueViewController {
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
 #if os(iOS)
         setNeedsStatusBarAppearanceUpdate()
 #endif
@@ -495,7 +490,7 @@ private extension QueueViewController {
         return parameters
     }
 
-    @objc private func dismissView() {
+    @ObjCMethod private func dismissView() {
         guard let delegate = delegate as? VideoPlayerViewController else {
             return
         }
@@ -509,8 +504,9 @@ private extension QueueViewController {
 
 // MARK: - UICollectionViewFlowLayout
 
-extension QueueViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDelegateFlowLayout")
+extension QueueViewController {
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let padding = sidePadding + 5.0
@@ -518,7 +514,7 @@ extension QueueViewController: UICollectionViewDelegateFlowLayout {
                                                         safeAreaInsets: collectionView.safeAreaInsets)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:insetForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         let grabberHeight = topView.isHidden ? 0 : topView.frame.height
@@ -529,7 +525,8 @@ extension QueueViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UICollectionViewDelegate / MediaCollectionViewCellDelegate
 
-extension QueueViewController: UICollectionViewDelegate, MediaCollectionViewCellDelegate {
+@ObjCExtension("UICollectionViewDelegate")
+extension QueueViewController: MediaCollectionViewCellDelegate {
     private func selectedItem(in collectionView: UICollectionView, at indexPath: IndexPath) {
         guard indexPath.row <= mediaList.count else {
             assertionFailure("QueueViewController: didSelectItemAt: IndexPath out of range.")
@@ -547,7 +544,7 @@ extension QueueViewController: UICollectionViewDelegate, MediaCollectionViewCell
         reload()
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedItem(in: collectionView, at: indexPath)
     }
 
@@ -601,8 +598,9 @@ extension QueueViewController: UICollectionViewDelegate, MediaCollectionViewCell
 
 // MARK: - UIScrollViewDelegate
 
-extension QueueViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+@ObjCExtension("UIScrollViewDelegate")
+extension QueueViewController {
+    @ObjCMethod("scrollViewDidScroll:") func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y <= 5.0 {
             topView.alpha = max(0.1, scrollView.contentOffset.y / 5)
         } else {
@@ -616,24 +614,25 @@ extension QueueViewController: UIScrollViewDelegate {
         }
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewWillBeginDragging:") func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         resetScrollView()
     }
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension QueueViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+@ObjCExtension("UICollectionViewDataSource")
+extension QueueViewController {
+    @ObjCMethod("numberOfSectionsInCollectionView:") func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return mediaList.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell =
                 collectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.defaultReuseIdentifier,
@@ -680,8 +679,9 @@ extension QueueViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDragDelegate
 
-extension QueueViewController: UICollectionViewDragDelegate {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDragDelegate")
+extension QueueViewController {
+    @ObjCMethod("collectionView:itemsForBeginningDragSession:atIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
         guard mediaList.count > 1 else {
@@ -691,12 +691,12 @@ extension QueueViewController: UICollectionViewDragDelegate {
         return [UIDragItem(itemProvider: NSItemProvider())]
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dragSessionIsRestrictedToDraggingApplication:") func collectionView(_ collectionView: UICollectionView,
                         dragSessionIsRestrictedToDraggingApplication session: UIDragSession) -> Bool {
         return true
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dragPreviewParametersForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         return dragPreviewParameters(for: indexPath)
     }
@@ -704,12 +704,13 @@ extension QueueViewController: UICollectionViewDragDelegate {
 
 // MARK: - UICollectionViewDropDelegate
 
-extension QueueViewController: UICollectionViewDropDelegate {
-    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+@ObjCExtension("UICollectionViewDropDelegate")
+extension QueueViewController {
+    @ObjCMethod("collectionView:canHandleDropSession:") func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.localDragSession != nil
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dropSessionDidUpdate:withDestinationIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         dropSessionDidUpdate session: UIDropSession,
                         withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         guard collectionView.hasActiveDrag else {
@@ -719,7 +720,7 @@ extension QueueViewController: UICollectionViewDropDelegate {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:performDropWithCoordinator:") func collectionView(_ collectionView: UICollectionView,
                         performDropWith coordinator: UICollectionViewDropCoordinator) {
         guard let item = coordinator.items.first,
               let sourceIndexPath = item.sourceIndexPath else {
@@ -749,7 +750,7 @@ extension QueueViewController: UICollectionViewDropDelegate {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dropPreviewParametersForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         dropPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         return dragPreviewParameters(for: indexPath)
     }
