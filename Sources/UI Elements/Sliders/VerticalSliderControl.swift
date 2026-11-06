@@ -14,7 +14,8 @@
 ///
 /// Not all of the functionality of the former is available here. The API is
 /// also not exactly the same for the functionality that _is_ present here.
-class VerticalSliderControl: UIControl {
+@ObjCImplementation
+class VerticalSliderControl: UIControlMethods {
     private static let defaultMaximumTrackLayerColor = UIColor(white: 1, alpha: 0.5)
     private static let defaultMinimumTrackLayerColor = UIColor.white
     private static let defaultAnimationDuration: TimeInterval = 0.1
@@ -158,19 +159,16 @@ class VerticalSliderControl: UIControl {
         return imageView
     }()
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     init() {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
 
         setup()
     }
 
     private lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gestureRecognizer = UIPanGestureRecognizer(target: self,
-                                                       action: #selector(handlePanGestureRecognizer(sender:)))
+                                                       action: ObjC.selector("handlePanGestureRecognizerSender:"))
         return gestureRecognizer
     }()
 
@@ -292,13 +290,13 @@ class VerticalSliderControl: UIControl {
             .create(name: NSLocalizedString("VERTICAL_SLIDER_CONTROL_INCREMENT_ACTION", comment: ""),
                     image: UIImage(systemName: "arrow.up"),
                     target: self,
-                    selector: #selector(handleAccessibilityIncrement))
+                    selector: ObjC.selector("handleAccessibilityIncrement"))
 
         let decrement = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("VERTICAL_SLIDER_CONTROL_DECREMENT_ACTION", comment: ""),
                     image: UIImage(systemName: "arrow.down"),
                     target: self,
-                    selector: #selector(handleAccessibilityDecrement))
+                    selector: ObjC.selector("handleAccessibilityDecrement"))
 
         accessibilityCustomActions = [increment, decrement]
     }
@@ -341,7 +339,7 @@ class VerticalSliderControl: UIControl {
         return CGSize(width: w, height: Self.defaultIntrinsicSize.height)
     }
 
-    override func updateConstraints() {
+    @ObjCMethod("updateConstraints") func updateConstraints() {
         maxTopConstraint.constant = maximumValueInsets.top
         maxLeadingConstraint.constant = maximumValueInsets.left
         maxTrailingConstraint.constant = -maximumValueInsets.right
@@ -350,7 +348,7 @@ class VerticalSliderControl: UIControl {
         minLeadingConstraint.constant = minimumValueInsets.left
         minTrailingConstraint.constant = -minimumValueInsets.right
 
-        super.updateConstraints()
+        callSuper("updateConstraints")
     }
 
     private func updateSublayers() {
@@ -380,15 +378,15 @@ class VerticalSliderControl: UIControl {
         CATransaction.commit()
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
 
         thumbImageView.frame = thumbRect
 
         updateSublayers()
     }
 
-    @objc private func handlePanGestureRecognizer(sender: UIPanGestureRecognizer) {
+    @ObjCMethod private func handlePanGestureRecognizer(sender: UIPanGestureRecognizer) {
         let y = sender.location(in: self).y
 
         let radius = max(Self.defaultThumbSideLength, thumbHeight) / 2 + Self.thumbTolerance
@@ -444,14 +442,14 @@ class VerticalSliderControl: UIControl {
         updateValueAndNotify(newValue)
     }
 
-    @objc private func handleAccessibilityIncrement() -> Bool {
+    @ObjCMethod private func handleAccessibilityIncrement() -> Bool {
         let newPct = min(1, percentage + Self.accessibilityIncrement)
         let newVal = lerp(from: range.lowerBound, to: range.upperBound, t: newPct)
         updateValueAndNotify(newVal, animated: true)
         return true
     }
 
-    @objc private func handleAccessibilityDecrement() -> Bool {
+    @ObjCMethod private func handleAccessibilityDecrement() -> Bool {
         let newPct = max(0, percentage - Self.accessibilityIncrement)
         let newVal = lerp(from: range.lowerBound, to: range.upperBound, t: newPct)
         updateValueAndNotify(newVal, animated: true)
