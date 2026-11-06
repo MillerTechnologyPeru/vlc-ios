@@ -12,7 +12,8 @@ protocol PasscodeFieldDelegate: AnyObject {
     func passcodeFieldDidEnterPasscode(_ passcodeField: PasscodeField, _ passcode: String)
 }
 
-class PasscodeField: UIView {
+@ObjCImplementation(protocols: ["UIKeyInput"], extensions: ["UIKeyInput"])
+class PasscodeField: UIViewMethods {
     /// Passcode the user entered
     ///
     /// To clear passcode call ``clear()``
@@ -48,15 +49,12 @@ class PasscodeField: UIView {
 
     private var pins = [PinView]()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
 
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setupUI() {
         createPins()
@@ -103,18 +101,19 @@ class PasscodeField: UIView {
     }
 }
 
-extension PasscodeField: UIKeyInput {
+@ObjCExtension("UIKeyInput")
+extension PasscodeField {
     var hasText: Bool {
         return !passcode.isEmpty
     }
 
-    func insertText(_ text: String) {
+    @ObjCMethod("insertText:") func insertText(_ text: String) {
         guard passcode.appending(text).count <= maxLength else { return }
 
         passcode.append(text)
     }
 
-    func deleteBackward() {
+    @ObjCMethod("deleteBackward") func deleteBackward() {
         guard hasText else { return }
 
         passcode.removeLast()
@@ -135,7 +134,8 @@ extension PasscodeField: UIKeyInput {
     }
 }
 
-class PinView: UIView {
+@ObjCImplementation
+class PinView: UIViewMethods {
     var isEmpty: Bool {
         get {
             self.backgroundColor == .clear
@@ -151,15 +151,12 @@ class PinView: UIView {
         PresentationTheme.current.colors.cellTextColor
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
 
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setupUI() {
         self.layer.borderWidth = 1
@@ -171,12 +168,12 @@ class PinView: UIView {
         ])
     }
 
-    override func layoutSubviews() {
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
         self.layer.cornerRadius = self.bounds.width / 2
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        callSuper("traitCollectionDidChange:", previousTraitCollection)
 
         // Update border color manually
         self.layer.borderColor = color.cgColor
