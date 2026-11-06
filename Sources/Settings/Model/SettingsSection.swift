@@ -84,7 +84,7 @@ struct SettingsItem: Equatable {
 
         init(preferenceKey: String) {
             self.preferenceKey = preferenceKey
-            NotificationCenter.default.addObserver(self, selector: #selector(didChange), name: UserDefaults.didChangeNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: ObjC.selector("didChange:"), name: UserDefaults.didChangeNotification, object: nil)
         }
 
         func set(isOn: Bool) {
@@ -103,7 +103,7 @@ struct SettingsItem: Equatable {
             observers.removeValue(forKey: Int)
         }
 
-        @objc private func didChange(_: Notification) {
+        @ObjCMethod private func didChange(_: Notification) {
             notifyObservers()
         }
 
