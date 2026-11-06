@@ -12,8 +12,9 @@
 
 import UIKit
 
-class VLCCloudSortingSpecifierManager: NSObject {
-    @objc weak var controller: VLCCloudStorageTableViewController!
+@ObjCImplementation
+class VLCCloudSortingSpecifierManager: NSObjectMethods {
+    weak var controller: VLCCloudStorageTableViewController!
     
     var items: NSArray {
         let items: NSArray = [NSLocalizedString("NAME", comment: ""),
@@ -21,13 +22,13 @@ class VLCCloudSortingSpecifierManager: NSObject {
         return items
     }
     
-    @objc var selectedIndex: IndexPath {
+    var selectedIndex: IndexPath {
         return IndexPath(row: controller.controller.sortBy.rawValue, section: 0)
     }
     
-    @objc init(controller: VLCCloudStorageTableViewController) {
+    init(controller: VLCCloudStorageTableViewController) {
         self.controller = controller
-        super.init()
+        objcInit("init")
     }
 }
 
