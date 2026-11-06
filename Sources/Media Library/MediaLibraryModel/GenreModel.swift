@@ -114,7 +114,7 @@ extension VLCMLGenre: SearchableMLModel {
 
 // MARK: - Helpers
 extension VLCMLGenre {
-    @objc func numberOfTracksString() -> String {
+    @ObjCMethod func numberOfTracksString() -> String {
         let numberOftracks = numberOfTracks()
         if numberOftracks != 1 {
             return String(format: NSLocalizedString("TRACKS", comment: ""), locale: Locale.current, numberOftracks)
