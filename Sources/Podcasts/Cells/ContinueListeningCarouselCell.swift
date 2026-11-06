@@ -12,7 +12,8 @@
 
 import UIKit
 
-class ContinueListeningCarouselCell: UICollectionViewCell {
+@ObjCImplementation
+class ContinueListeningCarouselCell: UICollectionViewCellMethods {
     static let reuseIdentifier = "ContinueListeningCarouselCell"
 
     private let artworkView = PodcastArtworkView()
@@ -34,13 +35,13 @@ class ContinueListeningCarouselCell: UICollectionViewCell {
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setupUI()
     }
 
@@ -73,7 +74,7 @@ class ContinueListeningCarouselCell: UICollectionViewCell {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(applyTheme),
+                                                selector: ObjC.selector("applyTheme"),
                                                 name: .VLCThemeDidChangeNotification,
                                                 object: nil)
     }
@@ -92,14 +93,14 @@ class ContinueListeningCarouselCell: UICollectionViewCell {
         accessibilityLabel = "\(episode.title), \(show?.name ?? "")"
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         titleLabel.textColor = colors.cellTextColor
         showNameLabel.textColor = colors.cellDetailTextColor
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         progressBar.progress = 0
     }
 }
