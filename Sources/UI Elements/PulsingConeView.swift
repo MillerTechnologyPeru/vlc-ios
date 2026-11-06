@@ -10,8 +10,8 @@
 
 import UIKit
 
-@objc(VLCPulsingConeView)
-class PulsingConeView: UIView {
+@ObjCImplementation("VLCPulsingConeView")
+class PulsingConeView: UIViewMethods {
 
     private let coneImageView: UIImageView = {
         let cone = UIImage(named: "LaunchCone") ?? UIImage(named: "cone")
@@ -25,24 +25,24 @@ class PulsingConeView: UIView {
     private let appearanceDelay: TimeInterval
     private var delayTimer: Timer?
 
-    override init(frame: CGRect) {
+    init(frame: CGRect) {
         coneSize = 80
         appearanceDelay = 1.0
-        super.init(frame: frame)
+        objcInit("initWithFrame:", frame)
         setupView()
     }
 
-    @objc init(coneSize: CGFloat) {
+    init(coneSize: CGFloat) {
         self.coneSize = coneSize
         appearanceDelay = 0
-        super.init(frame: CGRect(x: 0, y: 0, width: coneSize, height: coneSize))
+        objcInit("initWithFrame:", CGRect(x: 0, y: 0, width: coneSize, height: coneSize))
         setupView()
     }
 
-    required init?(coder: NSCoder) {
+    init?(coder: NSCoder) {
         coneSize = 80
         appearanceDelay = 1.0
-        super.init(coder: coder)
+        objcInit("initWithCoder:", coder)
         setupView()
     }
 
@@ -58,18 +58,18 @@ class PulsingConeView: UIView {
         ])
     }
 
-    @objc func startAnimating() {
+    @ObjCMethod func startAnimating() {
         if delayTimer != nil || coneImageView.layer.animation(forKey: "pulse") != nil {
             return
         }
         delayTimer = Timer.scheduledTimer(timeInterval: appearanceDelay,
                                           target: self,
-                                          selector: #selector(beginPulsing),
+                                          selector: ObjC.selector("beginPulsing"),
                                           userInfo: nil,
                                           repeats: false)
     }
 
-    @objc private func beginPulsing() {
+    @ObjCMethod private func beginPulsing() {
         delayTimer = nil
         coneImageView.tintColor = PresentationTheme.current.colors.orangeDarkAccent
         alpha = 1.0
@@ -92,7 +92,7 @@ class PulsingConeView: UIView {
         coneImageView.layer.add(pulse, forKey: "pulse")
     }
 
-    @objc func stopAnimating() {
+    @ObjCMethod func stopAnimating() {
         delayTimer?.invalidate()
         delayTimer = nil
         CATransaction.begin()
