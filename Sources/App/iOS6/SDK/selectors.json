@@ -1485,6 +1485,32 @@
 "NSObject",
 "NSSecureCoding"
 ],
+"OBSlider": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UIContextMenuInteractionDelegate",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"PodcastBackgroundRefresher": [
+"NSObject"
+],
 "UIAccelerometerDelegate": [
 "NSObject"
 ],
@@ -4790,6 +4816,955 @@
 ],
 "UIZoomTransitionSourceViewProviderContext": [
 "NSObject"
+],
+"VLCActivityViewControllerVendor": [
+"NSObject"
+],
+"VLCAdjustFilter": [
+"NSObject",
+"VLCFilter"
+],
+"VLCAppCoordinator": [
+"NSObject"
+],
+"VLCAppDelegate": [
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIApplicationDelegate",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIUserActivityRestoring"
+],
+"VLCArtworkCacher": [
+"NSObject",
+"VLCMLCacherDelegate"
+],
+"VLCArtworkImageView": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityContentSizeCategoryImageAdjusting",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCAudio": [
+"NSObject"
+],
+"VLCAudioEqualizer": [
+"NSObject"
+],
+"VLCAudioEqualizerBand": [
+"NSObject"
+],
+"VLCAudioEqualizerPreset": [
+"NSObject"
+],
+"VLCConsoleLogger": [
+"NSObject",
+"VLCFormattedMessageLogging",
+"VLCLogging"
+],
+"VLCCustomDialogRendererProtocol": [
+"NSObject"
+],
+"VLCDialogProvider": [
+"NSObject"
+],
+"VLCDonationNagScreenViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCDonationNavigationController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCDonationViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCEmptyLibraryView": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCEventsConfiguring": [
+"NSObject"
+],
+"VLCEventsDefaultConfiguration": [
+"NSObject",
+"VLCEventsConfiguring"
+],
+"VLCEventsLegacyConfiguration": [
+"NSObject",
+"VLCEventsConfiguring"
+],
+"VLCExternalDisplayController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCExternalDownloadCanceller": [
+"NSObject"
+],
+"VLCFavorite": [
+"NSCopying",
+"NSObject"
+],
+"VLCFavoriteService": [
+"NSObject"
+],
+"VLCFileLogger": [
+"NSObject",
+"VLCFormattedMessageLogging",
+"VLCLogging"
+],
+"VLCFilter": [
+"NSObject"
+],
+"VLCFilterParameter": [
+"NSObject"
+],
+"VLCFirstStepsViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCFormattedMessageLogging": [
+"NSObject",
+"VLCLogging"
+],
+"VLCHTTPUploaderController": [
+"NSObject"
+],
+"VLCLibrary": [
+"NSObject"
+],
+"VLCLibraryLogReceiverProtocol": [
+"NSObject"
+],
+"VLCLocalNetworkService": [
+"NSObject"
+],
+"VLCLocalNetworkServiceBrowser": [
+"NSObject"
+],
+"VLCLocalNetworkServiceBrowserDSM": [
+"NSObject",
+"VLCLocalNetworkServiceBrowser"
+],
+"VLCLocalNetworkServiceBrowserDelegate": [
+"NSObject"
+],
+"VLCLocalNetworkServiceBrowserMediaDiscoverer": [
+"NSObject",
+"VLCLocalNetworkServiceBrowser"
+],
+"VLCLocalNetworkServiceBrowserNFS": [
+"NSObject",
+"VLCLocalNetworkServiceBrowser"
+],
+"VLCLocalNetworkServiceBrowserNetService": [
+"NSNetServiceBrowserDelegate",
+"NSNetServiceDelegate",
+"NSObject",
+"VLCLocalNetworkServiceBrowser"
+],
+"VLCLocalNetworkServiceBrowserPlex": [
+"NSNetServiceBrowserDelegate",
+"NSNetServiceDelegate",
+"NSObject",
+"VLCLocalNetworkServiceBrowser"
+],
+"VLCLocalNetworkServiceBrowserUPnP": [
+"NSObject",
+"VLCLocalNetworkServiceBrowser"
+],
+"VLCLocalNetworkServiceDSM": [
+"NSObject",
+"VLCLocalNetworkService"
+],
+"VLCLocalNetworkServiceNFS": [
+"NSObject",
+"VLCLocalNetworkService"
+],
+"VLCLocalNetworkServiceNetService": [
+"NSObject",
+"VLCLocalNetworkService"
+],
+"VLCLocalNetworkServicePlex": [
+"NSObject",
+"VLCLocalNetworkService"
+],
+"VLCLocalNetworkServiceUPnP": [
+"NSObject",
+"VLCLocalNetworkService"
+],
+"VLCLocalNetworkServiceVLCMedia": [
+"NSObject",
+"VLCLocalNetworkService"
+],
+"VLCLogContext": [
+"NSObject"
+],
+"VLCLogMessageFormatter": [
+"NSObject",
+"VLCLogMessageFormatting"
+],
+"VLCLogMessageFormatting": [
+"NSObject"
+],
+"VLCLogging": [
+"NSObject"
+],
+"VLCMLAlbum": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLArtist": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLAudioTrack": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLBookmark": [
+"NSObject"
+],
+"VLCMLCacherDelegate": [
+"NSObject"
+],
+"VLCMLChapter": [
+"NSObject"
+],
+"VLCMLDeviceListerDelegate": [
+"NSObject"
+],
+"VLCMLFile": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLFolder": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLGenre": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLLabel": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLLoggerDelegate": [
+"NSObject"
+],
+"VLCMLMedia": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLMediaGroup": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLMetadata": [
+"NSObject"
+],
+"VLCMLMovie": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLPlaylist": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLSearchAggregate": [
+"NSObject"
+],
+"VLCMLService": [
+"NSObject"
+],
+"VLCMLShow": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLShowEpisode": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLSubscription": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLSubscriptionEpisode": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLSubtitleTrack": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMLVideoTrack": [
+"NSObject",
+"VLCMLObject"
+],
+"VLCMedia": [
+"NSObject"
+],
+"VLCMediaDelegate": [
+"NSObject"
+],
+"VLCMediaDiscoverer": [
+"NSObject"
+],
+"VLCMediaFileDiscoverer": [
+"NSObject"
+],
+"VLCMediaFileDiscovererDelegate": [
+"NSObject"
+],
+"VLCMediaLibrary": [
+"NSObject"
+],
+"VLCMediaLibraryDelegate": [
+"NSObject"
+],
+"VLCMediaList": [
+"NSObject"
+],
+"VLCMediaListDelegate": [
+"NSObject"
+],
+"VLCMediaListPlayer": [
+"NSObject"
+],
+"VLCMediaListPlayerDelegate": [
+"NSObject"
+],
+"VLCMediaLoudness": [
+"NSObject"
+],
+"VLCMediaMetaData": [
+"NSObject"
+],
+"VLCMediaPlayer": [
+"NSObject"
+],
+"VLCMediaPlayerDelegate": [
+"NSObject"
+],
+"VLCMediaThumbnailer": [
+"NSObject"
+],
+"VLCMetaData": [
+"NSObject"
+],
+"VLCMigrationCursor": [
+"NSObject"
+],
+"VLCMiniPlaybackViewInterface": [
+"NSObject"
+],
+"VLCNetworkImageView": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityContentSizeCategoryImageAdjusting",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCNetworkListCell": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UIGestureRecognizerDelegate",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring",
+"VLCRemoteBrowsingCell"
+],
+"VLCNetworkListCellDelegate": [
+"NSObject"
+],
+"VLCNetworkListViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCNetworkLoginViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCNetworkLoginViewControllerDelegate": [
+"NSObject"
+],
+"VLCNetworkServerBrowser": [
+"NSObject"
+],
+"VLCNetworkServerBrowserDelegate": [
+"NSObject"
+],
+"VLCNetworkServerBrowserItem": [
+"NSObject"
+],
+"VLCNetworkServerBrowserItemPlex": [
+"NSObject",
+"VLCNetworkServerBrowserItem"
+],
+"VLCNetworkServerBrowserItemVLCMedia": [
+"NSObject",
+"VLCNetworkServerBrowserItem"
+],
+"VLCNetworkServerBrowserPlex": [
+"NSObject",
+"VLCNetworkServerBrowser"
+],
+"VLCNetworkServerBrowserVLCMedia": [
+"NSObject",
+"VLCNetworkServerBrowser"
+],
+"VLCNetworkServerBrowserViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring",
+"VLCNetworkServerBrowserDelegate"
+],
+"VLCNetworkServerLoginInformation": [
+"NSCopying",
+"NSObject",
+"VLCNetworkServerLoginInformation"
+],
+"VLCNetworkServerLoginInformationField": [
+"NSCopying",
+"NSObject",
+"VLCNetworkServerLoginInformationField"
+],
+"VLCNonInteractiveWindowSceneDelegate": [
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIUserActivityRestoring"
+],
+"VLCOBSlider": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UIContextMenuInteractionDelegate",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCOnAirRailCell": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UIGestureRecognizerDelegate",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCOnAirRailCellDelegate": [
+"NSObject"
+],
+"VLCOnAirRailItem": [
+"NSObject"
+],
+"VLCOnAirViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCOpenNetworkStreamViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCPhotoLibraryController": [
+"NSObject"
+],
+"VLCPlaceholderArtwork": [
+"NSObject"
+],
+"VLCPlaybackInfoSubtitlesFetcherViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCPlaybackNavigationController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCPlaybackService": [
+"NSObject"
+],
+"VLCPlaybackServiceDelegate": [
+"NSObject"
+],
+"VLCPlayerDisplayController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCPodcastDirectoryLanguageViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCPodcastDirectoryListViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCPodcastIndexEpisode": [
+"NSObject"
+],
+"VLCPodcastIndexFeed": [
+"NSCoding",
+"NSObject"
+],
+"VLCPodcastIndexService": [
+"NSObject"
+],
+"VLCPodcastIndexShelf": [
+"NSCoding",
+"NSObject"
+],
+"VLCRadioErrorView": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCRadioFavoritesGridCell": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UIGestureRecognizerDelegate",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCRadioFavoritesGridCellDelegate": [
+"NSObject"
+],
+"VLCRadioListViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCRadioService": [
+"NSObject"
+],
+"VLCRemoteBrowsingCell": [
+"NSObject"
+],
+"VLCRendererDiscoverer": [
+"NSObject"
+],
+"VLCRendererDiscovererDelegate": [
+"NSObject"
+],
+"VLCRendererDiscovererDescription": [
+"NSObject"
+],
+"VLCRendererItem": [
+"NSObject"
+],
+"VLCResettingSlider": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UIContextMenuInteractionDelegate",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCServerBrowsingController": [
+"NSObject"
+],
+"VLCServerListViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCSlider": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UIContextMenuInteractionDelegate",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCStatusLabel": [
+"CALayerDelegate",
+"CLBodyIdentifiable",
+"CMBodyIdentifiable",
+"NSCoding",
+"NSObject",
+"UIAccessibilityIdentification",
+"UIActivityItemsConfigurationProviding",
+"UIAppearance",
+"UIAppearanceContainer",
+"UIContentSizeCategoryAdjusting",
+"UICoordinateSpace",
+"UIDynamicItem",
+"UIFocusEnvironment",
+"UIFocusItem",
+"UIFocusItemContainer",
+"UILargeContentViewerItem",
+"UILetterformAwareAdjusting",
+"UIPasteConfigurationSupporting",
+"UIPopoverPresentationControllerSourceItem",
+"UIResponderStandardEditActions",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
+],
+"VLCSubscriptionCacher": [
+"NSObject",
+"VLCExternalDownloadCanceller",
+"VLCMLCacherDelegate"
+],
+"VLCSubscriptionCacherDelegate": [
+"NSObject"
+],
+"VLCThumbnailsCache": [
+"NSObject"
+],
+"VLCTime": [
+"NSObject"
+],
+"VLCTranscoder": [
+"NSObject"
+],
+"VLCTranscoderDelegate": [
+"NSObject"
+],
+"VLCTransferController": [
+"NSObject"
+],
+"VLCTransferItem": [
+"NSObject"
+],
+"VLCTransferViewController": [
+"NSCoding",
+"NSExtensionRequestHandling",
+"NSObject",
+"UIActivityItemsConfigurationProviding",
+"UIAppearanceContainer",
+"UIContentContainer",
+"UIFocusEnvironment",
+"UIPasteConfigurationSupporting",
+"UIResponderStandardEditActions",
+"UIStateRestoring",
+"UITraitEnvironment",
+"UIUserActivityRestoring"
 ]
 },
 "containers": {
@@ -12276,6 +13251,10 @@
 "init(string:)": "initWithString:",
 "init(utf8String:)": "initWithUTF8String:",
 "isEqual(to:)": "isEqualToString:",
+"isSupportedFormat()": "isSupportedFormat",
+"isSupportedMediaFormat()": "isSupportedMediaFormat",
+"isSupportedPlaylistFormat()": "isSupportedPlaylistFormat",
+"isSupportedSubtitleFormat()": "isSupportedSubtitleFormat",
 "lengthOfBytes(using:)": "lengthOfBytesUsingEncoding:",
 "lineRange(for:)": "lineRangeForRange:",
 "linguisticTags(in:scheme:options:orthography:tokenRanges:)": "linguisticTagsInRange:scheme:options:orthography:tokenRanges:",
@@ -16417,6 +17396,14 @@
 },
 "properties": {}
 },
+"PodcastBackgroundRefresher": {
+"methods": {
+"class sharedInstance()": "sharedInstance",
+"registerTasks()": "registerTasks",
+"scheduleDownloadTask()": "scheduleDownloadTask"
+},
+"properties": {}
+},
 "UIAccessibilityContainerDataTable": {
 "methods": {
 "accessibilityColumnCount()": "accessibilityColumnCount",
@@ -17080,6 +18067,7 @@
 "class registerObject(forStateRestoration:restorationIdentifier:)": "registerObjectForStateRestoration:restorationIdentifier:",
 "clearKeepAliveTimeout()": "clearKeepAliveTimeout",
 "completeStateRestoration()": "completeStateRestoration",
+"dismissPresentedScreensAbovePlayer()": "dismissPresentedScreensAbovePlayer",
 "enabledRemoteNotificationTypes()": "enabledRemoteNotificationTypes",
 "endBackgroundTask(_:)": "endBackgroundTask:",
 "endIgnoringInteractionEvents()": "endIgnoringInteractionEvents",
@@ -17111,6 +18099,10 @@
 "unregisterForRemoteNotifications()": "unregisterForRemoteNotifications"
 },
 "properties": {
+"activeKeyWindow": [
+"activeKeyWindow",
+"setActiveKeyWindow:"
+],
 "alternateIconName": [
 "alternateIconName",
 "setAlternateIconName:"
@@ -17226,6 +18218,10 @@
 "systemPrefersReducedResourceUsage": [
 "systemPrefersReducedResourceUsage",
 "setSystemPrefersReducedResourceUsage:"
+],
+"topViewController": [
+"topViewController",
+"setTopViewController:"
 ],
 "userInterfaceLayoutDirection": [
 "userInterfaceLayoutDirection",
@@ -17493,6 +18489,9 @@
 "class fixedSpace()": "fixedSpaceItem",
 "class fixedSpace(_:)": "fixedSpaceItemOfWidth:",
 "class flexibleSpace()": "flexibleSpaceItem",
+"class themedBackButton(withTarget:andSelector:)": "themedBackButtonWithTarget:andSelector:",
+"class themedDarkToolbarButton(withTitle:target:andSelector:)": "themedDarkToolbarButtonWithTitle:target:andSelector:",
+"class themedPlayAllButton(withTarget:andSelector:)": "themedPlayAllButtonWithTarget:andSelector:",
 "creatingFixedGroup()": "creatingFixedGroup",
 "creatingMovableGroup(customizationIdentifier:)": "creatingMovableGroupWithCustomizationIdentifier:",
 "init()": "init",
@@ -21708,6 +22707,7 @@
 "UIImage": {
 "methods": {
 "applyingSymbolConfiguration(_:)": "imageByApplyingSymbolConfiguration:",
+"averageColor()": "averageColor",
 "byPreparingForDisplay()": "prepareForDisplayWithCompletionHandler:",
 "byPreparingThumbnail(ofSize:)": "prepareThumbnailOfSize:completionHandler:",
 "class animatedImage(with:duration:)": "animatedImageWithImages:duration:",
@@ -30768,6 +31768,7 @@
 "viewWillAppear(_:)": "viewWillAppear:",
 "viewWillDisappear(_:)": "viewWillDisappear:",
 "viewWillLayoutSubviews()": "viewWillLayoutSubviews",
+"vlc_showAlert(withTitle:message:buttonTitle:)": "vlc_showAlertWithTitle:message:buttonTitle:",
 "willAnimateRotation(to:duration:)": "willAnimateRotationToInterfaceOrientation:duration:",
 "willMove(toParent:)": "willMoveToParentViewController:",
 "willRotate(to:duration:)": "willRotateToInterfaceOrientation:duration:"
@@ -31888,7 +32889,4424 @@
 "setTargetScene:"
 ]
 }
+},
+"VLCActivityViewControllerVendor": {
+"methods": {
+"class activityViewController(forFiles:presenting:presenting:completionHandler:)": "activityViewControllerForFiles:presentingButton:presentingViewController:completionHandler:"
+},
+"properties": {}
+},
+"VLCAdjustFilter": {
+"methods": {
+"class create(with:)": "createWithVLCMediaPlayer:",
+"init(VLCMediaPlayer:)": "initWithVLCMediaPlayer:::SYNTHESIZED::c:objc(cs)VLCAdjustFilter",
+"init(vlcMediaPlayer:)": "initWithVLCMediaPlayer:"
+},
+"properties": {
+"brightness": [
+"brightness",
+"setBrightness:"
+],
+"contrast": [
+"contrast",
+"setContrast:"
+],
+"gamma": [
+"gamma",
+"setGamma:"
+],
+"hue": [
+"hue",
+"setHue:"
+],
+"saturation": [
+"saturation",
+"setSaturation:"
+]
 }
+},
+"VLCAppCoordinator": {
+"methods": {
+"class sharedInstance()": "sharedInstance",
+"handle(_:)": "handleShortcutItem:",
+"media(for:)": "mediaForUserActivity:",
+"showTab(for:)": "showTabForMedia:"
+},
+"properties": {
+"externalWindow": [
+"externalWindow",
+"setExternalWindow:"
+],
+"favoriteService": [
+"favoriteService",
+"setFavoriteService:"
+],
+"httpUploaderController": [
+"httpUploaderController",
+"setHttpUploaderController:"
+],
+"mediaLibraryService": [
+"mediaLibraryService",
+"setMediaLibraryService:"
+],
+"podcastStore": [
+"podcastStore",
+"setPodcastStore:"
+],
+"radioService": [
+"radioService",
+"setRadioService:"
+],
+"rendererDiscovererManager": [
+"rendererDiscovererManager",
+"setRendererDiscovererManager:"
+],
+"savedServerList": [
+"savedServerList",
+"setSavedServerList:"
+],
+"snapshotMediaLibraryService": [
+"snapshotMediaLibraryService",
+"setSnapshotMediaLibraryService:"
+],
+"stripeController": [
+"stripeController",
+"setStripeController:"
+],
+"tabBarController": [
+"tabBarController",
+"setTabBarController:"
+],
+"transferController": [
+"transferController",
+"setTransferController:"
+]
+}
+},
+"VLCAppDelegate": {
+"methods": {
+"setupTabBarAppearance()": "setupTabBarAppearance",
+"validatePasscodeIfNeeded()": "validatePasscodeIfNeededWithCompletion:",
+"validatePasscodeIfNeeded(completion:)": "validatePasscodeIfNeededWithCompletion:"
+},
+"properties": {
+"orientationLock": [
+"orientationLock",
+"setOrientationLock:"
+],
+"window": [
+"window",
+"setWindow:"
+]
+}
+},
+"VLCArtworkImageView": {
+"methods": {
+"setImage(_:placeholderName:)": "setImage:placeholderName:"
+},
+"properties": {
+"placeholderName": [
+"placeholderName",
+"setPlaceholderName:"
+]
+}
+},
+"VLCAudio": {
+"methods": {
+"setMute(_:)": "setMute:",
+"volumeDown()": "volumeDown",
+"volumeUp()": "volumeUp"
+},
+"properties": {
+"isMuted": [
+"isMuted",
+"setMuted:"
+],
+"passthrough": [
+"passthrough",
+"setPassthrough:"
+],
+"volume": [
+"volume",
+"setVolume:"
+]
+}
+},
+"VLCAudioEqualizer": {
+"methods": {
+"init()": "init",
+"init(preset:)": "initWithPreset:"
+},
+"properties": {
+"bands": [
+"bands",
+"setBands:"
+],
+"preAmplification": [
+"preAmplification",
+"setPreAmplification:"
+],
+"presets": [
+"presets",
+"setPresets:"
+]
+}
+},
+"VLCAudioEqualizerBand": {
+"methods": {},
+"properties": {
+"amplification": [
+"amplification",
+"setAmplification:"
+],
+"frequency": [
+"frequency",
+"setFrequency:"
+],
+"index": [
+"index",
+"setIndex:"
+]
+}
+},
+"VLCAudioEqualizerPreset": {
+"methods": {},
+"properties": {
+"index": [
+"index",
+"setIndex:"
+],
+"name": [
+"name",
+"setName:"
+]
+}
+},
+"VLCConsoleLogger": {
+"methods": {},
+"properties": {
+"formatter": [
+"formatter",
+"setFormatter:"
+]
+}
+},
+"VLCCustomDialogRendererProtocol": {
+"methods": {
+"cancelDialog(withReference:)": "cancelDialogWithReference:",
+"showError(withTitle:message:)": "showErrorWithTitle:message:",
+"showLogin(withTitle:message:defaultUsername:askingForStorage:withReference:)": "showLoginWithTitle:message:defaultUsername:askingForStorage:withReference:",
+"showProgress(withTitle:message:isIndeterminate:position:cancel:withReference:)": "showProgressWithTitle:message:isIndeterminate:position:cancelString:withReference:",
+"showQuestion(withTitle:message:type:cancel:action1String:action2String:withReference:)": "showQuestionWithTitle:message:type:cancelString:action1String:action2String:withReference:",
+"updateProgress(withReference:message:position:)": "updateProgressWithReference:message:position:"
+},
+"properties": {}
+},
+"VLCDialogProvider": {
+"methods": {
+"dismissDialog(withReference:)": "dismissDialogWithReference:",
+"init(library:customUI:)": "initWithLibrary:customUI:",
+"postAction(_:forDialogReference:)": "postAction:forDialogReference:",
+"postUsername(_:andPassword:forDialogReference:store:)": "postUsername:andPassword:forDialogReference:store:"
+},
+"properties": {
+"customRenderer": [
+"customRenderer",
+"setCustomRenderer:"
+]
+}
+},
+"VLCDonationNagScreenViewController": {
+"methods": {
+"dismiss(_:)": "dismiss:",
+"donate(_:)": "donate:"
+},
+"properties": {
+"buttonSeparatorView": [
+"buttonSeparatorView",
+"setButtonSeparatorView:"
+],
+"coloredBackgroundView": [
+"coloredBackgroundView",
+"setColoredBackgroundView:"
+],
+"descriptionLabel": [
+"descriptionLabel",
+"setDescriptionLabel:"
+],
+"donateButton": [
+"donateButton",
+"setDonateButton:"
+],
+"notnowButton": [
+"notnowButton",
+"setNotnowButton:"
+],
+"titleLabel": [
+"titleLabel",
+"setTitleLabel:"
+]
+}
+},
+"VLCDonationViewController": {
+"methods": {
+"continueButtonAction(_:)": "continueButtonAction:",
+"customAmountFieldAction(_:)": "customAmountFieldAction:",
+"monthlyCancelAction(_:)": "monthlyCancelAction:",
+"monthlyOptionAction(_:)": "monthlyOptionAction:",
+"monthlyUpdateAction(_:)": "monthlyUpdateAction:",
+"numberButtonAction(_:)": "numberButtonAction:",
+"segmentedControlAction(_:)": "segmentedControlAction:",
+"setCurrentSubscription(_:)": "setCurrentSubscription:",
+"setRecurringPriceList(_:)": "setRecurringPriceList:",
+"showPreviousCharges(_:)": "showPreviousCharges:",
+"switchCurrency(_:)": "switchCurrency:"
+},
+"properties": {
+"activityIndicatorView": [
+"activityIndicatorView",
+"setActivityIndicatorView:"
+],
+"confettiView": [
+"confettiView",
+"setConfettiView:"
+],
+"contentScrollView": [
+"contentScrollView",
+"setContentScrollView:"
+],
+"continueButton": [
+"continueButton",
+"setContinueButton:"
+],
+"customAmountField": [
+"customAmountField",
+"setCustomAmountField:"
+],
+"descriptionLabel": [
+"descriptionLabel",
+"setDescriptionLabel:"
+],
+"fiftyButton": [
+"fiftyButton",
+"setFiftyButton:"
+],
+"fiveButton": [
+"fiveButton",
+"setFiveButton:"
+],
+"hundredButton": [
+"hundredButton",
+"setHundredButton:"
+],
+"iconView": [
+"iconView",
+"setIconView:"
+],
+"intervalSelectorControl": [
+"intervalSelectorControl",
+"setIntervalSelectorControl:"
+],
+"monthlyCancelButton": [
+"monthlyCancelButton",
+"setMonthlyCancelButton:"
+],
+"monthlyFirstOptionButton": [
+"monthlyFirstOptionButton",
+"setMonthlyFirstOptionButton:"
+],
+"monthlyPaymentView": [
+"monthlyPaymentView",
+"setMonthlyPaymentView:"
+],
+"monthlySecondOptionButton": [
+"monthlySecondOptionButton",
+"setMonthlySecondOptionButton:"
+],
+"monthlyThirdOptionButton": [
+"monthlyThirdOptionButton",
+"setMonthlyThirdOptionButton:"
+],
+"monthlyUpdateButton": [
+"monthlyUpdateButton",
+"setMonthlyUpdateButton:"
+],
+"oneTimePaymentView": [
+"oneTimePaymentView",
+"setOneTimePaymentView:"
+],
+"previousDonationsButton": [
+"previousDonationsButton",
+"setPreviousDonationsButton:"
+],
+"selectedCurrencyButton": [
+"selectedCurrencyButton",
+"setSelectedCurrencyButton:"
+],
+"tenButton": [
+"tenButton",
+"setTenButton:"
+],
+"thirtyButton": [
+"thirtyButton",
+"setThirtyButton:"
+],
+"titleLabel": [
+"titleLabel",
+"setTitleLabel:"
+],
+"twentyButton": [
+"twentyButton",
+"setTwentyButton:"
+]
+}
+},
+"VLCEmptyLibraryView": {
+"methods": {
+"learnMore(_:)": "learnMore:"
+},
+"properties": {
+"contentType": [
+"contentType",
+"setContentType:"
+],
+"emptyLibraryLabel": [
+"emptyLibraryLabel",
+"setEmptyLibraryLabel:"
+],
+"emptyLibraryLongDescriptionLabel": [
+"emptyLibraryLongDescriptionLabel",
+"setEmptyLibraryLongDescriptionLabel:"
+],
+"folderName": [
+"folderName",
+"setFolderName:"
+],
+"iconView": [
+"iconView",
+"setIconView:"
+],
+"isAudioFolder": [
+"isAudioFolder",
+"setIsAudioFolder:"
+],
+"learnMoreButton": [
+"learnMoreButton",
+"setLearnMoreButton:"
+]
+}
+},
+"VLCEventsConfiguring": {
+"methods": {
+"dispatchQueue()": "dispatchQueue",
+"isAsync()": "isAsync"
+},
+"properties": {}
+},
+"VLCExternalDownloadCanceller": {
+"methods": {
+"cancelExternalDownload(withToken:)": "cancelExternalDownloadWithToken:"
+},
+"properties": {}
+},
+"VLCFavorite": {
+"methods": {},
+"properties": {
+"artworkURL": [
+"artworkURL",
+"setArtworkURL:"
+],
+"groupIdentifier": [
+"groupIdentifier",
+"setGroupIdentifier:"
+],
+"groupName": [
+"groupName",
+"setGroupName:"
+],
+"lastPlayedDate": [
+"lastPlayedDate",
+"setLastPlayedDate:"
+],
+"loginInformation": [
+"loginInformation",
+"setLoginInformation:"
+],
+"mediaDescription": [
+"mediaDescription",
+"setMediaDescription:"
+],
+"playable": [
+"playable",
+"setPlayable:"
+],
+"protocolIdentifier": [
+"protocolIdentifier",
+"setProtocolIdentifier:"
+],
+"url": [
+"url",
+"setUrl:"
+],
+"userVisibleName": [
+"userVisibleName",
+"setUserVisibleName:"
+]
+}
+},
+"VLCFavoriteService": {
+"methods": {
+"add(_:)": "addFavorite:",
+"favoriteOfServer(with:at:)": "favoriteOfServerWithIndex:atIndex:",
+"favoritesInGroup(withIdentifier:)": "favoritesInGroupWithIdentifier:",
+"isFavoriteURL(_:)": "isFavoriteURL:",
+"nameOfFavoritedServer(at:)": "nameOfFavoritedServerAtIndex:",
+"numberOfFavoritesOfServer(at:)": "numberOfFavoritesOfServerAtIndex:",
+"play(_:)": "playFavorite:",
+"remove(_:)": "removeFavorite:",
+"removeFavoriteOfServer(with:at:)": "removeFavoriteOfServerWithIndex:atIndex:",
+"setName(_:ofFavoritedServerAt:)": "setName:ofFavoritedServerAtIndex:",
+"storeContentSynchronously()": "storeContentSynchronously"
+},
+"properties": {
+"numberOfFavoritedServers": [
+"numberOfFavoritedServers",
+"setNumberOfFavoritedServers:"
+]
+}
+},
+"VLCFileLogger": {
+"methods": {
+"class create(with:)": "createWithFileHandle:",
+"init(fileHandle:)": "initWithFileHandle:"
+},
+"properties": {
+"fileHandle": [
+"fileHandle",
+"setFileHandle:"
+],
+"formatter": [
+"formatter",
+"setFormatter:"
+]
+}
+},
+"VLCFilter": {
+"methods": {
+"applyParameters(from:)": "applyParametersFrom:",
+"resetParametersIfNeeded()": "resetParametersIfNeeded"
+},
+"properties": {
+"isEnabled": [
+"isEnabled",
+"setEnabled:"
+],
+"mediaPlayer": [
+"mediaPlayer",
+"setMediaPlayer:"
+],
+"parameters": [
+"parameters",
+"setParameters:"
+]
+}
+},
+"VLCFilterParameter": {
+"methods": {
+"isValueSetToDefault()": "isValueSetToDefault"
+},
+"properties": {
+"defaultValue": [
+"defaultValue",
+"setDefaultValue:"
+],
+"maxValue": [
+"maxValue",
+"setMaxValue:"
+],
+"minValue": [
+"minValue",
+"setMinValue:"
+],
+"value": [
+"value",
+"setValue:"
+]
+}
+},
+"VLCFormattedMessageLogging": {
+"methods": {},
+"properties": {
+"formatter": [
+"formatter",
+"setFormatter:"
+]
+}
+},
+"VLCHTTPUploaderController": {
+"methods": {
+"addressToCopy()": "addressToCopy",
+"changeHTTPServerState(_:)": "changeHTTPServerState:",
+"cleanCache()": "cleanCache",
+"hostname()": "hostname",
+"hostnamePort()": "hostnamePort",
+"httpStatus()": "httpStatus",
+"isServerRunning()": "isServerRunning",
+"isUsingEthernet()": "isUsingEthernet",
+"moveFile(from:)": "moveFileFrom:",
+"resetIdleTimer()": "resetIdleTimer",
+"serverAddresses()": "serverAddresses",
+"updateReachabilityIfNeeded()": "updateReachabilityIfNeeded"
+},
+"properties": {
+"isReachable": [
+"isReachable",
+"setIsReachable:"
+],
+"medialibrary": [
+"medialibrary",
+"setMedialibrary:"
+],
+"nameOfUsedNetworkInterface": [
+"nameOfUsedNetworkInterface",
+"setNameOfUsedNetworkInterface:"
+]
+}
+},
+"VLCLibrary": {
+"methods": {
+"class shared()": "sharedLibrary",
+"init(options:)": "initWithOptions:",
+"setApplicationIdentifier(_:withVersion:andApplicationIconName:)": "setApplicationIdentifier:withVersion:andApplicationIconName:",
+"setDebugLoggingToFile(_:)": "setDebugLoggingToFile:",
+"setHumanReadableName(_:withHTTPUserAgent:)": "setHumanReadableName:withHTTPUserAgent:"
+},
+"properties": {
+"changeset": [
+"changeset",
+"setChangeset:"
+],
+"compiler": [
+"compiler",
+"setCompiler:"
+],
+"currentErrorMessage": [
+"currentErrorMessage",
+"setCurrentErrorMessage:"
+],
+"debugLogging": [
+"debugLogging",
+"setDebugLogging:"
+],
+"debugLoggingLevel": [
+"debugLoggingLevel",
+"setDebugLoggingLevel:"
+],
+"debugLoggingTarget": [
+"debugLoggingTarget",
+"setDebugLoggingTarget:"
+],
+"instance": [
+"instance",
+"setInstance:"
+],
+"loggers": [
+"loggers",
+"setLoggers:"
+],
+"sharedEventsConfiguration": [
+"sharedEventsConfiguration",
+"setSharedEventsConfiguration:"
+],
+"version": [
+"version",
+"setVersion:"
+]
+}
+},
+"VLCLibraryLogReceiverProtocol": {
+"methods": {
+"handleMessage(_:debugLevel:)": "handleMessage:debugLevel:"
+},
+"properties": {}
+},
+"VLCLocalNetworkService": {
+"methods": {
+"directPlaybackURL()": "directPlaybackURL",
+"loginInformation()": "loginInformation",
+"serverBrowser()": "serverBrowser"
+},
+"properties": {
+"connectionProtocol": [
+"connectionProtocol",
+"setConnectionProtocol:"
+],
+"icon": [
+"icon",
+"setIcon:"
+],
+"iconURL": [
+"iconURL",
+"setIconURL:"
+],
+"serviceName": [
+"serviceName",
+"setServiceName:"
+],
+"title": [
+"title",
+"setTitle:"
+]
+}
+},
+"VLCLocalNetworkServiceBrowser": {
+"methods": {
+"networkService(for:)": "networkServiceForIndex:",
+"startDiscovery()": "startDiscovery",
+"stopDiscovery()": "stopDiscovery"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"name": [
+"name",
+"setName:"
+],
+"numberOfItems": [
+"numberOfItems",
+"setNumberOfItems:"
+]
+}
+},
+"VLCLocalNetworkServiceBrowserDSM": {
+"methods": {
+"init()": "init"
+},
+"properties": {}
+},
+"VLCLocalNetworkServiceBrowserDelegate": {
+"methods": {
+"localNetworkServiceBrowserDidUpdateServices(_:)": "localNetworkServiceBrowserDidUpdateServices:"
+},
+"properties": {}
+},
+"VLCLocalNetworkServiceBrowserMediaDiscoverer": {
+"methods": {
+"init(name:serviceServiceName:)": "initWithName:serviceServiceName:"
+},
+"properties": {
+"mediaDiscoverer": [
+"mediaDiscoverer",
+"setMediaDiscoverer:"
+]
+}
+},
+"VLCLocalNetworkServiceBrowserNFS": {
+"methods": {
+"init()": "init"
+},
+"properties": {}
+},
+"VLCLocalNetworkServiceBrowserNetService": {
+"methods": {
+"addResolvedLocalNetworkService(_:)": "addResolvedLocalNetworkService:",
+"init(name:serviceType:domain:)": "initWithName:serviceType:domain:",
+"localService(for:)": "localServiceForNetService:",
+"netServiceDidResolveAddress(_:)": "netServiceDidResolveAddress:"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"domain": [
+"domain",
+"setDomain:"
+],
+"isDiscovering": [
+"isDiscovering",
+"setDiscovering:"
+],
+"netServiceBrowser": [
+"netServiceBrowser",
+"setNetServiceBrowser:"
+],
+"rawNetServices": [
+"rawNetServices",
+"setRawNetServices:"
+],
+"resolvedLocalNetworkServices": [
+"resolvedLocalNetworkServices",
+"setResolvedLocalNetworkServices:"
+],
+"serviceType": [
+"serviceType",
+"setServiceType:"
+]
+}
+},
+"VLCLocalNetworkServiceBrowserPlex": {
+"methods": {
+"init()": "init"
+},
+"properties": {}
+},
+"VLCLocalNetworkServiceBrowserUPnP": {
+"methods": {
+"init()": "init"
+},
+"properties": {}
+},
+"VLCLocalNetworkServiceNetService": {
+"methods": {
+"init(netService:serviceName:)": "initWithNetService:serviceName:"
+},
+"properties": {
+"netService": [
+"netService",
+"setNetService:"
+]
+}
+},
+"VLCLocalNetworkServiceVLCMedia": {
+"methods": {
+"init(mediaItem:serviceName:)": "initWithMediaItem:serviceName:"
+},
+"properties": {
+"mediaItem": [
+"mediaItem",
+"setMediaItem:"
+]
+}
+},
+"VLCLogContext": {
+"methods": {},
+"properties": {
+"file": [
+"file",
+"setFile:"
+],
+"function": [
+"function",
+"setFunction:"
+],
+"header": [
+"header",
+"setHeader:"
+],
+"line": [
+"line",
+"setLine:"
+],
+"module": [
+"module",
+"setModule:"
+],
+"objectId": [
+"objectId",
+"setObjectId:"
+],
+"objectType": [
+"objectType",
+"setObjectType:"
+],
+"threadId": [
+"threadId",
+"setThreadId:"
+]
+}
+},
+"VLCLogMessageFormatting": {
+"methods": {
+"format(withMessage:logLevel:context:)": "formatWithMessage:logLevel:context:"
+},
+"properties": {
+"contextFlags": [
+"contextFlags",
+"setContextFlags:"
+],
+"customContext": [
+"customContext",
+"setCustomContext:"
+]
+}
+},
+"VLCLogging": {
+"methods": {
+"handleMessage(_:logLevel:context:)": "handleMessage:logLevel:context:"
+},
+"properties": {
+"level": [
+"level",
+"setLevel:"
+]
+}
+},
+"VLCMLAlbum": {
+"methods": {
+"artist(with:desc:)": "artistWithSortingCriteria:desc:",
+"artists()": "artists",
+"artworkMRL()": "artworkMRL",
+"artworkMRL(of:)": "artworkMRLOfType:",
+"duration()": "duration",
+"identifier()": "identifier",
+"isArtworkGenerated()": "isArtworkGenerated",
+"isArtworkGenerated(for:)": "isArtworkGeneratedForType:",
+"isUnknownAlbum()": "isUnknownAlbum",
+"numberOfDiscs()": "numberOfDiscs",
+"numberOfTracks()": "numberOfTracks",
+"releaseYear()": "releaseYear",
+"removeThumbnail(of:)": "removeThumbnailOfType:",
+"searchTracks(_:)": "searchTracks:",
+"searchTracks(_:sortingCriteria:desc:)": "searchTracks:sortingCriteria:desc:",
+"setThumbnailWithMRL(_:of:)": "setThumbnailWithMRL:ofType:",
+"setThumbnailWithMRL(_:of:takeOwnership:)": "setThumbnailWithMRL:ofType:takeOwnership:",
+"tracks(by:sortingCriteria:desc:)": "tracksByGenre:sortingCriteria:desc:",
+"tracks(with:desc:)": "tracksWithSortingCriteria:desc:"
+},
+"properties": {
+"albumArtist": [
+"albumArtist",
+"setAlbumArtist:"
+],
+"favorite": [
+"favorite",
+"setFavorite:"
+],
+"shortSummary": [
+"shortSummary",
+"setShortSummary:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"tracks": [
+"tracks",
+"setTracks:"
+]
+}
+},
+"VLCMLArtist": {
+"methods": {
+"albums()": "albums",
+"albums(with:desc:)": "albumsWithSortingCriteria:desc:",
+"albumsCount()": "albumsCount",
+"artworkMRL()": "artworkMRL",
+"artworkMRL(of:)": "artworkMRLOfType:",
+"identifier()": "identifier",
+"isArtworkGenerated()": "isArtworkGenerated",
+"isArtworkGenerated(for:)": "isArtworkGeneratedForType:",
+"removeThumbnail(of:)": "removeThumbnailOfType:",
+"setThumbnailWithMRL(_:of:)": "setThumbnailWithMRL:ofType:",
+"setThumbnailWithMRL(_:of:takeOwnership:)": "setThumbnailWithMRL:ofType:takeOwnership:",
+"tracks()": "tracks",
+"tracks(with:desc:)": "tracksWithSortingCriteria:desc:",
+"tracksCount()": "tracksCount"
+},
+"properties": {
+"favorite": [
+"favorite",
+"setFavorite:"
+],
+"musicBrainzId": [
+"musicBrainzId",
+"setMusicBrainzId:"
+],
+"name": [
+"name",
+"setName:"
+],
+"shortBio": [
+"shortBio",
+"setShortBio:"
+]
+}
+},
+"VLCMLAudioTrack": {
+"methods": {
+"bitrate()": "bitrate",
+"identifier()": "identifier",
+"nbChannels()": "nbChannels",
+"sampleRate()": "sampleRate"
+},
+"properties": {
+"audioDescription": [
+"audioDescription",
+"setAudioDescription:"
+],
+"codec": [
+"codec",
+"setCodec:"
+],
+"isInAttachedFile": [
+"isInAttachedFile",
+"setIsInAttachedFile:"
+],
+"language": [
+"language",
+"setLanguage:"
+]
+}
+},
+"VLCMLBookmark": {
+"methods": {
+"identifier()": "identifier",
+"mediaIdentifier()": "mediaIdentifier"
+},
+"properties": {
+"bookmarkDescription": [
+"bookmarkDescription",
+"setBookmarkDescription:"
+],
+"creationDate": [
+"creationDate",
+"setCreationDate:"
+],
+"name": [
+"name",
+"setName:"
+],
+"time": [
+"time",
+"setTime:"
+]
+}
+},
+"VLCMLCacherDelegate": {
+"methods": {
+"cacheMRL(_:toPath:)": "cacheMRL:toPath:",
+"interruptCaching()": "interruptCaching"
+},
+"properties": {}
+},
+"VLCMLChapter": {
+"methods": {},
+"properties": {
+"duration": [
+"duration",
+"setDuration:"
+],
+"name": [
+"name",
+"setName:"
+],
+"offset": [
+"offset",
+"setOffset:"
+]
+}
+},
+"VLCMLDeviceListerDelegate": {
+"methods": {
+"medialibrary(_:deviceMountedWithUUID:withMountPoint:isRemovable:)": "medialibrary:deviceMountedWithUUID:withMountPoint:isRemovable:",
+"medialibrary(_:deviceUnmountedWithUUID:withMountPoint:)": "medialibrary:deviceUnmountedWithUUID:withMountPoint:"
+},
+"properties": {}
+},
+"VLCMLFile": {
+"methods": {
+"cacheType()": "cacheType",
+"delete()": "deleteFile",
+"identifier()": "identifier",
+"isExternal()": "isExternal",
+"isMain()": "isMain",
+"isNetwork()": "isNetwork",
+"isRemovable()": "isRemovable",
+"size()": "size",
+"type()": "type"
+},
+"properties": {
+"insertionDate": [
+"insertionDate",
+"setInsertionDate:"
+],
+"lastModificationDate": [
+"lastModificationDate",
+"setLastModificationDate:"
+],
+"mrl": [
+"mrl",
+"setMrl:"
+]
+}
+},
+"VLCMLFolder": {
+"methods": {
+"duration()": "duration",
+"identifier()": "identifier",
+"isBanned()": "isBanned",
+"isPresent()": "isPresent",
+"isRemovable()": "isRemovable",
+"media(of:sortingCriteria:desc:)": "mediaOfType:sortingCriteria:desc:",
+"nbAudio()": "nbAudio",
+"nbMedia()": "nbMedia",
+"nbVideo()": "nbVideo",
+"subfolders(with:desc:)": "subfoldersWithSortingCriteria:desc:"
+},
+"properties": {
+"favorite": [
+"favorite",
+"setFavorite:"
+],
+"mrl": [
+"mrl",
+"setMrl:"
+],
+"name": [
+"name",
+"setName:"
+]
+}
+},
+"VLCMLGenre": {
+"methods": {
+"albums()": "albums",
+"albums(with:desc:)": "albumsWithSortingCriteria:desc:",
+"artist(with:desc:)": "artistWithSortingCriteria:desc:",
+"artists()": "artists",
+"hasThumbnail(of:)": "hasThumbnailOfType:",
+"identifier()": "identifier",
+"numberOfTracks()": "numberOfTracks",
+"setThumbnailWithMRL(_:sizeType:takeOwnership:)": "setThumbnailWithMRL:sizeType:takeOwnership:",
+"thumbnailMRL(with:)": "thumbnailMRLWithType:",
+"tracks()": "tracks",
+"tracks(with:desc:)": "tracksWithSortingCriteria:desc:",
+"tracks(with:desc:thumbnails:)": "tracksWithSortingCriteria:desc:thumbnails:",
+"tracks(withThumbnails:)": "tracksWithThumbnails:"
+},
+"properties": {
+"favorite": [
+"favorite",
+"setFavorite:"
+],
+"name": [
+"name",
+"setName:"
+]
+}
+},
+"VLCMLLabel": {
+"methods": {
+"identifier()": "identifier",
+"media()": "media"
+},
+"properties": {
+"name": [
+"name",
+"setName:"
+]
+}
+},
+"VLCMLLoggerDelegate": {
+"methods": {
+"medialibraryDidLogMessage(_:level:)": "medialibraryDidLogMessage:level:"
+},
+"properties": {}
+},
+"VLCMLMedia": {
+"methods": {
+"add(to:)": "addToGroup:",
+"addBookmark(atTime:)": "addBookmarkAtTime:",
+"addExternalMrl(_:fileType:)": "addExternalMrl:fileType:",
+"addLabel(_:)": "addLabel:",
+"addToGroup(withIdentifier:)": "addToGroupWithIdentifier:",
+"bookmark(atTime:)": "bookmarkAtTime:",
+"class init(forPlaying:)": "mediaForPlayingMedia:",
+"class init(forPlayingMedia:)": "mediaForPlayingMedia:",
+"duration()": "duration",
+"fileName()": "fileName",
+"group()": "group",
+"groupIdentifier()": "groupIdentifier",
+"insertionDate()": "insertionDate",
+"isCached()": "isCached",
+"isDiscoveredMedia()": "isDiscoveredMedia",
+"isExternalMedia()": "isExternalMedia",
+"isFavorite()": "isFavorite",
+"isStream()": "isStream",
+"lastPlayedDate()": "lastPlayedDate",
+"linkedSubscriptions(with:desc:)": "linkedSubscriptionsWithSortingCriteria:desc:",
+"mainFile()": "mainFile",
+"metadata(of:)": "metadataOfType:",
+"nbSubscriptions()": "nbSubscriptions",
+"playCount()": "playCount",
+"regroup()": "regroup",
+"releaseDate()": "releaseDate",
+"removeAllBookmarks()": "removeAllBookmarks",
+"removeBookmark(atTime:)": "removeBookmarkAtTime:",
+"removeFromGroup()": "removeFromGroup",
+"removeFromHistory()": "removeFromHistory",
+"removeLabel(_:)": "removeLabel:",
+"removeThumbnail(of:)": "removeThumbnailOfType:",
+"requestThumbnail(of:desiredWidth:desiredHeight:atPosition:)": "requestThumbnailOfType:desiredWidth:desiredHeight:atPosition:",
+"setFavorite(_:)": "setFavorite:",
+"setMetadataOf(_:intValue:)": "setMetadataOfType:intValue:",
+"setMetadataOf(_:stringValue:)": "setMetadataOfType:stringValue:",
+"setPlayCount(_:)": "setPlayCount:",
+"setThumbnailWithMRL(_:of:)": "setThumbnailWithMRL:ofType:",
+"setThumbnailWithMRL(_:of:takeOwnership:)": "setThumbnailWithMRL:ofType:takeOwnership:",
+"subtype()": "subtype",
+"thumbnail()": "thumbnail",
+"thumbnail(of:)": "thumbnailOfType:",
+"thumbnailStatus()": "thumbnailStatus",
+"thumbnailStatus(of:)": "thumbnailStatusOfType:",
+"type()": "type",
+"updateTitle(_:)": "updateTitle:"
+},
+"properties": {
+"album": [
+"album",
+"setAlbum:"
+],
+"albumId": [
+"albumId",
+"setAlbumId:"
+],
+"artist": [
+"artist",
+"setArtist:"
+],
+"artistId": [
+"artistId",
+"setArtistId:"
+],
+"audioTrackIndex": [
+"audioTrackIndex",
+"setAudioTrackIndex:"
+],
+"audioTracks": [
+"audioTracks",
+"setAudioTracks:"
+],
+"bookmarks": [
+"bookmarks",
+"setBookmarks:"
+],
+"chapterIndex": [
+"chapterIndex",
+"setChapterIndex:"
+],
+"chapters": [
+"chapters",
+"setChapters:"
+],
+"discNumber": [
+"discNumber",
+"setDiscNumber:"
+],
+"files": [
+"files",
+"setFiles:"
+],
+"genre": [
+"genre",
+"setGenre:"
+],
+"genreId": [
+"genreId",
+"setGenreId:"
+],
+"isNew": [
+"isNew",
+"setIsNew:"
+],
+"labels": [
+"labels",
+"setLabels:"
+],
+"lyrics": [
+"lyrics",
+"setLyrics:"
+],
+"movie": [
+"movie",
+"setMovie:"
+],
+"primarySubtitleTrackIndex": [
+"primarySubtitleTrackIndex",
+"setPrimarySubtitleTrackIndex:"
+],
+"progress": [
+"progress",
+"setProgress:"
+],
+"secondarySubtitleTrackIndex": [
+"secondarySubtitleTrackIndex",
+"setSecondarySubtitleTrackIndex:"
+],
+"shortSummary": [
+"shortSummary",
+"setShortSummary:"
+],
+"showEpisode": [
+"showEpisode",
+"setShowEpisode:"
+],
+"subscriptionEpisode": [
+"subscriptionEpisode",
+"setSubscriptionEpisode:"
+],
+"subtitleTracks": [
+"subtitleTracks",
+"setSubtitleTracks:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"titleIndex": [
+"titleIndex",
+"setTitleIndex:"
+],
+"trackNumber": [
+"trackNumber",
+"setTrackNumber:"
+],
+"videoTracks": [
+"videoTracks",
+"setVideoTracks:"
+]
+}
+},
+"VLCMLMediaGroup": {
+"methods": {
+"add(_:)": "addMedia:",
+"addMedia(withIdentifier:)": "addMediaWithIdentifier:",
+"createDate()": "createDate",
+"destroy()": "destroy",
+"duration()": "duration",
+"identifier()": "identifier",
+"lastModificationDate()": "lastModificationDate",
+"media(of:)": "mediaOfType:",
+"media(of:sort:desc:)": "mediaOfType:sort:desc:",
+"media(of:sort:desc:items:offset:)": "mediaOfType:sort:desc:items:offset:",
+"name()": "name",
+"nbAudio()": "nbAudio",
+"nbPresentAudio()": "nbPresentAudio",
+"nbPresentMedia()": "nbPresentMedia",
+"nbPresentUnknown()": "nbPresentUnknown",
+"nbPresentVideo()": "nbPresentVideo",
+"nbSeen()": "nbSeen",
+"nbTotalMedia()": "nbTotalMedia",
+"nbUnknown()": "nbUnknown",
+"nbVideo()": "nbVideo",
+"remove(_:)": "removeMedia:",
+"removeMedia(withIdentifier:)": "removeMediaWithIdentifier:",
+"rename(withName:)": "renameWithName:",
+"searchMedia(withPattern:type:)": "searchMediaWithPattern:type:",
+"searchMedia(withPattern:type:sort:desc:)": "searchMediaWithPattern:type:sort:desc:",
+"userInteracted()": "userInteracted"
+},
+"properties": {
+"favorite": [
+"favorite",
+"setFavorite:"
+]
+}
+},
+"VLCMLMetadata": {
+"methods": {
+"double()": "double",
+"integer()": "integer",
+"isSet()": "isSet"
+},
+"properties": {
+"str": [
+"str",
+"setStr:"
+]
+}
+},
+"VLCMLMovie": {
+"methods": {
+"identifier()": "identifier"
+},
+"properties": {
+"imdbId": [
+"imdbId",
+"setImdbId:"
+],
+"shortSummary": [
+"shortSummary",
+"setShortSummary:"
+]
+}
+},
+"VLCMLObject": {
+"methods": {
+"identifier()": "identifier"
+},
+"properties": {}
+},
+"VLCMLPlaylist": {
+"methods": {
+"addMedia(_:atPosition:)": "addMedia:atPosition:",
+"addMedia(withIdentifier:atPosition:)": "addMediaWithIdentifier:atPosition:",
+"appendMedia(_:)": "appendMedia:",
+"appendMedia(withIdentifier:)": "appendMediaWithIdentifier:",
+"artworkMrl()": "artworkMrl",
+"creationDate()": "creationDate",
+"duration()": "duration",
+"identifier()": "identifier",
+"media(with:desc:)": "mediaWithSortingCriteria:desc:",
+"media(with:desc:_:_:)": "mediaWithSortingCriteria:desc:::",
+"moveMedia(fromPosition:toDestination:)": "moveMediaFromPosition:toDestination:",
+"nbAudio()": "nbAudio",
+"nbMedia()": "nbMedia",
+"nbPresentAudio()": "nbPresentAudio",
+"nbPresentMedia()": "nbPresentMedia",
+"nbPresentUnknown()": "nbPresentUnknown",
+"nbPresentVideo()": "nbPresentVideo",
+"nbUnknown()": "nbUnknown",
+"nbVideo()": "nbVideo",
+"removeMedia(fromPosition:)": "removeMediaFromPosition:",
+"searchMedia(withPattern:sort:desc:)": "searchMediaWithPattern:sort:desc:",
+"unknownDuration()": "unknownDuration",
+"updateName(_:)": "updateName:"
+},
+"properties": {
+"favorite": [
+"favorite",
+"setFavorite:"
+],
+"isReadOnly": [
+"isReadOnly",
+"setIsReadOnly:"
+],
+"media": [
+"media",
+"setMedia:"
+],
+"mrl": [
+"mrl",
+"setMrl:"
+],
+"name": [
+"name",
+"setName:"
+]
+}
+},
+"VLCMLSearchAggregate": {
+"methods": {
+"class initWith(_:artists:genres:media:playlists:)": "initWithAlbums:artists:genres:media:playlists:"
+},
+"properties": {
+"albums": [
+"albums",
+"setAlbums:"
+],
+"artists": [
+"artists",
+"setArtists:"
+],
+"genres": [
+"genres",
+"setGenres:"
+],
+"media": [
+"media",
+"setMedia:"
+],
+"playlists": [
+"playlists",
+"setPlaylists:"
+]
+}
+},
+"VLCMLService": {
+"methods": {
+"addSubscription(withMRL:)": "addSubscriptionWithMRL:",
+"media()": "media",
+"media(with:desc:)": "mediaWithSortingCriteria:desc:",
+"nbMedia()": "nbMedia",
+"nbSubscriptions()": "nbSubscriptions",
+"nbUnplayedMedia()": "nbUnplayedMedia",
+"refresh()": "refresh",
+"searchMedia(withPattern:)": "searchMediaWithPattern:",
+"searchMedia(withPattern:sort:desc:)": "searchMediaWithPattern:sort:desc:",
+"searchSubscriptions(withPattern:)": "searchSubscriptionsWithPattern:",
+"searchSubscriptions(withPattern:sort:desc:)": "searchSubscriptionsWithPattern:sort:desc:",
+"subscriptions()": "subscriptions",
+"subscriptions(with:desc:)": "subscriptionsWithSortingCriteria:desc:",
+"type()": "type"
+},
+"properties": {
+"autoDownloadEnabled": [
+"autoDownloadEnabled",
+"setAutoDownloadEnabled:"
+],
+"maxCacheSize": [
+"maxCacheSize",
+"setMaxCacheSize:"
+],
+"newMediaNotificationEnabled": [
+"newMediaNotificationEnabled",
+"setNewMediaNotificationEnabled:"
+]
+}
+},
+"VLCMLShow": {
+"methods": {
+"episodes(with:desc:)": "episodesWithSortingCriteria:desc:",
+"identifier()": "identifier",
+"numberOfEpisodes()": "numberOfEpisodes",
+"numberOfSeasons()": "numberOfSeasons",
+"searchEpisodes(withPattern:sort:desc:)": "searchEpisodesWithPattern:sort:desc:"
+},
+"properties": {
+"artworkMrl": [
+"artworkMrl",
+"setArtworkMrl:"
+],
+"episodes": [
+"episodes",
+"setEpisodes:"
+],
+"releaseDate": [
+"releaseDate",
+"setReleaseDate:"
+],
+"shortSummary": [
+"shortSummary",
+"setShortSummary:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"tvdbId": [
+"tvdbId",
+"setTvdbId:"
+]
+}
+},
+"VLCMLShowEpisode": {
+"methods": {
+"episodeID()": "episodeID",
+"identifier()": "identifier",
+"seasonID()": "seasonID"
+},
+"properties": {
+"shortSummary": [
+"shortSummary",
+"setShortSummary:"
+],
+"show": [
+"show",
+"setShow:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"tvdbId": [
+"tvdbId",
+"setTvdbId:"
+]
+}
+},
+"VLCMLSubscription": {
+"methods": {
+"cachedSize()": "cachedSize",
+"childSubscriptions()": "childSubscriptions",
+"childSubscriptions(with:desc:)": "childSubscriptionsWithSortingCriteria:desc:",
+"identifier()": "identifier",
+"media()": "media",
+"media(with:desc:)": "mediaWithSortingCriteria:desc:",
+"media(with:desc:_:_:)": "mediaWithSortingCriteria:desc:::",
+"nbMedia()": "nbMedia",
+"nbUnplayedMedia()": "nbUnplayedMedia",
+"parent()": "parent",
+"refresh()": "refresh",
+"requestArtwork()": "requestArtwork",
+"searchMedia(withPattern:sort:desc:)": "searchMediaWithPattern:sort:desc:",
+"searchMedia(withPattern:sort:desc:_:_:)": "searchMediaWithPattern:sort:desc:::",
+"serviceType()": "serviceType"
+},
+"properties": {
+"artworkMRL": [
+"artworkMRL",
+"setArtworkMRL:"
+],
+"author": [
+"author",
+"setAuthor:"
+],
+"copyright": [
+"copyright",
+"setCopyright:"
+],
+"language": [
+"language",
+"setLanguage:"
+],
+"maxCacheSize": [
+"maxCacheSize",
+"setMaxCacheSize:"
+],
+"maxCachedMedia": [
+"maxCachedMedia",
+"setMaxCachedMedia:"
+],
+"mrl": [
+"mrl",
+"setMrl:"
+],
+"name": [
+"name",
+"setName:"
+],
+"newMediaNotification": [
+"newMediaNotification",
+"setNewMediaNotification:"
+],
+"shortSummary": [
+"shortSummary",
+"setShortSummary:"
+],
+"website": [
+"website",
+"setWebsite:"
+]
+}
+},
+"VLCMLSubscriptionEpisode": {
+"methods": {
+"identifier()": "identifier"
+},
+"properties": {
+"author": [
+"author",
+"setAuthor:"
+],
+"episodeNumber": [
+"episodeNumber",
+"setEpisodeNumber:"
+],
+"seasonNumber": [
+"seasonNumber",
+"setSeasonNumber:"
+],
+"showNotes": [
+"showNotes",
+"setShowNotes:"
+]
+}
+},
+"VLCMLSubtitleTrack": {
+"methods": {
+"identifier()": "identifier"
+},
+"properties": {
+"codec": [
+"codec",
+"setCodec:"
+],
+"encoding": [
+"encoding",
+"setEncoding:"
+],
+"isInAttachedFile": [
+"isInAttachedFile",
+"setIsInAttachedFile:"
+],
+"language": [
+"language",
+"setLanguage:"
+],
+"trackDescription": [
+"trackDescription",
+"setTrackDescription:"
+]
+}
+},
+"VLCMLVideoTrack": {
+"methods": {
+"bitrate()": "bitrate",
+"fps()": "fps",
+"fpsDen()": "fpsDen",
+"fpsNum()": "fpsNum",
+"height()": "height",
+"identifier()": "identifier",
+"sarDen()": "sarDen",
+"sarNum()": "sarNum",
+"width()": "width"
+},
+"properties": {
+"codec": [
+"codec",
+"setCodec:"
+],
+"language": [
+"language",
+"setLanguage:"
+],
+"videoDescription": [
+"videoDescription",
+"setVideoDescription:"
+]
+}
+},
+"VLCMedia": {
+"methods": {
+"addOption(_:)": "addOption:",
+"addOptions(_:)": "addOptions:",
+"class codecName(forFourCC:trackType:)": "codecNameForFourCC:trackType:",
+"class init(URL:)": "mediaWithURL:::SYNTHESIZED::c:objc(cs)VLCMedia",
+"clearStoredCookies()": "clearStoredCookies",
+"compare(_:)": "compare:",
+"init(URL:)": "initWithURL:::SYNTHESIZED::c:objc(cs)VLCMedia",
+"init(asNodeWithName:)": "initAsNodeWithName:",
+"init(path:)": "initWithPath:",
+"init(stream:)": "initWithStream:",
+"init(url:)": "initWithURL:",
+"lengthWait(until:)": "lengthWaitUntilDate:",
+"metadata(forKey:)": "metadataForKey:",
+"parse()": "parse",
+"parse(options:)": "parseWithOptions:",
+"parse(options:timeout:)": "parseWithOptions:timeout:",
+"parseStop()": "parseStop",
+"setMetadata(_:forKey:)": "setMetadata:forKey:",
+"storeCookie(_:forHost:path:)": "storeCookie:forHost:path:",
+"synchronousParse()": "synchronousParse"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"demuxBitrate": [
+"demuxBitrate",
+"setDemuxBitrate:"
+],
+"inputBitrate": [
+"inputBitrate",
+"setInputBitrate:"
+],
+"isMediaSizeSuitableForDevice": [
+"isMediaSizeSuitableForDevice",
+"setMediaSizeSuitableForDevice:"
+],
+"isParsed": [
+"isParsed",
+"setIsParsed:"
+],
+"length": [
+"length",
+"setLength:"
+],
+"mediaType": [
+"mediaType",
+"setMediaType:"
+],
+"metaData": [
+"metaData",
+"setMetaData:"
+],
+"metaDictionary": [
+"metaDictionary",
+"setMetaDictionary:"
+],
+"numberOfCorruptedDataPackets": [
+"numberOfCorruptedDataPackets",
+"setNumberOfCorruptedDataPackets:"
+],
+"numberOfDecodedAudioBlocks": [
+"numberOfDecodedAudioBlocks",
+"setNumberOfDecodedAudioBlocks:"
+],
+"numberOfDecodedVideoBlocks": [
+"numberOfDecodedVideoBlocks",
+"setNumberOfDecodedVideoBlocks:"
+],
+"numberOfDiscontinuties": [
+"numberOfDiscontinuties",
+"setNumberOfDiscontinuties:"
+],
+"numberOfDisplayedPictures": [
+"numberOfDisplayedPictures",
+"setNumberOfDisplayedPictures:"
+],
+"numberOfLostAudioBuffers": [
+"numberOfLostAudioBuffers",
+"setNumberOfLostAudioBuffers:"
+],
+"numberOfLostPictures": [
+"numberOfLostPictures",
+"setNumberOfLostPictures:"
+],
+"numberOfPlayedAudioBuffers": [
+"numberOfPlayedAudioBuffers",
+"setNumberOfPlayedAudioBuffers:"
+],
+"numberOfReadBytesOnDemux": [
+"numberOfReadBytesOnDemux",
+"setNumberOfReadBytesOnDemux:"
+],
+"numberOfReadBytesOnInput": [
+"numberOfReadBytesOnInput",
+"setNumberOfReadBytesOnInput:"
+],
+"numberOfSentBytes": [
+"numberOfSentBytes",
+"setNumberOfSentBytes:"
+],
+"numberOfSentPackets": [
+"numberOfSentPackets",
+"setNumberOfSentPackets:"
+],
+"parsedStatus": [
+"parsedStatus",
+"setParsedStatus:"
+],
+"saveMetadata": [
+"saveMetadata",
+"setSaveMetadata:"
+],
+"state": [
+"state",
+"setState:"
+],
+"statistics": [
+"statistics",
+"setStatistics:"
+],
+"stats": [
+"stats",
+"setStats:"
+],
+"streamOutputBitrate": [
+"streamOutputBitrate",
+"setStreamOutputBitrate:"
+],
+"subitems": [
+"subitems",
+"setSubitems:"
+],
+"tracksInformation": [
+"tracksInformation",
+"setTracksInformation:"
+],
+"url": [
+"url",
+"setUrl:"
+],
+"userData": [
+"userData",
+"setUserData:"
+]
+}
+},
+"VLCMediaDelegate": {
+"methods": {
+"mediaDidFinishParsing(_:)": "mediaDidFinishParsing:",
+"mediaMetaDataDidChange(_:)": "mediaMetaDataDidChange:"
+},
+"properties": {}
+},
+"VLCMediaDiscoverer": {
+"methods": {
+"class availableMediaDiscoverer()": "availableMediaDiscoverer",
+"class availableMediaDiscoverer(for:)": "availableMediaDiscovererForCategoryType:",
+"init(name:)": "initWithName:",
+"init(name:libraryInstance:)": "initWithName:libraryInstance:",
+"start()": "startDiscoverer",
+"stop()": "stopDiscoverer"
+},
+"properties": {
+"discoveredMedia": [
+"discoveredMedia",
+"setDiscoveredMedia:"
+],
+"isRunning": [
+"isRunning",
+"setIsRunning:"
+],
+"libraryInstance": [
+"libraryInstance",
+"setLibraryInstance:"
+],
+"localizedName": [
+"localizedName",
+"setLocalizedName:"
+]
+}
+},
+"VLCMediaFileDiscoverer": {
+"methods": {
+"addObserver(_:)": "addObserver:",
+"class sharedInstance()": "sharedInstance",
+"removeObserver(_:)": "removeObserver:",
+"startDiscovering()": "startDiscovering",
+"stopDiscovering()": "stopDiscovering"
+},
+"properties": {
+"directoryPath": [
+"directoryPath",
+"setDirectoryPath:"
+],
+"filterResultsForPlayability": [
+"filterResultsForPlayability",
+"setFilterResultsForPlayability:"
+]
+}
+},
+"VLCMediaFileDiscovererDelegate": {
+"methods": {
+"mediaFileAdded(_:loading:)": "mediaFileAdded:loading:",
+"mediaFileDeleted(_:)": "mediaFileDeleted:"
+},
+"properties": {}
+},
+"VLCMediaLibrary": {
+"methods": {
+"addExternalFolder(at:)": "addExternalFolderAtURL:",
+"addExternalMedia(mrl:duration:)": "addExternalMediaWithMrl:duration:",
+"addExternalMedia(withMrl:)": "addExternalMediaWithMrl:",
+"addStream(withMrl:)": "addStreamWithMrl:",
+"album(withIdentifier:)": "albumWithIdentifier:",
+"albums()": "albums",
+"albums(_:_:)": "albums::",
+"albums(with:desc:)": "albumsWithSortingCriteria:desc:",
+"albums(with:desc:_:_:)": "albumsWithSortingCriteria:desc:::",
+"albums(with:desc:favoriteOnly:)": "albumsWithSortingCriteria:desc:favoriteOnly:",
+"artist(withIdentifier:)": "artistWithIdentifier:",
+"artists(_:)": "artists:",
+"artists(_:_:_:)": "artists:::",
+"artists(with:desc:all:)": "artistsWithSortingCriteria:desc:all:",
+"artists(with:desc:all:_:_:)": "artistsWithSortingCriteria:desc:all:::",
+"artists(with:desc:all:favoriteOnly:)": "artistsWithSortingCriteria:desc:all:favoriteOnly:",
+"audioFiles()": "audioFiles",
+"audioFiles(with:desc:)": "audioFilesWithSortingCriteria:desc:",
+"audioFiles(with:desc:favoriteOnly:)": "audioFilesWithSortingCriteria:desc:favoriteOnly:",
+"audioFiles(with:desc:items:offset:)": "audioFilesWithSortingCriteria:desc:items:offset:",
+"audioHistory()": "audioHistory",
+"audioHistory(_:_:)": "audioHistory::",
+"banFolder(withPath:)": "banFolderWithPath:",
+"bookmark(withIdentifier:)": "bookmarkWithIdentifier:",
+"cacheMedia(_:)": "cacheMedia:",
+"cacheNewSubscriptionMedia()": "cacheNewSubscriptionMedia",
+"class isMediaExtensionSupported(_:)": "isMediaExtensionSupported:",
+"class isPlaylistExtensionSupported(_:)": "isPlaylistExtensionSupported:",
+"class isSubtitleExtensionSupported(_:)": "isSubtitleExtensionSupported:",
+"class supportedMediaExtensions()": "supportedMediaExtensions",
+"class supportedPlaylistExtensions()": "supportedPlaylistExtensions",
+"class supportedSubtitleExtensions()": "supportedSubtitleExtensions",
+"clearDatabase(restorePlaylists:)": "clearDatabaseWithRestorePlaylists:",
+"clearHistory(by:)": "clearHistoryByMediaType:",
+"clearHistory(of:)": "clearHistoryOfType:",
+"createLabel(withName:)": "createLabelWithName:",
+"createMediaGroup(withMediaIds:)": "createMediaGroupWithMediaIds:",
+"createMediaGroup(withName:)": "createMediaGroupWithName:",
+"createPlaylist(withName:)": "createPlaylistWithName:",
+"delete(_:)": "deleteLabel:",
+"deleteExternalFolder(_:)": "deleteExternalFolder:",
+"deleteMediaGroup(withIdentifier:)": "deleteMediaGroupWithIdentifier:",
+"deletePlaylist(withIdentifier:)": "deletePlaylistWithIdentifier:",
+"discover(onEntryPoint:)": "discoverOnEntryPoint:",
+"enableDiscoverNetwork(_:)": "enableDiscoverNetwork:",
+"enableFailedThumbnailRegeneration()": "enableFailedThumbnailRegeneration",
+"externalFolders(with:desc:)": "externalFoldersWithSortingCriteria:desc:",
+"fits(inSubscriptionCache:)": "fitsInSubscriptionCache:",
+"folder(atMrl:)": "folderAtMrl:",
+"folder(withIdentifier:)": "folderWithIdentifier:",
+"folders()": "folders",
+"folders(of:)": "foldersOfType:",
+"folders(with:desc:)": "foldersWithSortingCriteria:desc:",
+"folders(with:type:desc:)": "foldersWithSortingCriteria:type:desc:",
+"forceParserRetry()": "forceParserRetry",
+"forceRescan()": "forceRescan",
+"genre(withIdentifier:)": "genreWithIdentifier:",
+"genres()": "genres",
+"genres(_:_:)": "genres::",
+"genres(with:desc:)": "genresWithSortingCriteria:desc:",
+"genres(with:desc:_:_:)": "genresWithSortingCriteria:desc:::",
+"genres(with:desc:favoriteOnly:)": "genresWithSortingCriteria:desc:favoriteOnly:",
+"history(of:)": "historyOfType:",
+"history(of:_:_:)": "historyOfType:::",
+"inProgressMediaOf(_:with:desc:)": "inProgressMediaOfType:withSortingCriteria:desc:",
+"media(withIdentifier:)": "mediaWithIdentifier:",
+"media(withMrl:)": "mediaWithMrl:",
+"mediaGroup(withIdentifier:)": "mediaGroupWithIdentifier:",
+"mediaGroups()": "mediaGroups",
+"mediaGroups(_:_:)": "mediaGroups::",
+"mediaGroups(ofType:sortingCriteria:desc:items:offset:)": "mediaGroupsOfType:sortingCriteria:desc:items:offset:",
+"mediaGroups(type:)": "mediaGroupsOfType:",
+"mediaGroups(type:items:offset:)": "mediaGroupsOfType:items:offset:",
+"mediaGroups(type:sortingCriteria:desc:)": "mediaGroupsOfType:sortingCriteria:desc:",
+"mediaGroups(with:desc:)": "mediaGroupsWithSortingCriteria:desc:",
+"mediaGroups(with:desc:_:_:)": "mediaGroupsWithSortingCriteria:desc:::",
+"mediaGroups(with:desc:favoriteOnly:)": "mediaGroupsWithSortingCriteria:desc:favoriteOnly:",
+"movieWitIdentifier(_:)": "movieWitIdentifier:",
+"movies()": "movies",
+"movies(with:desc:)": "moviesWithSortingCriteria:desc:",
+"pauseBackgroundOperations()": "pauseBackgroundOperations",
+"pauseCaching()": "pauseCaching",
+"playlist(withIdentifier:)": "playlistWithIdentifier:",
+"playlists()": "playlists",
+"playlists(_:_:)": "playlists::",
+"playlists(with:desc:)": "playlistsWithSortingCriteria:desc:",
+"playlists(with:desc:_:_:)": "playlistsWithSortingCriteria:desc:::",
+"playlists(with:desc:favoriteOnly:)": "playlistsWithSortingCriteria:desc:favoriteOnly:",
+"refreshAllSubscriptions()": "refreshAllSubscriptions",
+"regroupAll()": "regroupAll",
+"reload()": "reload",
+"reloadEntryPoint(_:)": "reloadEntryPoint:",
+"removeCachedMedia(_:)": "removeCachedMedia:",
+"removeEntryPoint(withPath:)": "removeEntryPointWithPath:",
+"removeExternalFolder(_:)": "removeExternalFolder:",
+"removeExternalMedia(_:)": "removeExternalMedia:",
+"removeSubscription(withIdentifier:)": "removeSubscriptionWithIdentifier:",
+"resumeBackgroundOperations()": "resumeBackgroundOperations",
+"resumeCaching()": "resumeCaching",
+"search(_:)": "search:",
+"search(_:sort:desc:)": "search:sort:desc:",
+"search(inAudioHistory:)": "searchInAudioHistory:",
+"search(inAudioHistory:sort:desc:)": "searchInAudioHistory:sort:desc:",
+"search(inHistoryOf:pattern:)": "searchInHistoryOfType:pattern:",
+"search(inHistoryOf:pattern:sort:desc:)": "searchInHistoryOfType:pattern:sort:desc:",
+"search(inVideoHistory:)": "searchInVideoHistory:",
+"search(inVideoHistory:sort:desc:)": "searchInVideoHistory:sort:desc:",
+"searchAlbums(byPattern:)": "searchAlbumsByPattern:",
+"searchAlbums(byPattern:sort:desc:)": "searchAlbumsByPattern:sort:desc:",
+"searchArtists(byName:all:)": "searchArtistsByName:all:",
+"searchArtists(byName:all:sort:desc:)": "searchArtistsByName:all:sort:desc:",
+"searchAudio(_:)": "searchAudio:",
+"searchAudio(_:sort:desc:)": "searchAudio:sort:desc:",
+"searchFolders(withPattern:)": "searchFoldersWithPattern:",
+"searchFolders(withPattern:sortingCriteria:desc:)": "searchFoldersWithPattern:sortingCriteria:desc:",
+"searchFolders(withPattern:type:)": "searchFoldersWithPattern:type:",
+"searchFolders(withPattern:type:sortingCriteria:desc:)": "searchFoldersWithPattern:type:sortingCriteria:desc:",
+"searchGenre(byName:)": "searchGenreByName:",
+"searchGenre(byName:sort:desc:)": "searchGenreByName:sort:desc:",
+"searchMedia(_:)": "searchMedia:",
+"searchMedia(_:sort:desc:)": "searchMedia:sort:desc:",
+"searchMediaGroups(withPattern:)": "searchMediaGroupsWithPattern:",
+"searchMediaGroups(withPattern:sort:desc:)": "searchMediaGroupsWithPattern:sort:desc:",
+"searchMovie(_:)": "searchMovie:",
+"searchMovie(_:sort:desc:)": "searchMovie:sort:desc:",
+"searchPlaylists(byName:of:)": "searchPlaylistsByName:ofType:",
+"searchPlaylists(byName:of:sort:desc:)": "searchPlaylistsByName:ofType:sort:desc:",
+"searchShows(_:)": "searchShows:",
+"searchShows(_:sort:desc:)": "searchShows:sort:desc:",
+"searchSubscriptionMedia(withPattern:)": "searchSubscriptionMediaWithPattern:",
+"searchSubscriptionMedia(withPattern:sort:desc:)": "searchSubscriptionMediaWithPattern:sort:desc:",
+"searchVideo(_:)": "searchVideo:",
+"searchVideo(_:sort:desc:)": "searchVideo:sort:desc:",
+"service(with:)": "serviceWithType:",
+"setVerbosity(_:)": "setVerbosity:",
+"setupMediaLibrary(databasePath:medialibraryPath:cachePath:)": "setupMediaLibraryWithDatabasePath:medialibraryPath:cachePath:",
+"show(withIdentifier:)": "showWithIdentifier:",
+"stopCaching()": "stopCaching",
+"subscription(withIdentifier:)": "subscriptionWithIdentifier:",
+"subscriptionMedia()": "subscriptionMedia",
+"subscriptionMedia(with:desc:)": "subscriptionMediaWithSortingCriteria:desc:",
+"unbanFolder(withEntryPoint:)": "unbanFolderWithEntryPoint:",
+"videoFiles()": "videoFiles",
+"videoFiles(with:desc:)": "videoFilesWithSortingCriteria:desc:",
+"videoFiles(with:desc:_:_:)": "videoFilesWithSortingCriteria:desc:::",
+"videoFiles(with:desc:favoriteOnly:)": "videoFilesWithSortingCriteria:desc:favoriteOnly:",
+"videoHistory()": "videoHistory",
+"videoHistory(_:_:)": "videoHistory::"
+},
+"properties": {
+"artworkCacherDelegate": [
+"artworkCacherDelegate",
+"setArtworkCacherDelegate:"
+],
+"cacherDelegate": [
+"cacherDelegate",
+"setCacherDelegate:"
+],
+"databasePath": [
+"databasePath",
+"setDatabasePath:"
+],
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"deviceListerDelegate": [
+"deviceListerDelegate",
+"setDeviceListerDelegate:"
+],
+"loggerDelegate": [
+"loggerDelegate",
+"setLoggerDelegate:"
+],
+"maxCacheSize": [
+"maxCacheSize",
+"setMaxCacheSize:"
+],
+"medialibraryPath": [
+"medialibraryPath",
+"setMedialibraryPath:"
+],
+"subscriptionMaxCacheSize": [
+"subscriptionMaxCacheSize",
+"setSubscriptionMaxCacheSize:"
+],
+"subscriptionMaxCachedMedia": [
+"subscriptionMaxCachedMedia",
+"setSubscriptionMaxCachedMedia:"
+]
+}
+},
+"VLCMediaLibraryDelegate": {
+"methods": {
+"medialibrary(_:artworkReadyForSubscriptionWithId:withSuccess:)": "medialibrary:artworkReadyForSubscriptionWithId:withSuccess:",
+"medialibrary(_:cacheIdleChanged:)": "medialibrary:cacheIdleChanged:",
+"medialibrary(_:deletedBookmarks:)": "medialibrary:deletedBookmarks:",
+"medialibrary(_:didAdd:)": "medialibrary:didAddArtists:",
+"medialibrary(_:didAddEntryPoint:withSuccess:)": "medialibrary:didAddEntryPoint:withSuccess:",
+"medialibrary(_:didAddMedia:)": "medialibrary:didAddMedia:",
+"medialibrary(_:didBanEntryPoint:withSuccess:)": "medialibrary:didBanEntryPoint:withSuccess:",
+"medialibrary(_:didChangeIdleBackgroundTasksWithSuccess:)": "medialibrary:didChangeIdleBackgroundTasksWithSuccess:",
+"medialibrary(_:didDeleteAlbumsWithIds:)": "medialibrary:didDeleteAlbumsWithIds:",
+"medialibrary(_:didDeleteArtistsWithIds:)": "medialibrary:didDeleteArtistsWithIds:",
+"medialibrary(_:didDeleteGenresWithIds:)": "medialibrary:didDeleteGenresWithIds:",
+"medialibrary(_:didDeleteMediaGroupsWithIds:)": "medialibrary:didDeleteMediaGroupsWithIds:",
+"medialibrary(_:didDeleteMediaWithIds:)": "medialibrary:didDeleteMediaWithIds:",
+"medialibrary(_:didDeletePlaylistsWithIds:)": "medialibrary:didDeletePlaylistsWithIds:",
+"medialibrary(_:didDeleteSubscriptionsWithIds:)": "medialibrary:didDeleteSubscriptionsWithIds:",
+"medialibrary(_:didFailDiscovery:)": "medialibrary:didFailDiscovery:",
+"medialibrary(_:didFinishCachingMediaWithId:operation:status:)": "medialibrary:didFinishCachingMediaWithId:operation:status:",
+"medialibrary(_:didModifyAlbumsWithIds:)": "medialibrary:didModifyAlbumsWithIds:",
+"medialibrary(_:didModifyArtistsWithIds:)": "medialibrary:didModifyArtistsWithIds:",
+"medialibrary(_:didModifyGenresWithIds:)": "medialibrary:didModifyGenresWithIds:",
+"medialibrary(_:didModifyMediaGroupsWithIds:)": "medialibrary:didModifyMediaGroupsWithIds:",
+"medialibrary(_:didModifyMediaWithIds:)": "medialibrary:didModifyMediaWithIds:",
+"medialibrary(_:didModifyPlaylistsWithIds:)": "medialibrary:didModifyPlaylistsWithIds:",
+"medialibrary(_:didModifySubscriptionsWithIds:)": "medialibrary:didModifySubscriptionsWithIds:",
+"medialibrary(_:didProgressDiscovery:)": "medialibrary:didProgressDiscovery:",
+"medialibrary(_:didReceiveNewMediaForSubscriptionsWithIds:)": "medialibrary:didReceiveNewMediaForSubscriptionsWithIds:",
+"medialibrary(_:didRemoveEntryPoint:withSuccess:)": "medialibrary:didRemoveEntryPoint:withSuccess:",
+"medialibrary(_:didStartCachingMediaWithId:operation:)": "medialibrary:didStartCachingMediaWithId:operation:",
+"medialibrary(_:didUnbanEntryPoint:withSuccess:)": "medialibrary:didUnbanEntryPoint:withSuccess:",
+"medialibrary(_:didUpdateCacheForSubscriptionWithId:)": "medialibrary:didUpdateCacheForSubscriptionWithId:",
+"medialibrary(_:didUpdateParsingStatsWithOpsDone:opsScheduled:)": "medialibrary:didUpdateParsingStatsWithOpsDone:opsScheduled:",
+"medialibrary(_:historyChangedOf:)": "medialibrary:historyChangedOfType:",
+"medialibrary(_:modifiedBookmarks:)": "medialibrary:modifiedBookmarks:",
+"medialibrary(_:thumbnailReadyFor:of:withSuccess:)": "medialibrary:thumbnailReadyForMedia:ofType:withSuccess:",
+"medialibrary(_:unhandledExceptionWithContext:errorMessage:clearSuggested:)": "medialibrary:unhandledExceptionWithContext:errorMessage:clearSuggested:",
+"medialibraryDidEndDiscovery(_:)": "medialibraryDidEndDiscovery:",
+"medialibraryDidStartDiscovery(_:)": "medialibraryDidStartDiscovery:",
+"medialibraryDidStartRescan(_:)": "medialibraryDidStartRescan:",
+"medialibraryDidUpdateExternalFolders(_:)": "medialibraryDidUpdateExternalFolders:"
+},
+"properties": {}
+},
+"VLCMediaList": {
+"methods": {
+"add(_:)": "addMedia:",
+"index(of:)": "indexOfMedia:",
+"init(array:)": "initWithArray:",
+"insert(_:at:)": "insertMedia:atIndex:",
+"lock()": "lock",
+"media(at:)": "mediaAtIndex:",
+"removeMedia(at:)": "removeMediaAtIndex:",
+"unlock()": "unlock",
+"writeM3U(to:)": "writeM3UToURL:error:",
+"writeM3U(to:relativeToDirectory:)": "writeM3UToURL:relativeToDirectory:error:"
+},
+"properties": {
+"count": [
+"count",
+"setCount:"
+],
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"isReadOnly": [
+"isReadOnly",
+"setIsReadOnly:"
+]
+}
+},
+"VLCMediaListDelegate": {
+"methods": {
+"mediaList(_:mediaAdded:at:)": "mediaList:mediaAdded:atIndex:",
+"mediaList(_:mediaRemovedAt:)": "mediaList:mediaRemovedAtIndex:"
+},
+"properties": {}
+},
+"VLCMediaListPlayer": {
+"methods": {
+"init(drawable:)": "initWithDrawable:",
+"init(options:)": "initWithOptions:",
+"init(options:andDrawable:)": "initWithOptions:andDrawable:",
+"pause()": "pause",
+"play()": "play",
+"play(_:)": "playMedia:",
+"playItem(at:)": "playItemAtIndex:",
+"stop()": "stop"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"mediaList": [
+"mediaList",
+"setMediaList:"
+],
+"mediaPlayer": [
+"mediaPlayer",
+"setMediaPlayer:"
+],
+"next": [
+"next",
+"setNext:"
+],
+"previous": [
+"previous",
+"setPrevious:"
+],
+"repeatMode": [
+"repeatMode",
+"setRepeatMode:"
+],
+"rootMedia": [
+"rootMedia",
+"setRootMedia:"
+]
+}
+},
+"VLCMediaListPlayerDelegate": {
+"methods": {
+"mediaListPlayer(_:nextMedia:)": "mediaListPlayer:nextMedia:",
+"mediaListPlayerFinishedPlayback(_:)": "mediaListPlayerFinishedPlayback:",
+"mediaListPlayerStopped(_:)": "mediaListPlayerStopped:"
+},
+"properties": {}
+},
+"VLCMediaLoudness": {
+"methods": {},
+"properties": {
+"date": [
+"date",
+"setDate:"
+],
+"loudnessValue": [
+"loudnessValue",
+"setLoudnessValue:"
+]
+}
+},
+"VLCMediaMetaData": {
+"methods": {
+"clearCache()": "clearCache",
+"prefetch()": "prefetch",
+"save()": "save"
+},
+"properties": {
+"actors": [
+"actors",
+"setActors:"
+],
+"album": [
+"album",
+"setAlbum:"
+],
+"albumArtist": [
+"albumArtist",
+"setAlbumArtist:"
+],
+"artist": [
+"artist",
+"setArtist:"
+],
+"artwork": [
+"artwork",
+"setArtwork:"
+],
+"artworkURL": [
+"artworkURL",
+"setArtworkURL:"
+],
+"copyright": [
+"copyright",
+"setCopyright:"
+],
+"date": [
+"date",
+"setDate:"
+],
+"director": [
+"director",
+"setDirector:"
+],
+"discNumber": [
+"discNumber",
+"setDiscNumber:"
+],
+"discTotal": [
+"discTotal",
+"setDiscTotal:"
+],
+"encodedBy": [
+"encodedBy",
+"setEncodedBy:"
+],
+"episode": [
+"episode",
+"setEpisode:"
+],
+"genre": [
+"genre",
+"setGenre:"
+],
+"language": [
+"language",
+"setLanguage:"
+],
+"metaDescription": [
+"metaDescription",
+"setMetaDescription:"
+],
+"nowPlaying": [
+"nowPlaying",
+"setNowPlaying:"
+],
+"publisher": [
+"publisher",
+"setPublisher:"
+],
+"rating": [
+"rating",
+"setRating:"
+],
+"season": [
+"season",
+"setSeason:"
+],
+"setting": [
+"setting",
+"setSetting:"
+],
+"showName": [
+"showName",
+"setShowName:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"trackID": [
+"trackID",
+"setTrackID:"
+],
+"trackNumber": [
+"trackNumber",
+"setTrackNumber:"
+],
+"trackTotal": [
+"trackTotal",
+"setTrackTotal:"
+],
+"url": [
+"url",
+"setUrl:"
+]
+}
+},
+"VLCMediaPlayer": {
+"methods": {
+"addPlaybackSlave(_:type:enforce:)": "addPlaybackSlave:type:enforce:",
+"amplification(ofBand:)": "amplificationOfBand:",
+"chapterDescriptions(ofTitle:)": "chapterDescriptionsOfTitle:",
+"chapters(forTitleIndex:)": "chaptersForTitleIndex:",
+"extraShortJumpBackward()": "extraShortJumpBackward",
+"extraShortJumpForward()": "extraShortJumpForward",
+"fastForward()": "fastForward",
+"fastForward(atRate:)": "fastForwardAtRate:",
+"frequencyOfBand(at:)": "frequencyOfBandAtIndex:",
+"gotoNextFrame()": "gotoNextFrame",
+"init(libVLCInstance:andLibrary:)": "initWithLibVLCInstance:andLibrary:",
+"init(library:)": "initWithLibrary:",
+"init(options:)": "initWithOptions:",
+"jumpBackward(_:)": "jumpBackward:",
+"jumpForward(_:)": "jumpForward:",
+"longJumpBackward()": "longJumpBackward",
+"longJumpForward()": "longJumpForward",
+"mediumJumpBackward()": "mediumJumpBackward",
+"mediumJumpForward()": "mediumJumpForward",
+"nextChapter()": "nextChapter",
+"numberOfChapters(forTitle:)": "numberOfChaptersForTitle:",
+"openVideoSubTitles(fromFile:)": "openVideoSubTitlesFromFile:",
+"pause()": "pause",
+"perform(_:)": "performNavigationAction:",
+"play()": "play",
+"previousChapter()": "previousChapter",
+"resetEqualizer(fromProfile:)": "resetEqualizerFromProfile:",
+"rewind()": "rewind",
+"rewind(atRate:)": "rewindAtRate:",
+"saveVideoSnapshot(at:withWidth:andHeight:)": "saveVideoSnapshotAt:withWidth:andHeight:",
+"setAmplification(_:forBand:)": "setAmplification:forBand:",
+"setDeinterlace(_:withFilter:)": "setDeinterlace:withFilter:",
+"setDeinterlaceFilter(_:)": "setDeinterlaceFilter:",
+"setRendererItem(_:)": "setRendererItem:",
+"shortJumpBackward()": "shortJumpBackward",
+"shortJumpForward()": "shortJumpForward",
+"startRecording(atPath:)": "startRecordingAtPath:",
+"stop()": "stop",
+"stopRecording()": "stopRecording",
+"updateViewpoint(_:pitch:roll:fov:absolute:)": "updateViewpoint:pitch:roll:fov:absolute:"
+},
+"properties": {
+"adjustFilter": [
+"adjustFilter",
+"setAdjustFilter:"
+],
+"adjustFilterEnabled": [
+"adjustFilterEnabled",
+"setAdjustFilterEnabled:"
+],
+"audio": [
+"audio",
+"setAudio:"
+],
+"audioChannel": [
+"audioChannel",
+"setAudioChannel:"
+],
+"audioTrackIndexes": [
+"audioTrackIndexes",
+"setAudioTrackIndexes:"
+],
+"audioTrackNames": [
+"audioTrackNames",
+"setAudioTrackNames:"
+],
+"brightness": [
+"brightness",
+"setBrightness:"
+],
+"canPause": [
+"canPause",
+"setCanPause:"
+],
+"contrast": [
+"contrast",
+"setContrast:"
+],
+"countOfTitles": [
+"countOfTitles",
+"setCountOfTitles:"
+],
+"currentAudioPlaybackDelay": [
+"currentAudioPlaybackDelay",
+"setCurrentAudioPlaybackDelay:"
+],
+"currentAudioTrackIndex": [
+"currentAudioTrackIndex",
+"setCurrentAudioTrackIndex:"
+],
+"currentChapterIndex": [
+"currentChapterIndex",
+"setCurrentChapterIndex:"
+],
+"currentTitleIndex": [
+"currentTitleIndex",
+"setCurrentTitleIndex:"
+],
+"currentVideoSubTitleDelay": [
+"currentVideoSubTitleDelay",
+"setCurrentVideoSubTitleDelay:"
+],
+"currentVideoSubTitleIndex": [
+"currentVideoSubTitleIndex",
+"setCurrentVideoSubTitleIndex:"
+],
+"currentVideoTrackIndex": [
+"currentVideoTrackIndex",
+"setCurrentVideoTrackIndex:"
+],
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"drawable": [
+"drawable",
+"setDrawable:"
+],
+"equalizer": [
+"equalizer",
+"setEqualizer:"
+],
+"equalizerEnabled": [
+"equalizerEnabled",
+"setEqualizerEnabled:"
+],
+"equalizerProfiles": [
+"equalizerProfiles",
+"setEqualizerProfiles:"
+],
+"fov": [
+"fov",
+"setFov:"
+],
+"framesPerSecond": [
+"framesPerSecond",
+"setFramesPerSecond:"
+],
+"gamma": [
+"gamma",
+"setGamma:"
+],
+"hasVideoOut": [
+"hasVideoOut",
+"setHasVideoOut:"
+],
+"hue": [
+"hue",
+"setHue:"
+],
+"indexOfLongestTitle": [
+"indexOfLongestTitle",
+"setIndexOfLongestTitle:"
+],
+"isPlaying": [
+"isPlaying",
+"setPlaying:"
+],
+"isSeekable": [
+"isSeekable",
+"setSeekable:"
+],
+"lastSnapshot": [
+"lastSnapshot",
+"setLastSnapshot:"
+],
+"libraryInstance": [
+"libraryInstance",
+"setLibraryInstance:"
+],
+"media": [
+"media",
+"setMedia:"
+],
+"momentaryLoudness": [
+"momentaryLoudness",
+"setMomentaryLoudness:"
+],
+"numberOfAudioTracks": [
+"numberOfAudioTracks",
+"setNumberOfAudioTracks:"
+],
+"numberOfBands": [
+"numberOfBands",
+"setNumberOfBands:"
+],
+"numberOfSubtitlesTracks": [
+"numberOfSubtitlesTracks",
+"setNumberOfSubtitlesTracks:"
+],
+"numberOfTitles": [
+"numberOfTitles",
+"setNumberOfTitles:"
+],
+"numberOfVideoTracks": [
+"numberOfVideoTracks",
+"setNumberOfVideoTracks:"
+],
+"pitch": [
+"pitch",
+"setPitch:"
+],
+"position": [
+"position",
+"setPosition:"
+],
+"preAmplification": [
+"preAmplification",
+"setPreAmplification:"
+],
+"rate": [
+"rate",
+"setRate:"
+],
+"remainingTime": [
+"remainingTime",
+"setRemainingTime:"
+],
+"roll": [
+"roll",
+"setRoll:"
+],
+"saturation": [
+"saturation",
+"setSaturation:"
+],
+"scaleFactor": [
+"scaleFactor",
+"setScaleFactor:"
+],
+"snapshots": [
+"snapshots",
+"setSnapshots:"
+],
+"state": [
+"state",
+"setState:"
+],
+"time": [
+"time",
+"setTime:"
+],
+"titleDescriptions": [
+"titleDescriptions",
+"setTitleDescriptions:"
+],
+"titles": [
+"titles",
+"setTitles:"
+],
+"videoAspectRatio": [
+"videoAspectRatio",
+"setVideoAspectRatio:"
+],
+"videoCropGeometry": [
+"videoCropGeometry",
+"setVideoCropGeometry:"
+],
+"videoSize": [
+"videoSize",
+"setVideoSize:"
+],
+"videoSubTitlesIndexes": [
+"videoSubTitlesIndexes",
+"setVideoSubTitlesIndexes:"
+],
+"videoSubTitlesNames": [
+"videoSubTitlesNames",
+"setVideoSubTitlesNames:"
+],
+"videoTrackIndexes": [
+"videoTrackIndexes",
+"setVideoTrackIndexes:"
+],
+"videoTrackNames": [
+"videoTrackNames",
+"setVideoTrackNames:"
+],
+"willPlay": [
+"willPlay",
+"setWillPlay:"
+],
+"yaw": [
+"yaw",
+"setYaw:"
+]
+}
+},
+"VLCMediaPlayerDelegate": {
+"methods": {
+"mediaPlayer(_:recordingStoppedAtPath:)": "mediaPlayer:recordingStoppedAtPath:",
+"mediaPlayerChapterChanged(_:)": "mediaPlayerChapterChanged:",
+"mediaPlayerLoudnessChanged(_:)": "mediaPlayerLoudnessChanged:",
+"mediaPlayerSnapshot(_:)": "mediaPlayerSnapshot:",
+"mediaPlayerStartedRecording(_:)": "mediaPlayerStartedRecording:",
+"mediaPlayerStateChanged(_:)": "mediaPlayerStateChanged:",
+"mediaPlayerTimeChanged(_:)": "mediaPlayerTimeChanged:",
+"mediaPlayerTitleChanged(_:)": "mediaPlayerTitleChanged:"
+},
+"properties": {}
+},
+"VLCMediaThumbnailer": {
+"methods": {
+"class init(media:andDelegate:)": "thumbnailerWithMedia:andDelegate:",
+"class init(media:delegate:andVLCLibrary:)": "thumbnailerWithMedia:delegate:andVLCLibrary:",
+"fetchThumbnail()": "fetchThumbnail"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"media": [
+"media",
+"setMedia:"
+],
+"snapshotPosition": [
+"snapshotPosition",
+"setSnapshotPosition:"
+],
+"thumbnail": [
+"thumbnail",
+"setThumbnail:"
+],
+"thumbnailHeight": [
+"thumbnailHeight",
+"setThumbnailHeight:"
+],
+"thumbnailWidth": [
+"thumbnailWidth",
+"setThumbnailWidth:"
+]
+}
+},
+"VLCMediaThumbnailerDelegate": {
+"methods": {
+"mediaThumbnailer(_:didFinishThumbnail:)": "mediaThumbnailer:didFinishThumbnail:",
+"mediaThumbnailerDidTimeOut(_:)": "mediaThumbnailerDidTimeOut:"
+},
+"properties": {}
+},
+"VLCMetaData": {
+"methods": {
+"prepareArtworkImage(_:for:)": "prepareArtworkImage:forURL:",
+"resetExposedTiming(withDuration:)": "resetExposedTimingWithDuration:",
+"updateExposedTiming(from:)": "updateExposedTimingFromMediaPlayer:",
+"updateMetadata(from:mediaPlayer:)": "updateMetadataFromMedia:mediaPlayer:",
+"updatePlaybackState(from:)": "updatePlaybackStateFromMediaPlayer:"
+},
+"properties": {
+"albumName": [
+"albumName",
+"setAlbumName:"
+],
+"albumTrackCount": [
+"albumTrackCount",
+"setAlbumTrackCount:"
+],
+"artist": [
+"artist",
+"setArtist:"
+],
+"artworkImage": [
+"artworkImage",
+"setArtworkImage:"
+],
+"descriptiveTitle": [
+"descriptiveTitle",
+"setDescriptiveTitle:"
+],
+"discNumber": [
+"discNumber",
+"setDiscNumber:"
+],
+"elapsedPlaybackTime": [
+"elapsedPlaybackTime",
+"setElapsedPlaybackTime:"
+],
+"genre": [
+"genre",
+"setGenre:"
+],
+"hasPlaceholderArtwork": [
+"hasPlaceholderArtwork",
+"setHasPlaceholderArtwork:"
+],
+"identifier": [
+"identifier",
+"setIdentifier:"
+],
+"isAudioOnly": [
+"isAudioOnly",
+"setIsAudioOnly:"
+],
+"isLiveStream": [
+"isLiveStream",
+"setIsLiveStream:"
+],
+"placeholderName": [
+"placeholderName",
+"setPlaceholderName:"
+],
+"playbackDuration": [
+"playbackDuration",
+"setPlaybackDuration:"
+],
+"playbackRate": [
+"playbackRate",
+"setPlaybackRate:"
+],
+"position": [
+"position",
+"setPosition:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"trackNumber": [
+"trackNumber",
+"setTrackNumber:"
+]
+}
+},
+"VLCMigrationCursor": {
+"methods": {
+"class complete(_:)": "completeStep:",
+"class isStepPending(_:)": "isStepPending:"
+},
+"properties": {}
+},
+"VLCMiniPlaybackViewInterface": {
+"methods": {},
+"properties": {
+"visible": [
+"visible",
+"setVisible:"
+]
+}
+},
+"VLCNetworkImageView": {
+"methods": {
+"cancelLoading()": "cancelLoading",
+"setImageWith(_:)": "setImageWithURL:",
+"setImageWith(_:maxPixelSize:)": "setImageWithURL:maxPixelSize:"
+},
+"properties": {
+"animateImageSetting": [
+"animateImageSetting",
+"setAnimateImageSetting:"
+],
+"aspectRatioConstraint": [
+"aspectRatioConstraint",
+"setAspectRatioConstraint:"
+],
+"downloadTask": [
+"downloadTask",
+"setDownloadTask:"
+]
+}
+},
+"VLCNetworkListCell": {
+"methods": {
+"class heightOfCell()": "heightOfCell",
+"class init(reuseIdentifier:)": "cellWithReuseIdentifier:",
+"triggerDownload(_:)": "triggerDownload:",
+"triggerFavorite(_:)": "triggerFavorite:"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"downloadButton": [
+"downloadButton",
+"setDownloadButton:"
+],
+"edgePadding": [
+"edgePadding",
+"setEdgePadding:"
+],
+"favoriteButton": [
+"favoriteButton",
+"setFavoriteButton:"
+],
+"folderTitleLabel": [
+"folderTitleLabel",
+"setFolderTitleLabel:"
+],
+"icon": [
+"icon",
+"setIcon:"
+],
+"iconURL": [
+"iconURL",
+"setIconURL:"
+],
+"interItemPadding": [
+"interItemPadding",
+"setInterItemPadding:"
+],
+"isDirectory": [
+"isDirectory",
+"setIsDirectory:"
+],
+"isDownloadable": [
+"isDownloadable",
+"setIsDownloadable:"
+],
+"isFavorable": [
+"isFavorable",
+"setIsFavorable:"
+],
+"isFavorite": [
+"isFavorite",
+"setIsFavorite:"
+],
+"isTitleLabelCentered": [
+"isTitleLabelCentered",
+"setTitleLabelCentered:"
+],
+"statusLabel": [
+"statusLabel",
+"setStatusLabel:"
+],
+"subtitle": [
+"subtitle",
+"setSubtitle:"
+],
+"subtitleLabel": [
+"subtitleLabel",
+"setSubtitleLabel:"
+],
+"thumbnailHeightConstraint": [
+"thumbnailHeightConstraint",
+"setThumbnailHeightConstraint:"
+],
+"thumbnailView": [
+"thumbnailView",
+"setThumbnailView:"
+],
+"thumbnailWidthConstraint": [
+"thumbnailWidthConstraint",
+"setThumbnailWidthConstraint:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"titleLabel": [
+"titleLabel",
+"setTitleLabel:"
+]
+}
+},
+"VLCNetworkListCellDelegate": {
+"methods": {
+"triggerDownload(for:)": "triggerDownloadForCell:",
+"triggerFavorite(for:)": "triggerFavoriteForCell:"
+},
+"properties": {}
+},
+"VLCNetworkListViewController": {
+"methods": {
+"addPlayAllAction()": "addPlayAllAction",
+"playAllAction(_:)": "playAllAction:",
+"removePlayAllAction()": "removePlayAllAction",
+"startActivityIndicator()": "startActivityIndicator",
+"stopActivityIndicator()": "stopActivityIndicator",
+"tableView(_:willDisplay:forRowAt:)": "tableView:willDisplayCell:forRowAtIndexPath:",
+"tableViewStyle()": "tableViewStyle"
+},
+"properties": {
+"searchController": [
+"searchController",
+"setSearchController:"
+],
+"tableView": [
+"tableView",
+"setTableView:"
+]
+}
+},
+"VLCNetworkLoginViewController": {
+"methods": {},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"loginInformation": [
+"loginInformation",
+"setLoginInformation:"
+]
+}
+},
+"VLCNetworkLoginViewControllerDelegate": {
+"methods": {
+"login(with:loginInfo:)": "loginWithLoginViewController:loginInfo:"
+},
+"properties": {}
+},
+"VLCNetworkServerBrowser": {
+"methods": {
+"update()": "update"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"favoriteGroupName": [
+"favoriteGroupName",
+"setFavoriteGroupName:"
+],
+"items": [
+"items",
+"setItems:"
+],
+"mediaList": [
+"mediaList",
+"setMediaList:"
+],
+"title": [
+"title",
+"setTitle:"
+]
+}
+},
+"VLCNetworkServerBrowserDelegate": {
+"methods": {
+"networkServerBrowser(_:requestDidFailWithError:)": "networkServerBrowser:requestDidFailWithError:",
+"networkServerBrowserDidUpdate(_:)": "networkServerBrowserDidUpdate:",
+"networkServerBrowserEndParsing(_:)": "networkServerBrowserEndParsing:",
+"networkServerBrowserShouldPopView(_:)": "networkServerBrowserShouldPopView:"
+},
+"properties": {}
+},
+"VLCNetworkServerBrowserItem": {
+"methods": {},
+"properties": {
+"containerBrowser": [
+"containerBrowser",
+"setContainerBrowser:"
+],
+"duration": [
+"duration",
+"setDuration:"
+],
+"fileSizeBytes": [
+"fileSizeBytes",
+"setFileSizeBytes:"
+],
+"filename": [
+"filename",
+"setFilename:"
+],
+"isContainer": [
+"isContainer",
+"setContainer:"
+],
+"isDownloadable": [
+"isDownloadable",
+"setDownloadable:"
+],
+"media": [
+"media",
+"setMedia:"
+],
+"mediaDescription": [
+"mediaDescription",
+"setMediaDescription:"
+],
+"name": [
+"name",
+"setName:"
+],
+"subtitleType": [
+"subtitleType",
+"setSubtitleType:"
+],
+"subtitleURL": [
+"subtitleURL",
+"setSubtitleURL:"
+],
+"thumbnailURL": [
+"thumbnailURL",
+"setThumbnailURL:"
+],
+"url": [
+"URL",
+"setURL:"
+]
+}
+},
+"VLCNetworkServerBrowserItemPlex": {
+"methods": {
+"init(dictionary:currentURL:authentificication:)": "initWithDictionary:currentURL:authentificication:"
+},
+"properties": {
+"duration": [
+"duration",
+"setDuration:"
+],
+"filename": [
+"filename",
+"setFilename:"
+],
+"isDownloadable": [
+"isDownloadable",
+"setDownloadable:"
+],
+"subtitleType": [
+"subtitleType",
+"setSubtitleType:"
+],
+"subtitleURL": [
+"subtitleURL",
+"setSubtitleURL:"
+],
+"thumbnailURL": [
+"thumbnailURL",
+"setThumbnailURL:"
+],
+"urLcontainer": [
+"URLcontainer",
+"setURLcontainer:"
+]
+}
+},
+"VLCNetworkServerBrowserItemVLCMedia": {
+"methods": {
+"init(media:options:)": "initWithMedia:options:",
+"init(media:options:mediaParser:)": "initWithMedia:options:mediaParser:"
+},
+"properties": {
+"duration": [
+"duration",
+"setDuration:"
+],
+"favoriteGroupName": [
+"favoriteGroupName",
+"setFavoriteGroupName:"
+],
+"isDownloadable": [
+"isDownloadable",
+"setDownloadable:"
+],
+"mediaDescription": [
+"mediaDescription",
+"setMediaDescription:"
+],
+"thumbnailURL": [
+"thumbnailURL",
+"setThumbnailURL:"
+]
+}
+},
+"VLCNetworkServerBrowserPlex": {
+"methods": {
+"init(login:)": "initWithLogin:",
+"init(name:host:portNumber:path:authentificication:)": "initWithName:host:portNumber:path:authentificication:",
+"init(name:url:auth:)": "initWithName:url:auth:"
+},
+"properties": {}
+},
+"VLCNetworkServerBrowserVLCMedia": {
+"methods": {
+"class ftpNetworkServerBrowser(with:username:password:)": "FTPNetworkServerBrowserWithURL:username:password:",
+"class ftpNetworkServerBrowser(withLogin:)": "FTPNetworkServerBrowserWithLogin:",
+"class nfsNetworkServerBrowser(with:)": "NFSNetworkServerBrowserWithURL:",
+"class nfsNetworkServerBrowser(withLogin:)": "NFSNetworkServerBrowserWithLogin:",
+"class sftpNetworkServerBrowser(with:username:password:)": "SFTPNetworkServerBrowserWithURL:username:password:",
+"class sftpNetworkServerBrowser(withLogin:)": "SFTPNetworkServerBrowserWithLogin:",
+"class smbNetworkServerBrowser(with:username:password:workgroup:)": "SMBNetworkServerBrowserWithURL:username:password:workgroup:",
+"class smbNetworkServerBrowser(withLogin:)": "SMBNetworkServerBrowserWithLogin:",
+"class uPnPNetworkServerBrowser(with:options:)": "UPnPNetworkServerBrowserWithURL:options:",
+"class uPnPNetworkServerBrowser(withLogin:)": "UPnPNetworkServerBrowserWithLogin:",
+"class webDAVNetworkServerBrowser(with:)": "WebDAVNetworkServerBrowserWithURL:",
+"class webDAVNetworkServerBrowser(withLogin:)": "WebDAVNetworkServerBrowserWithLogin:",
+"init(media:options:)": "initWithMedia:options:",
+"init(media:options:mediaParser:)": "initWithMedia:options:mediaParser:",
+"retrieveParsedStatus()": "retrieveParsedStatus",
+"setSortCriteria(_:ascending:)": "setSortCriteria:ascending:"
+},
+"properties": {
+"favoriteGroupName": [
+"favoriteGroupName",
+"setFavoriteGroupName:"
+],
+"sortAscending": [
+"sortAscending",
+"setSortAscending:"
+],
+"sortCriteria": [
+"sortCriteria",
+"setSortCriteria:"
+]
+}
+},
+"VLCNetworkServerBrowserViewController": {
+"methods": {
+"didSelect(_:index:singlePlayback:)": "didSelectItem:index:singlePlayback:",
+"init(serverBrowser:medialibraryService:)": "initWithServerBrowser:medialibraryService:",
+"themeDidChange()": "themeDidChange",
+"update()": "update"
+},
+"properties": {}
+},
+"VLCNetworkServerLoginInformation": {
+"methods": {
+"class newLoginInformation(forProtocol:)": "newLoginInformationForProtocol:",
+"class registerTemplateLoginInformation(_:)": "registerTemplateLoginInformation:"
+},
+"properties": {
+"additionalFields": [
+"additionalFields",
+"setAdditionalFields:"
+],
+"address": [
+"address",
+"setAddress:"
+],
+"options": [
+"options",
+"setOptions:"
+],
+"password": [
+"password",
+"setPassword:"
+],
+"port": [
+"port",
+"setPort:"
+],
+"protocolIdentifier": [
+"protocolIdentifier",
+"setProtocolIdentifier:"
+],
+"rootMedia": [
+"rootMedia",
+"setRootMedia:"
+],
+"username": [
+"username",
+"setUsername:"
+]
+}
+},
+"VLCNetworkServerLoginInformationField": {
+"methods": {
+"init(type:identifier:label:textValue:)": "initWithType:identifier:label:textValue:"
+},
+"properties": {
+"identifier": [
+"identifier",
+"setIdentifier:"
+],
+"localizedLabel": [
+"localizedLabel",
+"setLocalizedLabel:"
+],
+"textValue": [
+"textValue",
+"setTextValue:"
+],
+"type": [
+"type",
+"setType:"
+]
+}
+},
+"VLCOnAirRailCell": {
+"methods": {
+"class height(withSubtitles:)": "heightWithSubtitles:",
+"class height(withTileSide:subtitles:)": "heightWithTileSide:subtitles:",
+"configure(items:showsSubtitles:showsAddTile:)": "configureWithItems:showsSubtitles:showsAddTile:"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"reuseIdentifier": [
+"reuseIdentifier",
+"setReuseIdentifier:"
+],
+"tileSide": [
+"tileSide",
+"setTileSide:"
+]
+}
+},
+"VLCOnAirRailCellDelegate": {
+"methods": {
+"railCell(_:didSelectItemAt:)": "railCell:didSelectItemAtIndex:",
+"railCellDidSelectAddTile(_:)": "railCellDidSelectAddTile:"
+},
+"properties": {}
+},
+"VLCOnAirRailItem": {
+"methods": {
+"init(name:artworkURL:)": "initWithName:artworkURL:"
+},
+"properties": {
+"accessoryGlyphName": [
+"accessoryGlyphName",
+"setAccessoryGlyphName:"
+],
+"accessoryLabel": [
+"accessoryLabel",
+"setAccessoryLabel:"
+],
+"artworkURL": [
+"artworkURL",
+"setArtworkURL:"
+],
+"name": [
+"name",
+"setName:"
+],
+"subtitle": [
+"subtitle",
+"setSubtitle:"
+]
+}
+},
+"VLCPhotoLibraryController": {
+"methods": {
+"showPhotoLibraryPicker(_:)": "showPhotoLibraryPicker:"
+},
+"properties": {}
+},
+"VLCPlaceholderArtwork": {
+"methods": {
+"class backgroundColor(forName:)": "backgroundColorForName:",
+"class fontSize(forSide:)": "fontSizeForSide:",
+"class foregroundColor(forName:)": "foregroundColorForName:",
+"class initials(forName:)": "initialsForName:",
+"class placeholderImage(forName:pixelSize:)": "placeholderImageForName:pixelSize:"
+},
+"properties": {}
+},
+"VLCPlaybackInfoSubtitlesFetcherViewController": {
+"methods": {},
+"properties": {
+"tableView": [
+"tableView",
+"setTableView:"
+]
+}
+},
+"VLCPlaybackService": {
+"methods": {
+"addAudioToCurrentPlayback(from:)": "addAudioToCurrentPlaybackFromURL:",
+"addSubtitlesToCurrentPlayback(from:)": "addSubtitlesToCurrentPlaybackFromURL:",
+"amplification(ofBand:)": "amplificationOfBand:",
+"appendCollectionToQueue(_:)": "appendCollectionToQueue:",
+"appendMediaToQueue(_:)": "appendMediaToQueue:",
+"applyCustomEqualizerProfile(at:)": "applyCustomEqualizerProfileAtIndex:",
+"applyEqualizerPreset(_:)": "applyEqualizerPreset:",
+"audioTrackName(at:)": "audioTrackNameAtIndex:",
+"cancelSleepTimer()": "cancelSleepTimer",
+"changePlaybackRate(byFactor:)": "changePlaybackRateByFactor:",
+"chapterDescription(at:)": "chapterDescriptionAtIndex:",
+"class migrateToRelativePreampLevel()": "migrateToRelativePreampLevel",
+"class sharedInstance()": "sharedInstance",
+"configurePlaybackWithMedia(at:from:)": "configurePlaybackWithMediaAtIndex:fromMediaList:",
+"configurePlaybackWithMedia(at:fromCollection:openInMiniPlayer:)": "configurePlaybackWithMediaAtIndex:fromCollection:openInMiniPlayer:",
+"currentMediaProjection()": "currentMediaProjection",
+"deleteCustomEqualizerProfile(at:)": "deleteCustomEqualizerProfileAtIndex:",
+"disableAudio()": "disableAudio",
+"disablePrimaryVideoSubtitle()": "disablePrimaryVideoSubtitle",
+"disableSecondaryVideoSubtitle()": "disableSecondaryVideoSubtitle",
+"disableSubtitlesIfNeeded()": "disableSubtitlesIfNeeded",
+"equalizerProfiles()": "equalizerProfiles",
+"frequencyOfBand(at:)": "frequencyOfBandAtIndex:",
+"isPlayingOnExternalScreen()": "isPlayingOnExternalScreen",
+"jumpBackward(_:)": "jumpBackward:",
+"jumpForward(_:)": "jumpForward:",
+"mediaListContains(_:)": "mediaListContains:",
+"moveCustomEqualizerProfile(at:up:)": "moveCustomEqualizerProfileAtIndex:up:",
+"next()": "next",
+"nextFrame()": "nextFrame",
+"numberOfBands()": "numberOfBands",
+"pause()": "pause",
+"perform(_:)": "performNavigationAction:",
+"play()": "play",
+"play(_:)": "playMedia:",
+"play(_:openInMiniPlayer:)": "playMedia:openInMiniPlayer:",
+"playCollection(_:)": "playCollection:",
+"playCollectionNextInQueue(_:)": "playCollectionNextInQueue:",
+"playItem(at:)": "playItemAtIndex:",
+"playMedia(at:fromCollection:)": "playMediaAtIndex:fromCollection:",
+"playMediaList(_:firstIndex:subtitlesFilePath:)": "playMediaList:firstIndex:subtitlesFilePath:",
+"playMediaList(_:firstIndex:subtitlesFilePath:completion:)": "playMediaList:firstIndex:subtitlesFilePath:completion:",
+"playMediaNextInQueue(_:)": "playMediaNextInQueue:",
+"playPause()": "playPause",
+"playedTime()": "playedTime",
+"previous()": "previous",
+"previousFrame()": "previousFrame",
+"recoverDisplayedMetadata()": "recoverDisplayedMetadata",
+"recoverPlaybackState()": "recoverPlaybackState",
+"remainingTime()": "remainingTime",
+"removeMediaFromMediaList(at:)": "removeMediaFromMediaListAtIndex:",
+"renameCustomEqualizerProfile(at:toName:)": "renameCustomEqualizerProfileAtIndex:toName:",
+"resetABLoop()": "resetABLoop",
+"restoreAudioAndSubtitleTrack()": "restoreAudioAndSubtitleTrack",
+"restorePlaybackRateForCurrentMedia()": "restorePlaybackRateForCurrentMedia",
+"restoreSavedEqualizerProfile()": "restoreSavedEqualizerProfile",
+"saveCurrentlyPlayingMediaIdentifier()": "saveCurrentlyPlayingMediaIdentifier",
+"saveCustomEqualizerProfile(withName:)": "saveCustomEqualizerProfileWithName:",
+"savePlaybackRateForCurrentMedia()": "savePlaybackRateForCurrentMedia",
+"savePlaybackState()": "savePlaybackState",
+"saveSnapshot()": "saveSnapshotWithCompletion:",
+"saveSnapshot(completion:)": "saveSnapshotWithCompletion:",
+"scheduleSleepTimer(withInterval:)": "scheduleSleepTimerWithInterval:",
+"selectAudioTrack(at:)": "selectAudioTrackAtIndex:",
+"selectChapter(at:)": "selectChapterAtIndex:",
+"selectPrimaryVideoSubtitle(at:)": "selectPrimaryVideoSubtitleAtIndex:",
+"selectSecondaryVideoSubtitle(at:)": "selectSecondaryVideoSubtitleAtIndex:",
+"selectTitle(at:)": "selectTitleAtIndex:",
+"selectedEqualizerProfile()": "selectedEqualizerProfile",
+"setABLoopFromPosition(_:toPosition:)": "setABLoopFromPosition:toPosition:",
+"setAmplification(_:forBand:)": "setAmplification:forBand:",
+"setAudioPassthrough(_:)": "setAudioPassthrough:",
+"setCurrentAspectRatio(_:)": "setCurrentAspectRatio:",
+"setNeedsMetadataUpdate()": "setNeedsMetadataUpdate",
+"setPlayerDisplayController(_:)": "setPlayerDisplayController:",
+"setPlayerHidden(_:)": "setPlayerHidden:",
+"startPlayback()": "startPlayback",
+"stopPlayback()": "stopPlayback",
+"switchAspectRatio(_:)": "switchAspectRatio:",
+"syncVideoSubtitleState()": "syncVideoSubtitleState",
+"titleDescription(at:)": "titleDescriptionAtIndex:",
+"togglePictureInPicture()": "togglePictureInPicture",
+"toggleRepeatMode()": "toggleRepeatMode",
+"updateViewpoint(_:pitch:roll:fov:absolute:)": "updateViewpoint:pitch:roll:fov:absolute:",
+"videoSubtitleName(at:)": "videoSubtitleNameAtIndex:"
+},
+"properties": {
+"adjustFilter": [
+"adjustFilter",
+"setAdjustFilter:"
+],
+"audioDelay": [
+"audioDelay",
+"setAudioDelay:"
+],
+"audioTracks": [
+"audioTracks",
+"setAudioTracks:"
+],
+"currentAspectRatio": [
+"currentAspectRatio",
+"setCurrentAspectRatio:"
+],
+"currentChapterDescription": [
+"currentChapterDescription",
+"setCurrentChapterDescription:"
+],
+"currentMediaHasTrackToChooseFrom": [
+"currentMediaHasTrackToChooseFrom",
+"setCurrentMediaHasTrackToChooseFrom:"
+],
+"currentMediaIs360Video": [
+"currentMediaIs360Video",
+"setCurrentMediaIs360Video:"
+],
+"currentTitleDescription": [
+"currentTitleDescription",
+"setCurrentTitleDescription:"
+],
+"currentlyPlayingLibraryMedia": [
+"currentlyPlayingLibraryMedia",
+"setCurrentlyPlayingLibraryMedia:"
+],
+"currentlyPlayingMedia": [
+"currentlyPlayingMedia",
+"setCurrentlyPlayingMedia:"
+],
+"customEqualizerProfileNames": [
+"customEqualizerProfileNames",
+"setCustomEqualizerProfileNames:"
+],
+"defaultPlaybackRate": [
+"defaultPlaybackRate",
+"setDefaultPlaybackRate:"
+],
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"expectsAudioOnlyContent": [
+"expectsAudioOnlyContent",
+"setExpectsAudioOnlyContent:"
+],
+"fov": [
+"fov",
+"setFov:"
+],
+"fullscreenSessionRequested": [
+"fullscreenSessionRequested",
+"setFullscreenSessionRequested:"
+],
+"indexOfCurrentAudioTrack": [
+"indexOfCurrentAudioTrack",
+"setIndexOfCurrentAudioTrack:"
+],
+"indexOfCurrentChapter": [
+"indexOfCurrentChapter",
+"setIndexOfCurrentChapter:"
+],
+"indexOfCurrentPrimaryVideoSubtitleTrack": [
+"indexOfCurrentPrimaryVideoSubtitleTrack",
+"setIndexOfCurrentPrimaryVideoSubtitleTrack:"
+],
+"indexOfCurrentSecondaryVideoSubtitleTrack": [
+"indexOfCurrentSecondaryVideoSubtitleTrack",
+"setIndexOfCurrentSecondaryVideoSubtitleTrack:"
+],
+"indexOfCurrentTitle": [
+"indexOfCurrentTitle",
+"setIndexOfCurrentTitle:"
+],
+"isNextMediaAvailable": [
+"isNextMediaAvailable",
+"setIsNextMediaAvailable:"
+],
+"isPlaying": [
+"isPlaying",
+"setIsPlaying:"
+],
+"isSeekable": [
+"isSeekable",
+"setIsSeekable:"
+],
+"isShuffleMode": [
+"isShuffleMode",
+"setShuffleMode:"
+],
+"mediaDuration": [
+"mediaDuration",
+"setMediaDuration:"
+],
+"mediaLength": [
+"mediaLength",
+"setMediaLength:"
+],
+"mediaList": [
+"mediaList",
+"setMediaList:"
+],
+"mediaOptionsDictionary": [
+"mediaOptionsDictionary",
+"setMediaOptionsDictionary:"
+],
+"mediaPlayerState": [
+"mediaPlayerState",
+"setMediaPlayerState:"
+],
+"metadata": [
+"metadata",
+"setMetadata:"
+],
+"numberOfAudioTracks": [
+"numberOfAudioTracks",
+"setNumberOfAudioTracks:"
+],
+"numberOfChaptersForCurrentTitle": [
+"numberOfChaptersForCurrentTitle",
+"setNumberOfChaptersForCurrentTitle:"
+],
+"numberOfTitles": [
+"numberOfTitles",
+"setNumberOfTitles:"
+],
+"numberOfVideoSubtitlesIndexes": [
+"numberOfVideoSubtitlesIndexes",
+"setNumberOfVideoSubtitlesIndexes:"
+],
+"numberOfVideoTracks": [
+"numberOfVideoTracks",
+"setNumberOfVideoTracks:"
+],
+"openedLocalURLs": [
+"openedLocalURLs",
+"setOpenedLocalURLs:"
+],
+"pitch": [
+"pitch",
+"setPitch:"
+],
+"playAsAudio": [
+"playAsAudio",
+"setPlayAsAudio:"
+],
+"playbackPosition": [
+"playbackPosition",
+"setPlaybackPosition:"
+],
+"playbackRate": [
+"playbackRate",
+"setPlaybackRate:"
+],
+"playbackTime": [
+"playbackTime",
+"setPlaybackTime:"
+],
+"playerDisplayController": [
+"playerDisplayController",
+"setPlayerDisplayController:"
+],
+"playerIsSetup": [
+"playerIsSetup",
+"setPlayerIsSetup:"
+],
+"preAmplification": [
+"preAmplification",
+"setPreAmplification:"
+],
+"renderer": [
+"renderer",
+"setRenderer:"
+],
+"repeatMode": [
+"repeatMode",
+"setRepeatMode:"
+],
+"roll": [
+"roll",
+"setRoll:"
+],
+"shuffledList": [
+"shuffledList",
+"setShuffledList:"
+],
+"sleepTimer": [
+"sleepTimer",
+"setSleepTimer:"
+],
+"sleepTimerInterval": [
+"sleepTimerInterval",
+"setSleepTimerInterval:"
+],
+"startPosition": [
+"startPosition",
+"setStartPosition:"
+],
+"stopAfterCurrentItem": [
+"stopAfterCurrentItem",
+"setStopAfterCurrentItem:"
+],
+"subtitleDelay": [
+"subtitleDelay",
+"setSubtitleDelay:"
+],
+"textTracks": [
+"textTracks",
+"setTextTracks:"
+],
+"videoOutputView": [
+"videoOutputView",
+"setVideoOutputView:"
+],
+"yaw": [
+"yaw",
+"setYaw:"
+]
+}
+},
+"VLCPlaybackServiceDelegate": {
+"methods": {
+"displayMetadata(for:metadata:)": "displayMetadataForPlaybackService:metadata:",
+"mediaPlayerBufferingChanged(_:for:)": "mediaPlayerBufferingChanged:forPlaybackService:",
+"mediaPlayerStateChanged(_:isPlaying:currentMediaHasTrackToChooseFrom:currentMediaHasChapters:for:)": "mediaPlayerStateChanged:isPlaying:currentMediaHasTrackToChooseFrom:currentMediaHasChapters:forPlaybackService:",
+"pictureInPictureStateDidChange(enabled:)": "pictureInPictureStateDidChange:",
+"playModeUpdated()": "playModeUpdated",
+"playbackPositionUpdated(_:)": "playbackPositionUpdated:",
+"playbackService(_:nextMedia:)": "playbackService:nextMedia:",
+"playbackServiceDidSwitchAspectRatio(_:)": "playbackServiceDidSwitchAspectRatio:",
+"prepare(forMediaPlayback:)": "prepareForMediaPlayback:",
+"reloadPlayQueue()": "reloadPlayQueue",
+"showStatusMessage(_:)": "showStatusMessage:",
+"updateWidgetsIfNeeded()": "updateWidgetsIfNeeded"
+},
+"properties": {}
+},
+"VLCPlayerDisplayController": {
+"methods": {
+"closeFullscreenPlayback()": "closeFullscreenPlayback",
+"dismissPlaybackView()": "dismissPlaybackView",
+"hintPlayqueue(withDelay:)": "hintPlayqueueWithDelay:",
+"init()": "init",
+"pushPlaybackView()": "pushPlaybackView",
+"showAudioPlayer()": "showAudioPlayer",
+"showFullscreenPlayback()": "showFullscreenPlayback",
+"updateMiniPlayerHorizontalConstraints()": "updateMiniPlayerHorizontalConstraints"
+},
+"properties": {
+"bottomConstraint": [
+"bottomConstraint",
+"setBottomConstraint:"
+],
+"canBecomeFirstResponder": [
+"canBecomeFirstResponder",
+"setCanBecomeFirstResponder:"
+],
+"currentMediaType": [
+"currentMediaType",
+"setCurrentMediaType:"
+],
+"displayMode": [
+"displayMode",
+"setDisplayMode:"
+],
+"hintingPlayqueue": [
+"hintingPlayqueue",
+"setHintingPlayqueue:"
+],
+"isMiniPlayerVisible": [
+"isMiniPlayerVisible",
+"setIsMiniPlayerVisible:"
+],
+"keyCommands": [
+"keyCommands",
+"setKeyCommands:"
+],
+"leadingConstraint": [
+"leadingConstraint",
+"setLeadingConstraint:"
+],
+"miniPlaybackView": [
+"miniPlaybackView",
+"setMiniPlaybackView:"
+],
+"miniPlayerReferenceTabBar": [
+"miniPlayerReferenceTabBar",
+"setMiniPlayerReferenceTabBar:"
+],
+"playbackController": [
+"playbackController",
+"setPlaybackController:"
+],
+"playqueueBottomConstraint": [
+"playqueueBottomConstraint",
+"setPlayqueueBottomConstraint:"
+],
+"queueViewController": [
+"queueViewController",
+"setQueueViewController:"
+],
+"realBottomAnchor": [
+"realBottomAnchor",
+"setRealBottomAnchor:"
+],
+"realSafeAreaLayoutGuide": [
+"realSafeAreaLayoutGuide",
+"setRealSafeAreaLayoutGuide:"
+],
+"realTopAnchor": [
+"realTopAnchor",
+"setRealTopAnchor:"
+],
+"trailingConstraint": [
+"trailingConstraint",
+"setTrailingConstraint:"
+],
+"videoPlayerViewController": [
+"videoPlayerViewController",
+"setVideoPlayerViewController:"
+]
+}
+},
+"VLCPodcastDirectoryLanguageViewController": {
+"methods": {
+"init(service:)": "initWithService:"
+},
+"properties": {}
+},
+"VLCPodcastDirectoryListViewController": {
+"methods": {
+"init(service:shelf:)": "initWithService:shelf:"
+},
+"properties": {}
+},
+"VLCPodcastIndexEpisode": {
+"methods": {},
+"properties": {
+"artworkURL": [
+"artworkURL",
+"setArtworkURL:"
+],
+"duration": [
+"duration",
+"setDuration:"
+],
+"enclosureURL": [
+"enclosureURL",
+"setEnclosureURL:"
+],
+"episodeIdentifier": [
+"episodeIdentifier",
+"setEpisodeIdentifier:"
+],
+"episodeNumber": [
+"episodeNumber",
+"setEpisodeNumber:"
+],
+"isVideo": [
+"isVideo",
+"setVideo:"
+],
+"releaseDate": [
+"releaseDate",
+"setReleaseDate:"
+],
+"seasonNumber": [
+"seasonNumber",
+"setSeasonNumber:"
+],
+"summary": [
+"summary",
+"setSummary:"
+],
+"title": [
+"title",
+"setTitle:"
+]
+}
+},
+"VLCPodcastIndexFeed": {
+"methods": {},
+"properties": {
+"artworkURL": [
+"artworkURL",
+"setArtworkURL:"
+],
+"author": [
+"author",
+"setAuthor:"
+],
+"categories": [
+"categories",
+"setCategories:"
+],
+"episodeCount": [
+"episodeCount",
+"setEpisodeCount:"
+],
+"feedIdentifier": [
+"feedIdentifier",
+"setFeedIdentifier:"
+],
+"feedURL": [
+"feedURL",
+"setFeedURL:"
+],
+"isExplicit": [
+"isExplicit",
+"setExplicit:"
+],
+"language": [
+"language",
+"setLanguage:"
+],
+"lastUpdateDate": [
+"lastUpdateDate",
+"setLastUpdateDate:"
+],
+"subtitle": [
+"subtitle",
+"setSubtitle:"
+],
+"summary": [
+"summary",
+"setSummary:"
+],
+"title": [
+"title",
+"setTitle:"
+],
+"websiteURL": [
+"websiteURL",
+"setWebsiteURL:"
+]
+}
+},
+"VLCPodcastIndexService": {
+"methods": {
+"class localizedTitles(forCategoryNames:)": "localizedTitlesForCategoryNames:",
+"loadDetails(for:)": "loadDetailsForFeed:completion:",
+"loadDetails(for:completion:)": "loadDetailsForFeed:completion:",
+"loadRecentEpisodes(for:)": "loadRecentEpisodesForFeed:completion:",
+"loadRecentEpisodes(for:completion:)": "loadRecentEpisodesForFeed:completion:",
+"loadShelvesIfNeeded()": "loadShelvesIfNeeded",
+"loadTrending(forCategory:)": "loadTrendingForCategory:completion:",
+"loadTrending(forCategory:completion:)": "loadTrendingForCategory:completion:",
+"reloadShelves()": "reloadShelves",
+"searchFeeds(matching:completion:)": "searchFeedsMatching:completion:"
+},
+"properties": {
+"availableLanguageCodes": [
+"availableLanguageCodes",
+"setAvailableLanguageCodes:"
+],
+"isAvailable": [
+"isAvailable",
+"setAvailable:"
+],
+"isLoading": [
+"isLoading",
+"setLoading:"
+],
+"languageCode": [
+"languageCode",
+"setLanguageCode:"
+],
+"shelves": [
+"shelves",
+"setShelves:"
+],
+"suggestedLanguageCodes": [
+"suggestedLanguageCodes",
+"setSuggestedLanguageCodes:"
+]
+}
+},
+"VLCPodcastIndexShelf": {
+"methods": {},
+"properties": {
+"category": [
+"category",
+"setCategory:"
+],
+"feeds": [
+"feeds",
+"setFeeds:"
+],
+"title": [
+"title",
+"setTitle:"
+]
+}
+},
+"VLCRadioErrorView": {
+"methods": {
+"init(message:retryTarget:retryAction:)": "initWithMessage:retryTarget:retryAction:"
+},
+"properties": {}
+},
+"VLCRadioFavoritesGridCell": {
+"methods": {
+"class columns(forWidth:)": "columnsForWidth:",
+"class height(forFavoriteCount:width:)": "heightForFavoriteCount:width:",
+"class tileWidth(forWidth:columns:)": "tileWidthForWidth:columns:",
+"configure(with:)": "configureWithFavorites:"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"removalActionGlyphName": [
+"removalActionGlyphName",
+"setRemovalActionGlyphName:"
+],
+"removalActionTitle": [
+"removalActionTitle",
+"setRemovalActionTitle:"
+],
+"reuseIdentifier": [
+"reuseIdentifier",
+"setReuseIdentifier:"
+]
+}
+},
+"VLCRadioFavoritesGridCellDelegate": {
+"methods": {
+"favoritesGridCell(_:didRequestRemovalOfFavoriteAt:)": "favoritesGridCell:didRequestRemovalOfFavoriteAtIndex:",
+"favoritesGridCell(_:didSelectFavoriteAt:)": "favoritesGridCell:didSelectFavoriteAtIndex:",
+"favoritesGridCell(_:hasAlarmForFavoriteAt:)": "favoritesGridCell:hasAlarmForFavoriteAtIndex:",
+"favoritesGridCell(_:menuElementsForFavoriteAt:)": "favoritesGridCell:menuElementsForFavoriteAtIndex:"
+},
+"properties": {}
+},
+"VLCRadioService": {
+"methods": {
+"markCountryVisited(_:)": "markCountryVisited:",
+"markStreamPlayed(_:)": "markStreamPlayed:",
+"recentStream(for:)": "recentStreamForURL:",
+"removeRecentStream(_:)": "removeRecentStream:",
+"retryCountryDiscovery()": "retryCountryDiscovery",
+"startCountryDiscoveryIfNeeded()": "startCountryDiscoveryIfNeeded",
+"stopCountryDiscovery()": "stopCountryDiscovery"
+},
+"properties": {
+"allCountries": [
+"allCountries",
+"setAllCountries:"
+],
+"discoveryFailed": [
+"discoveryFailed",
+"setDiscoveryFailed:"
+],
+"hasCachedCountries": [
+"hasCachedCountries",
+"setHasCachedCountries:"
+],
+"playedStreams": [
+"playedStreams",
+"setPlayedStreams:"
+],
+"recentStreams": [
+"recentStreams",
+"setRecentStreams:"
+],
+"visitedCountries": [
+"visitedCountries",
+"setVisitedCountries:"
+]
+}
+},
+"VLCRemoteBrowsingCell": {
+"methods": {
+"setCheckBoxImageView()": "setCheckBoxImageView"
+},
+"properties": {
+"couldBeAudioOnlyMedia": [
+"couldBeAudioOnlyMedia",
+"setCouldBeAudioOnlyMedia:"
+],
+"isDirectory": [
+"isDirectory",
+"setIsDirectory:"
+],
+"isDownloadable": [
+"isDownloadable",
+"setIsDownloadable:"
+],
+"isFavorable": [
+"isFavorable",
+"setIsFavorable:"
+],
+"mediaIsNew": [
+"mediaIsNew",
+"setMediaIsNew:"
+],
+"mediaProgress": [
+"mediaProgress",
+"setMediaProgress:"
+],
+"progressViewHidden": [
+"progressViewHidden",
+"setProgressViewHidden:"
+],
+"subtitle": [
+"subtitle",
+"setSubtitle:"
+],
+"thumbnailImage": [
+"thumbnailImage",
+"setThumbnailImage:"
+],
+"thumbnailURL": [
+"thumbnailURL",
+"setThumbnailURL:"
+],
+"title": [
+"title",
+"setTitle:"
+]
+}
+},
+"VLCRendererDiscoverer": {
+"methods": {
+"class list()": "list",
+"init(name:)": "initWithName:",
+"start()": "start",
+"stop()": "stop"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"name": [
+"name",
+"setName:"
+],
+"renderers": [
+"renderers",
+"setRenderers:"
+]
+}
+},
+"VLCRendererDiscovererDelegate": {
+"methods": {
+"rendererDiscovererItemAdded(_:item:)": "rendererDiscovererItemAdded:item:",
+"rendererDiscovererItemDeleted(_:item:)": "rendererDiscovererItemDeleted:item:"
+},
+"properties": {}
+},
+"VLCRendererDiscovererDescription": {
+"methods": {
+"init(name:longName:)": "initWithName:longName:"
+},
+"properties": {
+"longName": [
+"longName",
+"setLongName:"
+],
+"name": [
+"name",
+"setName:"
+]
+}
+},
+"VLCRendererItem": {
+"methods": {},
+"properties": {
+"flags": [
+"flags",
+"setFlags:"
+],
+"iconURI": [
+"iconURI",
+"setIconURI:"
+],
+"name": [
+"name",
+"setName:"
+],
+"type": [
+"type",
+"setType:"
+]
+}
+},
+"VLCResettingSlider": {
+"methods": {},
+"properties": {
+"defaultValue": [
+"defaultValue",
+"setDefaultValue:"
+],
+"resetOnDoubleTap": [
+"resetOnDoubleTap",
+"setResetOnDoubleTap:"
+]
+}
+},
+"VLCServerBrowsingController": {
+"methods": {
+"configureCell(_:with:)": "configureCell:withItem:",
+"configureSubtitles(in:)": "configureSubtitlesInMediaList:",
+"init(viewController:serverBrowser:medialibraryService:)": "initWithViewController:serverBrowser:medialibraryService:",
+"streamFile(for:)": "streamFileForItem:",
+"streamMediaList(_:startingAt:)": "streamMediaList:startingAtIndex:",
+"triggerDownload(for:)": "triggerDownloadForItem:"
+},
+"properties": {
+"byteCountFormatter": [
+"byteCountFormatter",
+"setByteCountFormatter:"
+],
+"folderImage": [
+"folderImage",
+"setFolderImage:"
+],
+"genericFileImage": [
+"genericFileImage",
+"setGenericFileImage:"
+],
+"serverBrowser": [
+"serverBrowser",
+"setServerBrowser:"
+],
+"streamImage": [
+"streamImage",
+"setStreamImage:"
+],
+"viewController": [
+"viewController",
+"setViewController:"
+]
+}
+},
+"VLCServerListViewController": {
+"methods": {
+"init(medialibraryService:)": "initWithMedialibraryService:"
+},
+"properties": {}
+},
+"VLCStatusLabel": {
+"methods": {
+"showStatusMessage(_:)": "showStatusMessage:"
+},
+"properties": {}
+},
+"VLCSubscriptionCacher": {
+"methods": {
+"addManualRequestForMedia(withIdentifier:)": "addManualRequestForMediaWithIdentifier:",
+"cancelCachingOfMedia(withIdentifier:)": "cancelCachingOfMediaWithIdentifier:",
+"mediaIdentifier(forCachePath:)": "mediaIdentifierForCachePath:",
+"removeManualRequestForMedia(withIdentifier:)": "removeManualRequestForMediaWithIdentifier:"
+},
+"properties": {
+"automaticCachingAllowed": [
+"automaticCachingAllowed",
+"setAutomaticCachingAllowed:"
+],
+"delegate": [
+"delegate",
+"setDelegate:"
+],
+"networkReachable": [
+"networkReachable",
+"setNetworkReachable:"
+]
+}
+},
+"VLCSubscriptionCacherDelegate": {
+"methods": {
+"subscriptionCacher(_:didCacheMediaWithIdentifier:toPath:fraction:)": "subscriptionCacher:didCacheMediaWithIdentifier:toPath:fraction:"
+},
+"properties": {}
+},
+"VLCThumbnailsCache": {
+"methods": {
+"class cachedImage(for:)": "cachedImageForURL:",
+"class cachedImage(for:maxPixelSize:)": "cachedImageForURL:maxPixelSize:",
+"class image(from:for:maxPixelSize:)": "imageFromData:forURL:maxPixelSize:",
+"class invalidateThumbnail(for:)": "invalidateThumbnailForURL:",
+"class thumbnail(for:)": "thumbnailForURL:",
+"class thumbnail(for:maxPixelSize:)": "thumbnailForURL:maxPixelSize:"
+},
+"properties": {}
+},
+"VLCTime": {
+"methods": {
+"class null()": "nullTime",
+"compare(_:)": "compare:",
+"hash()": "hash",
+"init(int:)": "initWithInt:",
+"init(number:)": "initWithNumber:",
+"isEqual(_:)": "isEqual:"
+},
+"properties": {
+"intValue": [
+"intValue",
+"setIntValue:"
+],
+"minuteStringValue": [
+"minuteStringValue",
+"setMinuteStringValue:"
+],
+"numberValue": [
+"numberValue",
+"setNumberValue:"
+],
+"stringValue": [
+"stringValue",
+"setStringValue:"
+],
+"value": [
+"value",
+"setValue:"
+],
+"verboseStringValue": [
+"verboseStringValue",
+"setVerboseStringValue:"
+]
+}
+},
+"VLCTranscoder": {
+"methods": {
+"reencodeAndMuxSRTFile(_:toMP4File:outputPath:)": "reencodeAndMuxSRTFile:toMP4File:outputPath:"
+},
+"properties": {
+"delegate": [
+"delegate",
+"setDelegate:"
+]
+}
+},
+"VLCTranscoderDelegate": {
+"methods": {
+"transcode(_:finishedSucessfully:)": "transcode:finishedSucessfully:"
+},
+"properties": {}
+},
+"VLCTransferController": {
+"methods": {
+"addVLCMedia(toDownloadList:fileNameOfMedia:)": "addVLCMediaToDownloadList:fileNameOfMedia:",
+"cancel(inProgressItem:)": "cancelInProgressItem:",
+"cancelCurrentDownload()": "cancelCurrentDownload",
+"cancelExternalDownload(_:)": "cancelExternalDownload:",
+"cancelUpload(_:)": "cancelUpload:",
+"failExternalDownload(_:errorDescription:)": "failExternalDownload:errorDescription:",
+"failUpload(_:errorDescription:)": "failUpload:errorDescription:",
+"failWatch(_:errorDescription:)": "failWatchTransfer:errorDescription:",
+"finishExternalDownload(_:filePath:)": "finishExternalDownload:filePath:",
+"finishUpload(_:filePath:)": "finishUpload:filePath:",
+"finishWatch(_:filePath:)": "finishWatchTransfer:filePath:",
+"observeOutstandingWatchTransfers()": "observeOutstandingWatchTransfers",
+"removeFailedItem(_:)": "removeFailedItem:",
+"startExternalDownload(withName:canceller:)": "startExternalDownloadWithName:canceller:",
+"startUpload(withExpectedSize:)": "startUploadWithExpectedSize:",
+"updateExternalDownload(_:receivedBytes:expectedBytes:)": "updateExternalDownload:receivedBytes:expectedBytes:",
+"updateUpload(_:displayName:)": "updateUpload:displayName:",
+"updateUpload(_:receivedBytes:)": "updateUpload:receivedBytes:"
+},
+"properties": {
+"completedItems": [
+"completedItems",
+"setCompletedItems:"
+],
+"failedItems": [
+"failedItems",
+"setFailedItems:"
+],
+"inProgressItems": [
+"inProgressItems",
+"setInProgressItems:"
+]
+}
+},
+"VLCTransferItem": {
+"methods": {
+"class byteProgressString(forReceived:expected:)": "byteProgressStringForReceived:expected:",
+"class downloadItem(withName:)": "downloadItemWithName:",
+"class queuedDownloadItem(withName:urlString:)": "queuedDownloadItemWithName:urlString:",
+"class uploadItem(withExpectedSize:)": "uploadItemWithExpectedSize:",
+"class watch(withName:urlString:transferredBytes:expectedSize:)": "watchTransferItemWithName:urlString:transferredBytes:expectedSize:",
+"ingestReceivedBytes(_:expectedBytes:)": "ingestReceivedBytes:expectedBytes:",
+"markCompleted(withFilePath:)": "markCompletedWithFilePath:",
+"markFailedWithError(_:)": "markFailedWithError:"
+},
+"properties": {
+"active": [
+"active",
+"setActive:"
+],
+"date": [
+"date",
+"setDate:"
+],
+"direction": [
+"direction",
+"setDirection:"
+],
+"displayName": [
+"displayName",
+"setDisplayName:"
+],
+"errorDescription": [
+"errorDescription",
+"setErrorDescription:"
+],
+"expectedBytes": [
+"expectedBytes",
+"setExpectedBytes:"
+],
+"filePath": [
+"filePath",
+"setFilePath:"
+],
+"progress": [
+"progress",
+"setProgress:"
+],
+"receivedBytes": [
+"receivedBytes",
+"setReceivedBytes:"
+],
+"sizeKnown": [
+"sizeKnown",
+"setSizeKnown:"
+],
+"statsText": [
+"statsText",
+"setStatsText:"
+],
+"type": [
+"type",
+"setType:"
+],
+"urlString": [
+"urlString",
+"setUrlString:"
+]
+}
+}
+},
+"names": {
+"NSBlockOperation": "BlockOperation",
+"NSBundle": "Bundle",
+"NSByteCountFormatter": "ByteCountFormatter",
+"NSCachedURLResponse": "CachedURLResponse",
+"NSDateComponentsFormatter": "DateComponentsFormatter",
+"NSDateFormatter": "DateFormatter",
+"NSDateIntervalFormatter": "DateIntervalFormatter",
+"NSDiffableDataSourceSectionSnapshot": "NSDiffableDataSourceSectionSnapshotReference",
+"NSDiffableDataSourceSnapshot": "NSDiffableDataSourceSnapshotReference",
+"NSDimension": "Dimension",
+"NSEnergyFormatter": "EnergyFormatter",
+"NSFileHandle": "FileHandle",
+"NSFileManager": "FileManager",
+"NSFileWrapper": "FileWrapper",
+"NSFormatter": "Formatter",
+"NSHTTPCookie": "HTTPCookie",
+"NSHTTPCookieStorage": "HTTPCookieStorage",
+"NSHTTPURLResponse": "HTTPURLResponse",
+"NSISO8601DateFormatter": "ISO8601DateFormatter",
+"NSInputStream": "InputStream",
+"NSJSONSerialization": "JSONSerialization",
+"NSLengthFormatter": "LengthFormatter",
+"NSListFormatter": "ListFormatter",
+"NSMassFormatter": "MassFormatter",
+"NSMeasurementFormatter": "MeasurementFormatter",
+"NSMessagePort": "MessagePort",
+"NSNetService": "NetService",
+"NSNetServiceBrowser": "NetServiceBrowser",
+"NSNotificationCenter": "NotificationCenter",
+"NSNotificationQueue": "NotificationQueue",
+"NSNumberFormatter": "NumberFormatter",
+"NSOperation": "Operation",
+"NSOperationQueue": "OperationQueue",
+"NSOutputStream": "OutputStream",
+"NSPersonNameComponentsFormatter": "PersonNameComponentsFormatter",
+"NSPipe": "Pipe",
+"NSPort": "Port",
+"NSProcessInfo": "ProcessInfo",
+"NSProgress": "Progress",
+"NSPropertyListSerialization": "PropertyListSerialization",
+"NSRelativeDateTimeFormatter": "RelativeDateTimeFormatter",
+"NSRunLoop": "RunLoop",
+"NSScanner": "Scanner",
+"NSStream": "Stream",
+"NSThread": "Thread",
+"NSTimer": "Timer",
+"NSURLAuthenticationChallenge": "URLAuthenticationChallenge",
+"NSURLCache": "URLCache",
+"NSURLCredential": "URLCredential",
+"NSURLCredentialStorage": "URLCredentialStorage",
+"NSURLProtectionSpace": "URLProtectionSpace",
+"NSURLProtocol": "URLProtocol",
+"NSURLResponse": "URLResponse",
+"NSURLSession": "URLSession",
+"NSURLSessionConfiguration": "URLSessionConfiguration",
+"NSURLSessionDataTask": "URLSessionDataTask",
+"NSURLSessionDownloadTask": "URLSessionDownloadTask",
+"NSURLSessionStreamTask": "URLSessionStreamTask",
+"NSURLSessionTask": "URLSessionTask",
+"NSURLSessionTaskMetrics": "URLSessionTaskMetrics",
+"NSURLSessionTaskTransactionMetrics": "URLSessionTaskTransactionMetrics",
+"NSURLSessionUploadTask": "URLSessionUploadTask",
+"NSURLSessionWebSocketTask": "URLSessionWebSocketTask",
+"NSUndoManager": "UndoManager",
+"NSUnit": "Unit",
+"NSUnitAcceleration": "UnitAcceleration",
+"NSUnitAngle": "UnitAngle",
+"NSUnitArea": "UnitArea",
+"NSUnitConcentrationMass": "UnitConcentrationMass",
+"NSUnitConverter": "UnitConverter",
+"NSUnitConverterLinear": "UnitConverterLinear",
+"NSUnitDispersion": "UnitDispersion",
+"NSUnitDuration": "UnitDuration",
+"NSUnitElectricCharge": "UnitElectricCharge",
+"NSUnitElectricCurrent": "UnitElectricCurrent",
+"NSUnitElectricPotentialDifference": "UnitElectricPotentialDifference",
+"NSUnitElectricResistance": "UnitElectricResistance",
+"NSUnitEnergy": "UnitEnergy",
+"NSUnitFrequency": "UnitFrequency",
+"NSUnitFuelEfficiency": "UnitFuelEfficiency",
+"NSUnitIlluminance": "UnitIlluminance",
+"NSUnitInformationStorage": "UnitInformationStorage",
+"NSUnitLength": "UnitLength",
+"NSUnitMass": "UnitMass",
+"NSUnitPower": "UnitPower",
+"NSUnitPressure": "UnitPressure",
+"NSUnitSpeed": "UnitSpeed",
+"NSUnitTemperature": "UnitTemperature",
+"NSUnitVolume": "UnitVolume",
+"NSUserDefaults": "UserDefaults",
+"NSValueTransformer": "ValueTransformer",
+"NSXMLParser": "XMLParser",
+"UICollectionViewDiffableDataSource": "UICollectionViewDiffableDataSourceReference",
+"UITableViewDiffableDataSource": "UITableViewDiffableDataSourceReference",
+"VLCPlaybackService": "PlaybackService"
 },
 "protocols": [
 "CAAction",
@@ -32130,7 +37548,46 @@
 "UIViewImplicitlyAnimating",
 "UIWebViewDelegate",
 "UIWindowSceneDelegate",
-"UIWritingToolsCoordinatorDelegate"
+"UIWritingToolsCoordinatorDelegate",
+"VLCCustomDialogRendererProtocol",
+"VLCEventsConfiguring",
+"VLCExternalDownloadCanceller",
+"VLCFilter",
+"VLCFilterParameter",
+"VLCFormattedMessageLogging",
+"VLCLibraryLogReceiverProtocol",
+"VLCLocalNetworkService",
+"VLCLocalNetworkServiceBrowser",
+"VLCLocalNetworkServiceBrowserDelegate",
+"VLCLogMessageFormatting",
+"VLCLogging",
+"VLCMLCacherDelegate",
+"VLCMLDeviceListerDelegate",
+"VLCMLLoggerDelegate",
+"VLCMLObject",
+"VLCMediaDelegate",
+"VLCMediaFileDiscovererDelegate",
+"VLCMediaLibraryDelegate",
+"VLCMediaListDelegate",
+"VLCMediaListPlayerDelegate",
+"VLCMediaPlayerDelegate",
+"VLCMediaThumbnailerDelegate",
+"VLCMiniPlaybackViewInterface",
+"VLCNetworkListCellDelegate",
+"VLCNetworkLoginViewControllerDelegate",
+"VLCNetworkServerBrowser",
+"VLCNetworkServerBrowserDelegate",
+"VLCNetworkServerBrowserItem",
+"VLCNetworkServerLoginInformation",
+"VLCNetworkServerLoginInformationField",
+"VLCOnAirRailCellDelegate",
+"VLCPlaybackServiceDelegate",
+"VLCPlayerDisplayControllerDelegate",
+"VLCRadioFavoritesGridCellDelegate",
+"VLCRemoteBrowsingCell",
+"VLCRendererDiscovererDelegate",
+"VLCSubscriptionCacherDelegate",
+"VLCTranscoderDelegate"
 ],
 "superclasses": {
 "CAAnimation": "NSObject",
@@ -32392,6 +37849,8 @@
 "NSXPCInterface": "NSObject",
 "NSXPCListener": "NSObject",
 "NSXPCListenerEndpoint": "NSObject",
+"OBSlider": "UISlider",
+"PodcastBackgroundRefresher": "NSObject",
 "UIAccessibilityCustomAction": "NSObject",
 "UIAccessibilityCustomRotor": "NSObject",
 "UIAccessibilityCustomRotorItemResult": "NSObject",
@@ -32785,6 +38244,127 @@
 "UIZoomTransitionAlignmentRectContext": "NSObject",
 "UIZoomTransitionInteractionContext": "NSObject",
 "UIZoomTransitionOptions": "NSObject",
-"UIZoomTransitionSourceViewProviderContext": "NSObject"
+"UIZoomTransitionSourceViewProviderContext": "NSObject",
+"VLCActivityViewControllerVendor": "NSObject",
+"VLCAdjustFilter": "NSObject",
+"VLCAppCoordinator": "NSObject",
+"VLCAppDelegate": "UIResponder",
+"VLCArtworkCacher": "NSObject",
+"VLCArtworkImageView": "UIImageView",
+"VLCAudio": "NSObject",
+"VLCAudioEqualizer": "NSObject",
+"VLCAudioEqualizerBand": "NSObject",
+"VLCAudioEqualizerPreset": "NSObject",
+"VLCConsoleLogger": "NSObject",
+"VLCDialogProvider": "NSObject",
+"VLCDonationNagScreenViewController": "UIViewController",
+"VLCDonationNavigationController": "UINavigationController",
+"VLCDonationViewController": "UIViewController",
+"VLCEmptyLibraryView": "UIView",
+"VLCEventsDefaultConfiguration": "NSObject",
+"VLCEventsLegacyConfiguration": "NSObject",
+"VLCExternalDisplayController": "UIViewController",
+"VLCFavorite": "NSObject",
+"VLCFavoriteService": "NSObject",
+"VLCFileLogger": "NSObject",
+"VLCFirstStepsViewController": "UIViewController",
+"VLCHTTPUploaderController": "NSObject",
+"VLCLibrary": "NSObject",
+"VLCLocalNetworkServiceBrowserDSM": "VLCLocalNetworkServiceBrowserMediaDiscoverer",
+"VLCLocalNetworkServiceBrowserMediaDiscoverer": "NSObject",
+"VLCLocalNetworkServiceBrowserNFS": "VLCLocalNetworkServiceBrowserMediaDiscoverer",
+"VLCLocalNetworkServiceBrowserNetService": "NSObject",
+"VLCLocalNetworkServiceBrowserPlex": "VLCLocalNetworkServiceBrowserNetService",
+"VLCLocalNetworkServiceBrowserUPnP": "VLCLocalNetworkServiceBrowserMediaDiscoverer",
+"VLCLocalNetworkServiceDSM": "VLCLocalNetworkServiceVLCMedia",
+"VLCLocalNetworkServiceNFS": "VLCLocalNetworkServiceVLCMedia",
+"VLCLocalNetworkServiceNetService": "NSObject",
+"VLCLocalNetworkServicePlex": "VLCLocalNetworkServiceNetService",
+"VLCLocalNetworkServiceUPnP": "VLCLocalNetworkServiceVLCMedia",
+"VLCLocalNetworkServiceVLCMedia": "NSObject",
+"VLCLogContext": "NSObject",
+"VLCLogMessageFormatter": "NSObject",
+"VLCMLAlbum": "NSObject",
+"VLCMLArtist": "NSObject",
+"VLCMLAudioTrack": "NSObject",
+"VLCMLBookmark": "NSObject",
+"VLCMLChapter": "NSObject",
+"VLCMLFile": "NSObject",
+"VLCMLFolder": "NSObject",
+"VLCMLGenre": "NSObject",
+"VLCMLLabel": "NSObject",
+"VLCMLMedia": "NSObject",
+"VLCMLMediaGroup": "NSObject",
+"VLCMLMetadata": "NSObject",
+"VLCMLMovie": "NSObject",
+"VLCMLPlaylist": "NSObject",
+"VLCMLSearchAggregate": "NSObject",
+"VLCMLService": "NSObject",
+"VLCMLShow": "NSObject",
+"VLCMLShowEpisode": "NSObject",
+"VLCMLSubscription": "NSObject",
+"VLCMLSubscriptionEpisode": "NSObject",
+"VLCMLSubtitleTrack": "NSObject",
+"VLCMLVideoTrack": "NSObject",
+"VLCMedia": "NSObject",
+"VLCMediaDiscoverer": "NSObject",
+"VLCMediaFileDiscoverer": "NSObject",
+"VLCMediaLibrary": "NSObject",
+"VLCMediaList": "NSObject",
+"VLCMediaListPlayer": "NSObject",
+"VLCMediaLoudness": "NSObject",
+"VLCMediaMetaData": "NSObject",
+"VLCMediaPlayer": "NSObject",
+"VLCMediaThumbnailer": "NSObject",
+"VLCMetaData": "NSObject",
+"VLCMigrationCursor": "NSObject",
+"VLCNetworkImageView": "VLCArtworkImageView",
+"VLCNetworkListCell": "UITableViewCell",
+"VLCNetworkListViewController": "UIViewController",
+"VLCNetworkLoginViewController": "UIViewController",
+"VLCNetworkServerBrowserItemPlex": "NSObject",
+"VLCNetworkServerBrowserItemVLCMedia": "NSObject",
+"VLCNetworkServerBrowserPlex": "NSObject",
+"VLCNetworkServerBrowserVLCMedia": "NSObject",
+"VLCNetworkServerBrowserViewController": "VLCNetworkListViewController",
+"VLCNetworkServerLoginInformation": "NSObject",
+"VLCNetworkServerLoginInformationField": "NSObject",
+"VLCNonInteractiveWindowSceneDelegate": "UIResponder",
+"VLCOBSlider": "OBSlider",
+"VLCOnAirRailCell": "UITableViewCell",
+"VLCOnAirRailItem": "NSObject",
+"VLCOnAirViewController": "UIViewController",
+"VLCOpenNetworkStreamViewController": "UIViewController",
+"VLCPhotoLibraryController": "NSObject",
+"VLCPlaceholderArtwork": "NSObject",
+"VLCPlaybackInfoSubtitlesFetcherViewController": "UIViewController",
+"VLCPlaybackNavigationController": "UINavigationController",
+"VLCPlaybackService": "NSObject",
+"VLCPlayerDisplayController": "UIViewController",
+"VLCPodcastDirectoryLanguageViewController": "VLCNetworkListViewController",
+"VLCPodcastDirectoryListViewController": "VLCNetworkListViewController",
+"VLCPodcastIndexEpisode": "NSObject",
+"VLCPodcastIndexFeed": "NSObject",
+"VLCPodcastIndexService": "NSObject",
+"VLCPodcastIndexShelf": "NSObject",
+"VLCRadioErrorView": "UIView",
+"VLCRadioFavoritesGridCell": "UITableViewCell",
+"VLCRadioListViewController": "VLCNetworkListViewController",
+"VLCRadioService": "NSObject",
+"VLCRendererDiscoverer": "NSObject",
+"VLCRendererDiscovererDescription": "NSObject",
+"VLCRendererItem": "NSObject",
+"VLCResettingSlider": "VLCSlider",
+"VLCServerBrowsingController": "NSObject",
+"VLCServerListViewController": "UIViewController",
+"VLCSlider": "UISlider",
+"VLCStatusLabel": "UILabel",
+"VLCSubscriptionCacher": "NSObject",
+"VLCThumbnailsCache": "NSObject",
+"VLCTime": "NSObject",
+"VLCTranscoder": "NSObject",
+"VLCTransferController": "NSObject",
+"VLCTransferItem": "NSObject",
+"VLCTransferViewController": "UIViewController"
 }
 }
