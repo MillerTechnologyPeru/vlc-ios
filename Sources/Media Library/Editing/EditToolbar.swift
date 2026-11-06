@@ -20,7 +20,8 @@ protocol EditToolbarDelegate: AnyObject {
     func editToolbarEmptySelection(_ editToolbar: EditToolbar) -> Bool
 }
 
-class EditToolbar: UIView {
+@ObjCImplementation
+class EditToolbar: UIViewMethods {
     static let height: CGFloat = 60
     weak var delegate: EditToolbarDelegate?
 
@@ -45,7 +46,7 @@ class EditToolbar: UIView {
         addToPlaylistButton.titleLabel?.font = UIFont.preferredCustomFont(forTextStyle: .headline)
         addToPlaylistButton.titleLabel?.lineBreakMode = .byTruncatingTail
         addToPlaylistButton.contentHorizontalAlignment = .left
-        addToPlaylistButton.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
+        addToPlaylistButton.addTarget(self, action: ObjC.selector("addToPlaylist"), for: .touchUpInside)
         addToPlaylistButton.tintColor = .orange
         addToPlaylistButton.accessibilityLabel = NSLocalizedString("ADD_TO_PLAYLIST", comment: "")
         addToPlaylistButton.accessibilityHint = NSLocalizedString("ADD_TO_PLAYLIST_HINT", comment: "")
@@ -58,27 +59,27 @@ class EditToolbar: UIView {
     private var deleteButton: UIButton!
     private(set) var shareButton: UIButton!
 
-    @objc func addToPlaylist() {
+    @ObjCMethod func addToPlaylist() {
         delegate?.editToolbarDidAddToPlaylist(self)
     }
 
-    @objc func addToMediaGroup() {
+    @ObjCMethod func addToMediaGroup() {
         delegate?.editToolbarDidAddToMediaGroup(self)
     }
 
-    @objc func removeFromMediaGroup() {
+    @ObjCMethod func removeFromMediaGroup() {
         delegate?.editToolbarDidRemoveFromMediaGroup(self)
     }
 
-    @objc func deleteSelection() {
+    @ObjCMethod func deleteSelection() {
         delegate?.editToolbarDidDelete(self)
     }
 
-    @objc func renameSelection() {
+    @ObjCMethod func renameSelection() {
         delegate?.editToolbarDidRename(self)
     }
 
-    @objc func share() {
+    @ObjCMethod func share() {
         delegate?.editToolbarDidShare(self)
     }
 
@@ -154,21 +155,21 @@ class EditToolbar: UIView {
         for button in buttons {
             switch button.identifier {
             case .addToPlaylist:
-                rightStackView.addArrangedSubview(button.button(self, #selector(addToPlaylist)))
+                rightStackView.addArrangedSubview(button.button(self, ObjC.selector("addToPlaylist")))
             case .addToMediaGroup:
-                addToMediaGroupButton = button.button(self, #selector(addToMediaGroup))
+                addToMediaGroupButton = button.button(self, ObjC.selector("addToMediaGroup"))
                 rightStackView.addArrangedSubview(addToMediaGroupButton)
             case .removeFromMediaGroup:
-                removeFromMediaGroupButton = button.button(self, #selector(removeFromMediaGroup))
+                removeFromMediaGroupButton = button.button(self, ObjC.selector("removeFromMediaGroup"))
                 rightStackView.addArrangedSubview(removeFromMediaGroupButton)
             case .rename:
-                renameButton = button.button(self, #selector(renameSelection))
+                renameButton = button.button(self, ObjC.selector("renameSelection"))
                 rightStackView.addArrangedSubview(renameButton)
             case .delete:
-                deleteButton = button.button(self, #selector(deleteSelection))
+                deleteButton = button.button(self, ObjC.selector("deleteSelection"))
                 rightStackView.addArrangedSubview(deleteButton)
             case .share:
-                shareButton = button.button(self, #selector(share))
+                shareButton = button.button(self, ObjC.selector("share"))
                 rightStackView.addArrangedSubview(shareButton)
             //Not supported in edit mode
             case .play,
@@ -202,13 +203,10 @@ class EditToolbar: UIView {
     }
 
     init() {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         setupView()
         setupRightStackView()
         setupStackView()
     }
 
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
