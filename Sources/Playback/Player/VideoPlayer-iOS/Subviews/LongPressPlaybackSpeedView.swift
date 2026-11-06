@@ -8,16 +8,14 @@
 
 import UIKit
 
-class LongPressPlaybackSpeedView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+@ObjCImplementation
+class LongPressPlaybackSpeedView: UIViewMethods {
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
 
         setupView()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private static let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -89,8 +87,8 @@ class LongPressPlaybackSpeedView: UIView {
         self.backgroundColor = .secondarySystemBackground.withAlphaComponent(0.5)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
 
         self.layer.cornerRadius = self.bounds.height / 2
         self.layer.masksToBounds = true
