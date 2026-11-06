@@ -12,20 +12,23 @@
 
 import UIKit
 
-class PlaylistTableViewCell: UITableViewCell {
+@ObjCImplementation
+class PlaylistTableViewCell: UITableViewCellMethods {
+    init() { objcInit() }
+
 
     @IBOutlet weak var playlistTitle: UILabel!
     @IBOutlet weak var playlistDuration: UILabel!
     @IBOutlet weak var playlistThumbnail: VLCArtworkImageView!
     @IBOutlet weak var playlistTracks: UILabel!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    @ObjCMethod("awakeFromNib") func awakeFromNib() {
+        callSuper("awakeFromNib")
         accessoryType = .disclosureIndicator
     }
 
     // Intentionally empty to suppress the default selection highlight
-    override func setSelected(_ selected: Bool, animated: Bool) {
+    @ObjCMethod("setSelected:animated:") func setSelected(_ selected: Bool, animated: Bool) {
     }
 
     var playlist: VLCMLPlaylist? {
@@ -41,8 +44,8 @@ class PlaylistTableViewCell: UITableViewCell {
         }
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         playlistTitle.text = ""
         playlistDuration.text = ""
         playlistThumbnail.setImage(nil, placeholderName: nil)
