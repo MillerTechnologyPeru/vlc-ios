@@ -8,7 +8,8 @@
 
 import UIKit
 
-class AddToPlaylistViewController: UIViewController {
+@ObjCImplementation(protocols: ["UICollectionViewDataSource", "UICollectionViewDelegate"], extensions: ["UICollectionViewDataSource", "UICollectionViewDelegate"])
+class AddToPlaylistViewController: UIViewControllerMethods {
 
     var playlistCollectionView: UICollectionView!
     var createPlaylistButton: UIButton!
@@ -17,21 +18,18 @@ class AddToPlaylistViewController: UIViewController {
     let playlistModel: PlaylistModel
     let medialib: MediaLibraryService
 
-    @objc var mediaToAdd = [VLCMLMedia]()
+    var mediaToAdd = [VLCMLMedia]()
 
     init() {
         let appCoordinator = VLCAppCoordinator.sharedInstance()
         medialib = appCoordinator.mediaLibraryService
         playlistModel = PlaylistModel(medialibrary: medialib)
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
 
         setupTitleLabel()
         setupCreateButton()
@@ -39,12 +37,12 @@ class AddToPlaylistViewController: UIViewController {
         setupFocusGuide()
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTheme),
+                                               selector: ObjC.selector("updateTheme"),
                                                name: .VLCThemeDidChangeNotification,
                                                object: nil)
     }
 
-    @objc private func updateTheme() {
+    @ObjCMethod private func updateTheme() {
         titleLabel.textColor = PresentationTheme.current.colors.cellTextColor
     }
 
@@ -68,7 +66,7 @@ class AddToPlaylistViewController: UIViewController {
     private func setupCreateButton() {
         createPlaylistButton = UIButton(type: .system)
         createPlaylistButton.setTitle(NSLocalizedString("PLAYLIST_CREATION", comment: ""), for: .normal)
-        createPlaylistButton.addTarget(self, action: #selector(createNewPlaylist(_:)), for: .primaryActionTriggered)
+        createPlaylistButton.addTarget(self, action: ObjC.selector("createNewPlaylist:"), for: .primaryActionTriggered)
         createPlaylistButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(createPlaylistButton)
 
@@ -117,8 +115,8 @@ class AddToPlaylistViewController: UIViewController {
         focusGuide.preferredFocusEnvironments = [playlistCollectionView!]
     }
 
-    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
-        super.didUpdateFocus(in: context, with: coordinator)
+    @ObjCMethod("didUpdateFocusInContext:withAnimationCoordinator:") func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        callSuper("didUpdateFocusInContext:withAnimationCoordinator:", context, coordinator)
 
         // Dynamically redirect: from collection view -> button, from button -> collection view
         if let guide = view.layoutGuides.first(where: { $0 is UIFocusGuide }) as? UIFocusGuide {
@@ -132,7 +130,7 @@ class AddToPlaylistViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc func createNewPlaylist(_ sender: UIButton) {
+    @ObjCMethod func createNewPlaylist(_ sender: UIButton) {
         let playlistAlert = UIAlertController(title: NSLocalizedString("PLAYLIST_CREATION", comment: ""),
                                               message: NSLocalizedString("PLAYLIST_DESCRIPTION", comment: ""),
                                               preferredStyle: .alert)
@@ -166,15 +164,16 @@ class AddToPlaylistViewController: UIViewController {
 
 // MARK: - UICollectionViewDataSource
 
-extension AddToPlaylistViewController: UICollectionViewDataSource {
+@ObjCExtension("UICollectionViewDataSource")
+extension AddToPlaylistViewController {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         playlistModel.fileArrayLock.lock()
         defer { playlistModel.fileArrayLock.unlock() }
         return playlistModel.files.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VLCMovieTVCollectionViewCellIdentifier, for: indexPath) as! VLCMovieTVCollectionViewCell
         playlistModel.fileArrayLock.lock()
         let playlist = playlistModel.files[indexPath.row]
@@ -188,9 +187,10 @@ extension AddToPlaylistViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension AddToPlaylistViewController: UICollectionViewDelegate {
+@ObjCExtension("UICollectionViewDelegate")
+extension AddToPlaylistViewController {
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         playlistModel.fileArrayLock.lock()
         let playlist = playlistModel.files[indexPath.row]
         playlistModel.fileArrayLock.unlock()
