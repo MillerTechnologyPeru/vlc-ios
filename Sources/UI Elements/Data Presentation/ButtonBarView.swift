@@ -12,7 +12,8 @@
 
 import Foundation
 
-class ButtonBarView: UICollectionView {
+@ObjCImplementation
+class ButtonBarView: UICollectionViewMethods {
 
     var selectedBar: UIView!
     var separatorView: UIView!
@@ -22,15 +23,11 @@ class ButtonBarView: UICollectionView {
 
     var selectedIndex = 0
 
-    @available(*, unavailable, message: "use init(frame:)")
-    required init?(coder aDecoder: NSCoder) {
-        fatalError()
-    }
 
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+    init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        objcInit("initWithFrame:collectionViewLayout:", frame, layout)
         setup()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .VLCThemeDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"), name: .VLCThemeDidChangeNotification, object: nil)
 
     }
 
@@ -49,7 +46,7 @@ class ButtonBarView: UICollectionView {
         updateTheme()
     }
 
-    @objc func updateTheme() {
+    @ObjCMethod func updateTheme() {
         if #available(iOS 26.0, *) {
             // Hosted inside the navigation bar's glass palette, so it carries no effect of its own.
             backgroundColor = .clear
@@ -153,13 +150,13 @@ class ButtonBarView: UICollectionView {
         selectedBar.frame = selectedBarFrame
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         updateSelectedBarYPosition()
     }
 
-    override func safeAreaInsetsDidChange() {
-        super.safeAreaInsetsDidChange()
+    @ObjCMethod("safeAreaInsetsDidChange") func safeAreaInsetsDidChange() {
+        callSuper("safeAreaInsetsDidChange")
 
         guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout,
               flowLayout.sectionInset.left != safeAreaInsets.left || flowLayout.sectionInset.right != safeAreaInsets.right else {
