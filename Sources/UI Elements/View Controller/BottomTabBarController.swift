@@ -10,11 +10,13 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc(VLCBottomTabBarController)
-class BottomTabBarController: UITabBarController {
+@ObjCImplementation("VLCBottomTabBarController")
+class BottomTabBarController: UITabBarControllerMethods {
+    init() { objcInit() }
+
     // MARK: - Properties
 
-    @objc lazy var bottomBar: UITabBar = {
+    lazy var bottomBar: UITabBar = {
         let bottomBar = UITabBar()
         bottomBar.translatesAutoresizingMaskIntoConstraints = false
         return bottomBar
@@ -36,8 +38,8 @@ class BottomTabBarController: UITabBarController {
 
     // MARK: - Init
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
 
         guard isBottomBarActive else {
             return
@@ -60,8 +62,8 @@ class BottomTabBarController: UITabBarController {
         ])
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    @ObjCMethod("viewWillLayoutSubviews") func viewWillLayoutSubviews() {
+        callSuper("viewWillLayoutSubviews")
 
         guard isBottomBarActive else {
             return
@@ -71,8 +73,8 @@ class BottomTabBarController: UITabBarController {
         bottomBar.selectedItem = tabBar.selectedItem
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
 
         if #unavailable(iOS 26.0) {
             tabBar.layer.shadowPath = UIBezierPath(rect: tabBar.bounds).cgPath
