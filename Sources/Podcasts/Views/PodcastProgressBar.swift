@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastProgressBar: UIView {
+@ObjCImplementation
+class PodcastProgressBar: UIViewMethods {
     private let trackView = UIView()
     private let fillView = UIView()
     private var fillWidthConstraint: NSLayoutConstraint?
@@ -23,13 +24,13 @@ class PodcastProgressBar: UIView {
         }
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setup()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setup()
     }
 
@@ -59,13 +60,13 @@ class PodcastProgressBar: UIView {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(applyTheme),
+                                                selector: ObjC.selector("applyTheme"),
                                                 name: .VLCThemeDidChangeNotification,
                                                 object: nil)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         layer.cornerRadius = bounds.height / 2
         trackView.layer.cornerRadius = layer.cornerRadius
         fillView.layer.cornerRadius = layer.cornerRadius
@@ -77,7 +78,7 @@ class PodcastProgressBar: UIView {
         fillWidthConstraint?.constant = bounds.width * clamped
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         trackView.backgroundColor = colors.separatorColor
         fillView.backgroundColor = colors.orangeUI
