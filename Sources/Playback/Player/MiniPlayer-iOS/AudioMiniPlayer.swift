@@ -34,14 +34,14 @@ struct MiniPlayerPosition {
     var horizontal: MiniPlayerHorizontalPosition
 }
 
-@objc enum PanDirection: Int {
+enum PanDirection: Int {
     case vertical
     case horizontal
 }
 
-@objc(VLCAudioMiniPlayer)
-class AudioMiniPlayer: UIView, MiniPlayer, QueueViewControllerDelegate {
-    @objc static let height: Float = 72.0
+@ObjCImplementation("VLCAudioMiniPlayer", protocols: ["UIContextMenuInteractionDelegate"], extensions: ["Extension", "Extension2", "UIContextMenuInteractionDelegate"])
+class AudioMiniPlayer: UIViewMethods, MiniPlayer, QueueViewControllerDelegate {
+    static let height: Float = 72.0
     private static let extraControlsMinWidth: CGFloat = 500.0
     var visible: Bool = false
     var contentHeight: Float {
@@ -78,19 +78,16 @@ class AudioMiniPlayer: UIView, MiniPlayer, QueueViewControllerDelegate {
     var tapticPosition = MiniPlayerPosition(vertical: .bottom, horizontal: .center)
     var panDirection: PanDirection = .vertical
 
-    @objc init(draggingDelegate: MiniPlayerDraggingDelegate) {
+    init(draggingDelegate: MiniPlayerDraggingDelegate) {
         self.draggingDelegate = draggingDelegate
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         initView()
         setupConstraint()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         let hasRoomForExtraControls = bounds.width >= AudioMiniPlayer.extraControlsMinWidth
         if repeatButton.isHidden == hasRoomForExtraControls {
             repeatButton.isHidden = !hasRoomForExtraControls
@@ -136,7 +133,7 @@ class AudioMiniPlayer: UIView, MiniPlayer, QueueViewControllerDelegate {
         return .white
     }
 
-    @objc func setupQueueViewController(with view: QueueViewController) {
+    @ObjCMethod func setupQueueViewController(with view: QueueViewController) {
         queueViewController = view
         queueViewController?.delegate = self
     }
@@ -225,11 +222,11 @@ private extension AudioMiniPlayer {
         nextButton.accessibilityLabel = NSLocalizedString("NEXT_BUTTON", comment: "")
         previousButton.accessibilityLabel = NSLocalizedString("PREV_BUTTON", comment: "")
 
-        repeatButton.addTarget(self, action: #selector(handelRepeat(_:)), for: .touchUpInside)
-        previousButton.addTarget(self, action: #selector(handlePrevious(_:)), for: .touchUpInside)
-        playPauseButton.addTarget(self, action: #selector(handlePlayPause(_:)), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(handleNext(_:)), for: .touchUpInside)
-        shuffleButton.addTarget(self, action: #selector(handleShuffle(_:)), for: .touchUpInside)
+        repeatButton.addTarget(self, action: ObjC.selector("handelRepeat:"), for: .touchUpInside)
+        previousButton.addTarget(self, action: ObjC.selector("handlePrevious:"), for: .touchUpInside)
+        playPauseButton.addTarget(self, action: ObjC.selector("handlePlayPause:"), for: .touchUpInside)
+        nextButton.addTarget(self, action: ObjC.selector("handleNext:"), for: .touchUpInside)
+        shuffleButton.addTarget(self, action: ObjC.selector("handleShuffle:"), for: .touchUpInside)
 
         if #available(iOS 26.0, *) {
             playPauseButton.setImage(UIImage(named: "MiniPlay")?.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -366,14 +363,14 @@ private extension AudioMiniPlayer {
     }
 
     private func setupGestures() {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(didDrag(_:)))
+        let pan = UIPanGestureRecognizer(target: self, action: ObjC.selector("didDrag:"))
         pan.minimumNumberOfTouches = 1
         audioMiniPlayer.addGestureRecognizer(pan)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleFullScreen(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: ObjC.selector("handleFullScreen:"))
         infoContainer.addGestureRecognizer(tap)
 
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressPlayPause(_:)))
+        let longPress = UILongPressGestureRecognizer(target: self, action: ObjC.selector("handleLongPressPlayPause:"))
         longPress.minimumPressDuration = 0.5
         longPress.allowableMovement = 10
         playPauseButton.addGestureRecognizer(longPress)
@@ -460,31 +457,32 @@ extension AudioMiniPlayer: VLCPlaybackServiceDelegate {
 
 // MARK: - UI Receivers
 
+@ObjCExtension("Extension")
 private extension AudioMiniPlayer {
-    @objc private func handlePrevious(_ sender: UIButton) {
+    @ObjCMethod private func handlePrevious(_ sender: UIButton) {
         playbackService.previous()
     }
 
-    @objc private func handlePlayPause(_ sender: UIButton) {
+    @ObjCMethod private func handlePlayPause(_ sender: UIButton) {
         playbackService.playPause()
         updatePlayPauseButton()
     }
 
-    @objc private func handleNext(_ sender: UIButton) {
+    @ObjCMethod private func handleNext(_ sender: UIButton) {
         playbackService.next()
     }
 
-    @objc private func handelRepeat(_ sender: UIButton) {
+    @ObjCMethod private func handelRepeat(_ sender: UIButton) {
         playbackService.toggleRepeatMode()
         updateRepeatButton()
     }
 
-    @objc private func handleShuffle(_ sender: UIButton? = nil) {
+    @ObjCMethod private func handleShuffle(_ sender: UIButton? = nil) {
         playbackService.isShuffleMode = !playbackService.isShuffleMode
         updateShuffleButton()
     }
 
-    @objc private func handleFullScreen(_ sender: Any) {
+    @ObjCMethod private func handleFullScreen(_ sender: Any) {
         if position.vertical == .top {
             dismissPlayqueue(with: nil)
         }
@@ -507,7 +505,7 @@ private extension AudioMiniPlayer {
                                         for: nil)
     }
 
-    @objc private func handleLongPressPlayPause(_ sender: UILongPressGestureRecognizer) {
+    @ObjCMethod private func handleLongPressPlayPause(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
             // case .began:
             // In the case of .began we could a an icon like the old miniplayer
@@ -524,10 +522,11 @@ private extension AudioMiniPlayer {
 
 // MARK: - Playqueue UI
 
+@ObjCExtension("Extension2")
 extension AudioMiniPlayer {
 
     // MARK: Drag gesture handlers
-    @objc func didDrag(_ sender: UIPanGestureRecognizer) {
+    @ObjCMethod func didDrag(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .began:
             dragDidBegin(sender)
@@ -750,8 +749,9 @@ private extension AudioMiniPlayer {
 
 // MARK: - UIContextMenuInteractionDelegate
 
-extension AudioMiniPlayer: UIContextMenuInteractionDelegate {
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+@ObjCExtension("UIContextMenuInteractionDelegate")
+extension AudioMiniPlayer {
+    @ObjCMethod("contextMenuInteraction:configurationForMenuAtLocation:") func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: nil,
@@ -844,7 +844,7 @@ extension AudioMiniPlayer: ZoomTransitionEndpoint {
     }
 }
 
-@objc protocol MiniPlayerDraggingDelegate {
+protocol MiniPlayerDraggingDelegate {
     func miniPlayerDragStateDidChange(_ miniPlayer: AudioMiniPlayer, sender: UIPanGestureRecognizer, panDirection: PanDirection)
     func miniPlayerDragDidEnd(_ miniPlayer: AudioMiniPlayer, sender: UIPanGestureRecognizer, panDirection: PanDirection)
     func miniPlayerPositionToTop(_ miniPlayer: AudioMiniPlayer)
