@@ -9,14 +9,15 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class TrackModel: NSObject, MediaModel {
+@ObjCImplementation
+class TrackModel: NSObjectMethods, MediaModel {
     typealias MLType = VLCMLMedia
 
-    @objc var sortModel = SortModel([.alpha, .album, .duration, .fileSize, .insertionDate, .lastPlaybackDate, .playCount])
+    var sortModel = SortModel([.alpha, .album, .duration, .fileSize, .insertionDate, .lastPlaybackDate, .playCount])
 
     var observable = VLCObservable<MediaLibraryBaseModelObserver>()
 
-    @objc var files = [VLCMLMedia]()
+    var files = [VLCMLMedia]()
     var fileArrayLock = NSRecursiveLock()
 
     var currentPage = 0
@@ -35,9 +36,9 @@ class TrackModel: NSObject, MediaModel {
 
     var indicatorName: String = NSLocalizedString("SONGS", comment: "")
 
-    @objc required init(medialibrary: MediaLibraryService) {
+    init(medialibrary: MediaLibraryService) {
         self.medialibrary = medialibrary
-        super.init()
+        objcInit("init")
         medialibrary.observable.addObserver(self)
     }
 
@@ -49,7 +50,7 @@ class TrackModel: NSObject, MediaModel {
                                   offset: UInt32(offset))
     }
 
-    @objc func getMedia(at index: Int) -> VLCMLMedia? {
+    @ObjCMethod func getMedia(at index: Int) -> VLCMLMedia? {
         fileArrayLock.lock()
         defer { fileArrayLock.unlock() }
         guard index >= 0, index < files.count else { return nil }
