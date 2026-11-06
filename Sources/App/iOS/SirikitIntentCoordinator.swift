@@ -10,15 +10,16 @@ import Foundation
 @preconcurrency import Intents
 @preconcurrency import VLCMediaLibraryKit
 
-class SirikitIntentCoordinator: NSObject {
+@ObjCImplementation
+class SirikitIntentCoordinator: NSObjectMethods {
     private let mediaLibraryService: MediaLibraryService
     private let resolver: MediaResolver
     private let playbackService = PlaybackService.sharedInstance()
 
-    @objc init(mediaLibraryService: MediaLibraryService) {
+    init(mediaLibraryService: MediaLibraryService) {
         self.mediaLibraryService = mediaLibraryService
         self.resolver = MediaResolver(mediaLibraryService: mediaLibraryService)
-        super.init()
+        objcInit("init")
     }
 }
 
