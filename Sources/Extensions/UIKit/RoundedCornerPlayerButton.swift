@@ -12,7 +12,8 @@
 
 import UIKit
 
-final class RoundedCornerPlayerButton: UIControl {
+@ObjCImplementation
+final class RoundedCornerPlayerButton: UIControlMethods {
     private var glassBackgroundView: UIView?
 
     private let iconView: UIImageView = {
@@ -64,13 +65,10 @@ final class RoundedCornerPlayerButton: UIControl {
     }()
 
     init(showsChevron: Bool) {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         setup(showsChevron: showsChevron)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setup(showsChevron: Bool) {
         translatesAutoresizingMaskIntoConstraints = false
@@ -110,23 +108,23 @@ final class RoundedCornerPlayerButton: UIControl {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(applyBackgroundStyle),
+                                       selector: ObjC.selector("applyBackgroundStyle"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(applyBackgroundStyle),
+                                       selector: ObjC.selector("applyBackgroundStyle"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         if glassBackgroundView == nil {
             roundCorners(radius: bounds.height / 2)
         }
     }
 
-    @objc private func applyBackgroundStyle() {
+    @ObjCMethod private func applyBackgroundStyle() {
         glassBackgroundView?.removeFromSuperview()
         glassBackgroundView = nil
 
