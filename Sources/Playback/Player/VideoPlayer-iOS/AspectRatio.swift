@@ -9,6 +9,10 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
+// Also built with Embedded Swift for iOS 6 (Sources/App/iOS6), which has no
+// @objc: there, NSLocalizedString comes from the iOS 6 app. #if can't wrap an
+// attribute alone, so the cases are declared for each.
+#if !hasFeature(Embedded)
 import UIKit
 
 @objc(VLCAspectRatio)
@@ -22,7 +26,22 @@ enum AspectRatio: Int, CaseIterable {
     case twentyOneToOne
     case thirtyFiveToOne
     case thirtyNineToOne
+}
+#else
+enum AspectRatio: Int, CaseIterable {
+    case Default = 0
+    case fillToScreen
+    case fourToThree
+    case fiveToFour
+    case sixteenToNine
+    case sixteenToTen
+    case twentyOneToOne
+    case thirtyFiveToOne
+    case thirtyNineToOne
+}
+#endif
 
+extension AspectRatio {
     var stringToDisplay: String {
         switch self {
         case .Default:
@@ -60,6 +79,7 @@ enum AspectRatio: Int, CaseIterable {
     }
 }
 
+#if !hasFeature(Embedded)
 @objc(VLCAspectRatioBridge)
 class AspectRatioBridge: NSObject {
     @objc class func stringToDisplay(for rawValue: Int) -> String? {
@@ -78,3 +98,4 @@ class AspectRatioBridge: NSObject {
         return aspectRatio.value
     }
 }
+#endif
