@@ -40,6 +40,7 @@ module SwiftUI "$SWIFT_IOS6"/SwiftUI/Sources/SwiftUI/*.swift \
     -I"$SWIFT_IOS6/SwiftUI/Sources/CSwiftUIBackend/include"
 module VLCKit "$HERE"/VLCKit/*.swift
 module VLCMediaLibraryKit "$HERE"/VLCMediaLibraryKit/*.swift
+module VLCApp "$HERE"/VLCApp/*.swift
 module VLCiOS6 "$HERE"/VLCiOS6/*.swift
 
 # Frameworks VLC imports that iOS 6 or Embedded Swift doesn't have: empty
