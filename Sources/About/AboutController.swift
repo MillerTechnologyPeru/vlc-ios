@@ -15,7 +15,8 @@ import UIKit
 import WebKit
 import MessageUI
 
-class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
+@ObjCImplementation(protocols: ["UINavigationControllerDelegate"])
+class AboutController: UIViewControllerMethods, MFMailComposeViewControllerDelegate {
 
     private let webView = WKWebView()
     private let notificationCenter = NotificationCenter.default
@@ -26,16 +27,13 @@ class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UI
         return PresentationTheme.current.colors.statusBarStyle
     }
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        objcInit("initWithNibName:bundle:", nibNameOrNil, nibBundleOrNil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         setup()
     }
 
@@ -67,7 +65,7 @@ class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UI
 
     private func setupObserver() {
         notificationCenter.addObserver(self,
-                                       selector: #selector(themeDidChange),
+                                       selector: ObjC.selector("themeDidChange"),
                                        name: NSNotification.Name(kVLCThemeDidChangeNotification),
                                        object: nil)
     }
@@ -83,12 +81,12 @@ class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UI
         let feedbackButton = UIBarButtonItem(title: NSLocalizedString("BUTTON_CONTACT", comment: ""),
                                              style: .plain,
                                              target: self,
-                                             action: #selector(sendFeedbackEmail))
+                                             action: ObjC.selector("sendFeedbackEmail"))
         feedbackButton.accessibilityIdentifier = VLCAccessibilityIdentifier.contact
         let doneButton = UIBarButtonItem(title: NSLocalizedString("BUTTON_DONE", comment: ""),
                                          style: .done,
                                          target: self,
-                                         action: #selector(dismissView))
+                                         action: ObjC.selector("dismissView"))
         doneButton.accessibilityIdentifier = VLCAccessibilityIdentifier.done
         self.navigationItem.leftBarButtonItem = feedbackButton
         self.navigationItem.rightBarButtonItem = doneButton
@@ -162,7 +160,7 @@ class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UI
 
     // MARK: - Observer & BarButton Actions
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         let colors = PresentationTheme.current.colors
         view.backgroundColor = colors.background
         webView.backgroundColor = colors.background
@@ -170,7 +168,7 @@ class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UI
         loadWebsite()
     }
 
-    @objc private func sendFeedbackEmail() {
+    @ObjCMethod private func sendFeedbackEmail() {
 #if os(iOS)
         ImpactFeedbackGenerator().selectionChanged()
 #endif
@@ -262,7 +260,7 @@ class AboutController: UIViewController, MFMailComposeViewControllerDelegate, UI
     }
 
 
-    @objc private func dismissView() {
+    @ObjCMethod private func dismissView() {
 #if os(iOS)
         ImpactFeedbackGenerator().selectionChanged()
 #endif
@@ -300,22 +298,20 @@ extension AboutController: WKNavigationDelegate {
     }
 }
 
-class AboutNavigationController: UINavigationController {
+@ObjCImplementation
+class AboutNavigationController: UINavigationControllerMethods {
 
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
+    init(rootViewController: UIViewController) {
+        objcInit("initWithRootViewController:", rootViewController)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+    init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        objcInit("initWithNibName:bundle:", nibNameOrNil, nibBundleOrNil)
     }
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         navigationBar.prefersLargeTitles = false
     }
 }
