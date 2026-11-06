@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Writes the Objective-C selectors of UIKit's, Foundation's and QuartzCore's
-Swift names, for port.py.
+Swift names, and those of other Objective-C modules (MobileVLCKit,
+VLCMediaLibraryKit, the app's headers), for port.py and swiftnames.py.
 
 Swift renames Objective-C methods (`tableView(_:cellForRowAt:)` is
 `tableView:cellForRowAtIndexPath:`), and an @ObjCImplementation override or
@@ -10,11 +11,12 @@ precise identifier, a Clang USR such as
 `c:objc(pl)UITableViewDataSource(im)tableView:cellForRowAtIndexPath:`, has
 its container and selector.
 
-usage: selectors.py <output.json>
+usage: selectors.py <output.json> [-F <frameworks folder>]... [module]...
 
 The output maps each class and protocol to its methods' and initializers'
 Swift names and selectors, and its properties' Swift names, getters and
-setters, with each class's superclass and protocols, and the protocols' names.
+setters, with each class's superclass and protocols, the protocols' names, and
+the Swift names of classes Swift renames (NS_SWIFT_NAME).
 """
 
 import glob
@@ -30,24 +32,33 @@ USR = re.compile(r"^c:objc\((cs|pl)\)([A-Za-z0-9_]+)\((im|cm|py|cpy)\)(.+)$")
 CONTAINER = re.compile(r"^c:objc\((cs|pl)\)([A-Za-z0-9_]+)$")
 
 
-def extract(directory):
+def extract(directory, modules, framework_paths):
     sdk = subprocess.check_output(["xcrun", "--sdk", "iphoneos", "--show-sdk-path"], text=True).strip()
-    for module in MODULES:
+    flags = [flag for path in framework_paths for flag in ("-F", path)]
+    for module in modules:
         subprocess.check_call(["xcrun", "swift-symbolgraph-extract", "-module-name", module,
-                               "-target", "arm64-apple-ios17.0", "-sdk", sdk, "-output-dir", directory,
-                               "-minimum-access-level", "public"])
+                               "-target", "arm64-apple-ios17.0", "-sdk", sdk, *flags, "-output-dir", directory,
+                               "-minimum-access-level", "public"], stderr=subprocess.DEVNULL)
 
 
 def main():
-    if len(sys.argv) != 2:
+    arguments = sys.argv[1:]
+    if not arguments or arguments[0].startswith("-"):
         sys.exit(__doc__.strip().splitlines()[-6])
-    output = sys.argv[1]
+    output, modules, framework_paths = arguments[0], list(MODULES), []
+    rest = iter(arguments[1:])
+    for argument in rest:
+        if argument == "-F":
+            framework_paths.append(next(rest))
+        else:
+            modules.append(argument)
+    names = {}  # Objective-C name -> Swift name, where Swift renames it
     containers = {}
     superclasses = {}
     conformances = {}  # class or protocol -> protocols it adopts or refines
     protocols = set()
     with tempfile.TemporaryDirectory() as directory:
-        extract(directory)
+        extract(directory, modules, framework_paths)
         for path in sorted(glob.glob(os.path.join(directory, "*.symbols.json"))):
             graph = json.load(open(path))
             for symbol in graph["symbols"]:
@@ -56,6 +67,9 @@ def main():
                 if container:
                     if container.group(1) == "pl":
                         protocols.add(container.group(2))
+                    title = symbol["names"]["title"]
+                    if container.group(1) == "cs" and title != container.group(2) and "." not in title:
+                        names[container.group(2)] = title
                     continue
                 match = USR.match(precise)
                 if not match:
@@ -84,7 +98,7 @@ def main():
                     conformances.setdefault(source.group(2), set()).add(target.group(2))
     result = {"containers": dict(sorted(containers.items())), "superclasses": dict(sorted(superclasses.items())),
               "conformances": {name: sorted(adopted) for name, adopted in sorted(conformances.items())},
-              "protocols": sorted(protocols)}
+              "protocols": sorted(protocols), "names": dict(sorted(names.items()))}
     with open(output, "w") as handle:
         json.dump(result, handle, indent=0, sort_keys=True)
         handle.write("\n")
