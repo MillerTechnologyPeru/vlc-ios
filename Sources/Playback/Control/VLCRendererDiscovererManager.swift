@@ -9,19 +9,20 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc protocol VLCRendererDiscovererManagerDelegate {
-    @objc optional func removedCurrentRendererItem(_ item: VLCRendererItem)
-    @objc optional func addedRendererItem()
-    @objc optional func removedRendererItem()
+protocol VLCRendererDiscovererManagerDelegate {
+    optional func removedCurrentRendererItem(_ item: VLCRendererItem)
+    optional func addedRendererItem()
+    optional func removedRendererItem()
 }
 
-class VLCRendererDiscovererManager: NSObject {
+@ObjCImplementation(protocols: ["VLCRendererDiscovererDelegate"])
+class VLCRendererDiscovererManager: NSObjectMethods {
     // Array of RendererDiscoverers(Chromecast, UPnP, ...)
-    @objc var discoverers: [VLCRendererDiscoverer] = [VLCRendererDiscoverer]()
+    var discoverers: [VLCRendererDiscoverer] = [VLCRendererDiscoverer]()
 
-    @objc weak var delegate: VLCRendererDiscovererManagerDelegate?
+    weak var delegate: VLCRendererDiscovererManagerDelegate?
 
-    @objc lazy var actionSheet: ActionSheet = {
+    lazy var actionSheet: ActionSheet = {
         let actionSheet = ActionSheet()
         actionSheet.delegate = self
         actionSheet.dataSource = self
@@ -34,17 +35,17 @@ class VLCRendererDiscovererManager: NSObject {
         return actionSheet
     }()
 
-    @objc var presentingViewController: UIViewController?
+    var presentingViewController: UIViewController?
 
-    @objc var rendererButtons: [UIButton] = [UIButton]()
+    var rendererButtons: [UIButton] = [UIButton]()
 
-    @objc init(presentingViewController: UIViewController?) {
+    init(presentingViewController: UIViewController?) {
         self.presentingViewController = presentingViewController
-        super.init()
+        objcInit("init")
     }
 
     // Returns renderers of *all* discoverers
-    @objc func getAllRenderers() -> [VLCRendererItem] {
+    @ObjCMethod func getAllRenderers() -> [VLCRendererItem] {
         return discoverers.flatMap { $0.renderers }
     }
 
@@ -55,7 +56,7 @@ class VLCRendererDiscovererManager: NSObject {
         return false
     }
 
-    @objc func start() {
+    @ObjCMethod func start() {
         // Gather potential renderer discoverers
         guard VLCRendererDiscoverer.list() != nil else {
             print("VLCRendererDiscovererManager: Unable to retrieve list of VLCRendererDiscovererDescription")
@@ -77,7 +78,7 @@ class VLCRendererDiscovererManager: NSObject {
         }*/
     }
 
-    @objc func stop() {
+    @ObjCMethod func stop() {
         for discoverer in discoverers {
             discoverer.stop()
         }
@@ -86,7 +87,7 @@ class VLCRendererDiscovererManager: NSObject {
 
     // MARK: VLCActionSheet
 
-    @objc fileprivate func displayActionSheet() {
+    @ObjCMethod fileprivate func displayActionSheet() {
         guard let presentingViewController = presentingViewController else {
             assertionFailure("VLCRendererDiscovererManager: Cannot display actionSheet, no viewController setted")
             return
@@ -117,7 +118,7 @@ class VLCRendererDiscovererManager: NSObject {
         }
     }
 
-    @objc func addSelectionHandler(_ selectionHandler: ((_ rendererItem: VLCRendererItem?) -> Void)?) {
+    @ObjCMethod func addSelectionHandler(_ selectionHandler: ((_ rendererItem: VLCRendererItem?) -> Void)?) {
         actionSheet.setAction { [weak self] (item) in
             if let rendererItem = item as? VLCRendererItem {
                 //if we select the same renderer we want to disconnect
@@ -134,13 +135,13 @@ class VLCRendererDiscovererManager: NSObject {
     /// The button state will be handled by the manager.
     ///
     /// - Returns: New `UIButton`
-    @objc func setupRendererButton() -> UIButton {
+    @ObjCMethod func setupRendererButton() -> UIButton {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         button.isHidden = getAllRenderers().isEmpty
         button.tintColor = PresentationTheme.current.colors.orangeUI
         button.setImage(UIImage(named: "renderer"), for: .normal)
         button.setImage(UIImage(named: "rendererFull"), for: .selected)
-        button.addTarget(self, action: #selector(displayActionSheet), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("displayActionSheet"), for: .touchUpInside)
         button.accessibilityLabel = NSLocalizedString("BUTTON_RENDERER", comment: "")
         button.accessibilityHint = NSLocalizedString("BUTTON_RENDERER_HINT", comment: "")
         rendererButtons.append(button)
@@ -150,7 +151,7 @@ class VLCRendererDiscovererManager: NSObject {
 
 // MARK: VLCRendererDiscovererDelegate
 
-extension VLCRendererDiscovererManager: VLCRendererDiscovererDelegate {
+extension VLCRendererDiscovererManager {
     func rendererDiscovererItemAdded(_ rendererDiscoverer: VLCRendererDiscoverer, item: VLCRendererItem) {
         for button in rendererButtons {
             UIView.animate(withDuration: 0.1) {
