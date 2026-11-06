@@ -13,6 +13,7 @@
 
 import UIKit
 
+@ObjCImplementation
 class MediaGridCollectionCell: BaseCollectionViewCell {
 
     private let notificationCenter = NotificationCenter.default
@@ -156,17 +157,14 @@ class MediaGridCollectionCell: BaseCollectionViewCell {
         setup()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setup() {
         setupUI()
         setupNotificationObservers()
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    @ObjCMethod("awakeFromNib") func awakeFromNib() {
+        callSuper("awakeFromNib")
         thumbnailView.accessibilityIgnoresInvertColors = true
         clipsToBounds = true
         layer.cornerRadius = 2
@@ -220,16 +218,16 @@ class MediaGridCollectionCell: BaseCollectionViewCell {
 
     private func setupNotificationObservers() {
         notificationCenter.addObserver(self,
-                                       selector: #selector(themeDidChange),
+                                       selector: ObjC.selector("themeDidChange"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(dynamicFontSizeChange),
+                                       selector: ObjC.selector("dynamicFontSizeChange"),
                                        name: UIContentSizeCategory.didChangeNotification,
                                        object: nil)
     }
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         let colors = PresentationTheme.current.colors
         backgroundColor = colors.background
         titleLabel.textColor = colors.cellTextColor
@@ -242,7 +240,7 @@ class MediaGridCollectionCell: BaseCollectionViewCell {
         applyRadius()
     }
 
-    @objc private func dynamicFontSizeChange() {
+    @ObjCMethod private func dynamicFontSizeChange() {
         newLabel.font = UIFont.preferredCustomFont(forTextStyle: .headline).bolded
         titleLabel.font = UIFont.preferredCustomFont(forTextStyle: .headline).semibolded
         descriptionLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -364,8 +362,8 @@ class MediaGridCollectionCell: BaseCollectionViewCell {
         return CGSize(width: cellWidth, height: finalHeight)
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         titleLabel.text = ""
         accessibilityLabel = ""
         accessibilityValue = nil
