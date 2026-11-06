@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// The Objective-C class VLCVideoView.
-public protocol VLCVideoViewMethods: ObjCWrapper {}
+public protocol VLCVideoViewMethods: ObjCObjectMethods {}
 @ObjC public struct VLCVideoView: VLCVideoViewMethods {}
 
 /// The Objective-C class VLCAdjustFilter, a subclass of NSObject.
@@ -18,6 +18,8 @@ extension VLCAdjustFilterMethods {
     @ObjCProperty(readonly: true) public var hue: ObjCValue
     @ObjCProperty(readonly: true) public var saturation: ObjCValue
     @ObjCProperty(readonly: true) public var gamma: ObjCValue
+}
+extension VLCAdjustFilterMethods where Self: ObjCWrapper {
     @ObjCMethod("createWithVLCMediaPlayer:") public static func createWithVLCMediaPlayer(_ a0: some VLCMediaPlayerMethods) -> Self
     @ObjCMethod("initWithVLCMediaPlayer:") public init(vlcMediaPlayer a0: some VLCMediaPlayerMethods)
 }
@@ -40,6 +42,8 @@ public protocol VLCAudioEqualizerMethods: NSObjectMethods {}
 extension VLCAudioEqualizerMethods {
     @ObjCProperty public var preAmplification: Float
     @ObjCProperty(readonly: true) public var bands: NSArray
+}
+extension VLCAudioEqualizerMethods where Self: ObjCWrapper {
     @ObjCMethod("initWithPreset:") public init(preset a0: some VLCAudioEqualizerPresetMethods)
 }
 
@@ -71,11 +75,13 @@ extension VLCConsoleLoggerMethods {
 public protocol VLCDialogProviderMethods: NSObjectMethods {}
 @ObjC public struct VLCDialogProvider: VLCDialogProviderMethods {}
 extension VLCDialogProviderMethods {
-    @ObjCMethod("initWithLibrary:customUI:") public init(library a0: VLCLibrary?, customUI a1: Bool)
     @ObjCProperty public var customRenderer: ObjCValue
     @ObjCMethod("postUsername:andPassword:forDialogReference:store:") public func postUsername(_ a0: String, andPassword a1: String, forDialogReference a2: some NSValueMethods, store a3: Bool)
     @ObjCMethod("postAction:forDialogReference:") public func postAction(_ a0: Int, forDialogReference a1: some NSValueMethods)
     @ObjCMethod("dismissDialogWithReference:") public func dismissDialogWithReference(_ a0: some NSValueMethods)
+}
+extension VLCDialogProviderMethods where Self: ObjCWrapper {
+    @ObjCMethod("initWithLibrary:customUI:") public init(library a0: VLCLibrary?, customUI a1: Bool)
 }
 
 /// The Objective-C class VLCEventsDefaultConfiguration, a subclass of NSObject.
@@ -92,6 +98,8 @@ public protocol VLCFileLoggerMethods: NSObjectMethods {}
 extension VLCFileLoggerMethods {
     @ObjCProperty(readonly: true) public var fileHandle: NSFileHandle
     @ObjCProperty public var formatter: ObjCValue
+}
+extension VLCFileLoggerMethods where Self: ObjCWrapper {
     @ObjCMethod("createWithFileHandle:") public static func createWithFileHandle(_ a0: some NSFileHandleMethods) -> Self
     @ObjCMethod("initWithFileHandle:") public init(fileHandle a0: some NSFileHandleMethods)
 }
@@ -100,8 +108,6 @@ extension VLCFileLoggerMethods {
 public protocol VLCLibraryMethods: NSObjectMethods {}
 @ObjC public struct VLCLibrary: VLCLibraryMethods {}
 extension VLCLibraryMethods {
-    @ObjCMethod("sharedLibrary") public static func sharedLibrary() -> VLCLibrary
-    @ObjCMethod("initWithOptions:") public init(options a0: some NSArrayMethods)
     @ObjCProperty public var loggers: NSArray?
     @ObjCProperty public var debugLogging: Bool
     @ObjCProperty public var debugLoggingLevel: Int
@@ -113,6 +119,10 @@ extension VLCLibraryMethods {
     @ObjCMethod("setHumanReadableName:withHTTPUserAgent:") public func setHumanReadableName(_ a0: String, withHTTPUserAgent a1: String)
     @ObjCMethod("setApplicationIdentifier:withVersion:andApplicationIconName:") public func setApplicationIdentifier(_ a0: String, withVersion a1: String, andApplicationIconName a2: String)
     @ObjCProperty public var instance: ObjCValue
+}
+extension VLCLibraryMethods where Self: ObjCWrapper {
+    @ObjCMethod("sharedLibrary") public static func sharedLibrary() -> VLCLibrary
+    @ObjCMethod("initWithOptions:") public init(options a0: some NSArrayMethods)
 }
 
 /// The Objective-C class VLCLogContext, a subclass of NSObject.
@@ -137,14 +147,6 @@ public protocol VLCLogMessageFormatterMethods: NSObjectMethods {}
 public protocol VLCMediaMethods: NSObjectMethods {}
 @ObjC public struct VLCMedia: VLCMediaMethods {}
 extension VLCMediaMethods {
-    @ObjCMethod("mediaWithURL:") public static func mediaWithURL(_ a0: some NSURLMethods) -> Self
-    @ObjCMethod("mediaWithPath:") public static func mediaWithPath(_ a0: String) -> Self
-    @ObjCMethod("codecNameForFourCC:trackType:") public static func codecNameForFourCC(_ a0: Int, trackType a1: String) -> String
-    @ObjCMethod("mediaAsNodeWithName:") public static func mediaAsNodeWithName(_ a0: String) -> Self
-    @ObjCMethod("initWithURL:") public init(url a0: some NSURLMethods)
-    @ObjCMethod("initWithPath:") public init(path a0: String)
-    @ObjCMethod("initWithStream:") public init(stream a0: some NSInputStreamMethods)
-    @ObjCMethod("initAsNodeWithName:") public init(asNodeWithName a0: String)
     @ObjCProperty(readonly: true) public var mediaType: Int
     @ObjCMethod("compare:") public func compare(_ a0: VLCMedia?) -> Int
     @ObjCProperty public var delegate: ObjCValue
@@ -190,21 +192,33 @@ extension VLCMediaMethods {
     @ObjCProperty(readonly: true) public var numberOfCorruptedDataPackets: Int
     @ObjCProperty(readonly: true) public var numberOfDiscontinuties: Int
 }
+extension VLCMediaMethods where Self: ObjCWrapper {
+    @ObjCMethod("mediaWithURL:") public static func mediaWithURL(_ a0: some NSURLMethods) -> Self
+    @ObjCMethod("mediaWithPath:") public static func mediaWithPath(_ a0: String) -> Self
+    @ObjCMethod("codecNameForFourCC:trackType:") public static func codecNameForFourCC(_ a0: Int, trackType a1: String) -> String
+    @ObjCMethod("mediaAsNodeWithName:") public static func mediaAsNodeWithName(_ a0: String) -> Self
+    @ObjCMethod("initWithURL:") public init(url a0: some NSURLMethods)
+    @ObjCMethod("initWithPath:") public init(path a0: String)
+    @ObjCMethod("initWithStream:") public init(stream a0: some NSInputStreamMethods)
+    @ObjCMethod("initAsNodeWithName:") public init(asNodeWithName a0: String)
+}
 
 /// The Objective-C class VLCMediaDiscoverer, a subclass of NSObject.
 public protocol VLCMediaDiscovererMethods: NSObjectMethods {}
 @ObjC public struct VLCMediaDiscoverer: VLCMediaDiscovererMethods {}
 extension VLCMediaDiscovererMethods {
     @ObjCProperty(readonly: true) public var libraryInstance: VLCLibrary
-    @ObjCMethod("availableMediaDiscoverer") public static func availableMediaDiscoverer() -> NSArray
-    @ObjCMethod("availableMediaDiscovererForCategoryType:") public static func availableMediaDiscovererForCategoryType(_ a0: Int) -> NSArray
-    @ObjCMethod("initWithName:") public init(name a0: String)
-    @ObjCMethod("initWithName:libraryInstance:") public init(name a0: String, libraryInstance a1: some VLCLibraryMethods)
     @ObjCMethod("startDiscoverer") public func startDiscoverer() -> Int
     @ObjCMethod("stopDiscoverer") public func stopDiscoverer()
     @ObjCProperty(readonly: true) public var discoveredMedia: VLCMediaList?
     @ObjCProperty(readonly: true) public var localizedName: String
     @ObjCProperty(readonly: true) public var isRunning: Bool
+}
+extension VLCMediaDiscovererMethods where Self: ObjCWrapper {
+    @ObjCMethod("availableMediaDiscoverer") public static func availableMediaDiscoverer() -> NSArray
+    @ObjCMethod("availableMediaDiscovererForCategoryType:") public static func availableMediaDiscovererForCategoryType(_ a0: Int) -> NSArray
+    @ObjCMethod("initWithName:") public init(name a0: String)
+    @ObjCMethod("initWithName:libraryInstance:") public init(name a0: String, libraryInstance a1: some VLCLibraryMethods)
 }
 
 /// The Objective-C class VLCMediaLibrary, a subclass of NSObject.
@@ -349,6 +363,8 @@ extension VLCMediaLibraryMethods {
     @ObjCProperty public var subscriptionMaxCachedMedia: Int
     @ObjCProperty public var subscriptionMaxCacheSize: Int64
     @ObjCProperty public var maxCacheSize: Int64
+}
+extension VLCMediaLibraryMethods where Self: ObjCWrapper {
     @ObjCMethod("supportedMediaExtensions") public static func supportedMediaExtensions() -> NSArray
     @ObjCMethod("isMediaExtensionSupported:") public static func isMediaExtensionSupported(_ a0: String) -> Bool
     @ObjCMethod("supportedPlaylistExtensions") public static func supportedPlaylistExtensions() -> NSArray
@@ -361,7 +377,6 @@ extension VLCMediaLibraryMethods {
 public protocol VLCMediaListMethods: NSObjectMethods {}
 @ObjC public struct VLCMediaList: VLCMediaListMethods {}
 extension VLCMediaListMethods {
-    @ObjCMethod("initWithArray:") public init(array a0: some NSArrayMethods)
     @ObjCMethod("lock") public func lock()
     @ObjCMethod("unlock") public func unlock()
     @ObjCMethod("addMedia:") public func addMedia(_ a0: some VLCMediaMethods) -> Int
@@ -373,6 +388,9 @@ extension VLCMediaListMethods {
     @ObjCProperty public var delegate: ObjCValue
     @ObjCProperty(readonly: true) public var isReadOnly: Bool
 }
+extension VLCMediaListMethods where Self: ObjCWrapper {
+    @ObjCMethod("initWithArray:") public init(array a0: some NSArrayMethods)
+}
 
 /// The Objective-C class VLCMediaListPlayer, a subclass of NSObject.
 public protocol VLCMediaListPlayerMethods: NSObjectMethods {}
@@ -382,9 +400,6 @@ extension VLCMediaListPlayerMethods {
     @ObjCProperty public var rootMedia: VLCMedia?
     @ObjCProperty(readonly: true) public var mediaPlayer: VLCMediaPlayer
     @ObjCProperty public var delegate: ObjCValue
-    @ObjCMethod("initWithDrawable:") public init(drawable a0: ObjCValue)
-    @ObjCMethod("initWithOptions:") public init(options a0: some NSArrayMethods)
-    @ObjCMethod("initWithOptions:andDrawable:") public init(options a0: some NSArrayMethods, andDrawable a1: ObjCValue)
     @ObjCMethod("play") public func play()
     @ObjCMethod("pause") public func pause()
     @ObjCMethod("stop") public func stop()
@@ -394,6 +409,11 @@ extension VLCMediaListPlayerMethods {
     @ObjCMethod("playItemAtNumber:") public func playItemAtNumber(_ a0: some NSNumberMethods)
     @ObjCProperty public var repeatMode: Int
     @ObjCMethod("playMedia:") public func playMedia(_ a0: some VLCMediaMethods)
+}
+extension VLCMediaListPlayerMethods where Self: ObjCWrapper {
+    @ObjCMethod("initWithDrawable:") public init(drawable a0: ObjCValue)
+    @ObjCMethod("initWithOptions:") public init(options a0: some NSArrayMethods)
+    @ObjCMethod("initWithOptions:andDrawable:") public init(options a0: some NSArrayMethods, andDrawable a1: ObjCValue)
 }
 
 /// The Objective-C class VLCMediaLoudness, a subclass of NSObject.
@@ -446,9 +466,6 @@ public protocol VLCMediaPlayerMethods: NSObjectMethods {}
 extension VLCMediaPlayerMethods {
     @ObjCProperty(readonly: true) public var libraryInstance: VLCLibrary
     @ObjCProperty public var delegate: ObjCValue
-    @ObjCMethod("initWithLibrary:") public init(library a0: some VLCLibraryMethods)
-    @ObjCMethod("initWithOptions:") public init(options a0: some NSArrayMethods)
-    @ObjCMethod("initWithLibVLCInstance:andLibrary:") public init(libVLCInstance a0: ObjCValue, andLibrary a1: some VLCLibraryMethods)
     @ObjCProperty public var drawable: ObjCValue
     @ObjCProperty public var videoAspectRatio: ObjCValue
     @ObjCProperty public var videoCropGeometry: ObjCValue
@@ -546,13 +563,16 @@ extension VLCMediaPlayerMethods {
     @ObjCMethod("stopRecording") public func stopRecording() -> Bool
     @ObjCMethod("setRendererItem:") public func setRendererItem(_ a0: VLCRendererItem?) -> Bool
 }
+extension VLCMediaPlayerMethods where Self: ObjCWrapper {
+    @ObjCMethod("initWithLibrary:") public init(library a0: some VLCLibraryMethods)
+    @ObjCMethod("initWithOptions:") public init(options a0: some NSArrayMethods)
+    @ObjCMethod("initWithLibVLCInstance:andLibrary:") public init(libVLCInstance a0: ObjCValue, andLibrary a1: some VLCLibraryMethods)
+}
 
 /// The Objective-C class VLCMediaThumbnailer, a subclass of NSObject.
 public protocol VLCMediaThumbnailerMethods: NSObjectMethods {}
 @ObjC public struct VLCMediaThumbnailer: VLCMediaThumbnailerMethods {}
 extension VLCMediaThumbnailerMethods {
-    @ObjCMethod("thumbnailerWithMedia:andDelegate:") public static func thumbnailerWithMedia(_ a0: some VLCMediaMethods, andDelegate a1: ObjCValue) -> VLCMediaThumbnailer
-    @ObjCMethod("thumbnailerWithMedia:delegate:andVLCLibrary:") public static func thumbnailerWithMedia(_ a0: some VLCMediaMethods, delegate a1: ObjCValue, andVLCLibrary a2: VLCLibrary?) -> VLCMediaThumbnailer
     @ObjCMethod("fetchThumbnail") public func fetchThumbnail()
     @ObjCProperty public var delegate: ObjCValue
     @ObjCProperty public var media: VLCMedia
@@ -560,6 +580,10 @@ extension VLCMediaThumbnailerMethods {
     @ObjCProperty public var thumbnailHeight: Float
     @ObjCProperty public var thumbnailWidth: Float
     @ObjCProperty public var snapshotPosition: Float
+}
+extension VLCMediaThumbnailerMethods where Self: ObjCWrapper {
+    @ObjCMethod("thumbnailerWithMedia:andDelegate:") public static func thumbnailerWithMedia(_ a0: some VLCMediaMethods, andDelegate a1: ObjCValue) -> VLCMediaThumbnailer
+    @ObjCMethod("thumbnailerWithMedia:delegate:andVLCLibrary:") public static func thumbnailerWithMedia(_ a0: some VLCMediaMethods, delegate a1: ObjCValue, andVLCLibrary a2: VLCLibrary?) -> VLCMediaThumbnailer
 }
 
 /// The Objective-C class VLCRendererDiscoverer, a subclass of NSObject.
@@ -569,9 +593,11 @@ extension VLCRendererDiscovererMethods {
     @ObjCProperty(readonly: true) public var name: String
     @ObjCProperty(readonly: true) public var renderers: NSArray
     @ObjCProperty public var delegate: ObjCValue
-    @ObjCMethod("initWithName:") public init(name a0: String)
     @ObjCMethod("start") public func start() -> Bool
     @ObjCMethod("stop") public func stop()
+}
+extension VLCRendererDiscovererMethods where Self: ObjCWrapper {
+    @ObjCMethod("initWithName:") public init(name a0: String)
     @ObjCMethod("list") public static func list() -> NSArray?
 }
 
@@ -581,6 +607,8 @@ public protocol VLCRendererDiscovererDescriptionMethods: NSObjectMethods {}
 extension VLCRendererDiscovererDescriptionMethods {
     @ObjCProperty(readonly: true) public var name: String
     @ObjCProperty(readonly: true) public var longName: String
+}
+extension VLCRendererDiscovererDescriptionMethods where Self: ObjCWrapper {
     @ObjCMethod("initWithName:longName:") public init(name a0: String, longName a1: String)
 }
 
@@ -598,11 +626,6 @@ extension VLCRendererItemMethods {
 public protocol VLCTimeMethods: NSObjectMethods {}
 @ObjC public struct VLCTime: VLCTimeMethods {}
 extension VLCTimeMethods {
-    @ObjCMethod("nullTime") public static func nullTime() -> VLCTime
-    @ObjCMethod("timeWithNumber:") public static func timeWithNumber(_ a0: NSNumber?) -> VLCTime
-    @ObjCMethod("timeWithInt:") public static func timeWithInt(_ a0: Int) -> VLCTime
-    @ObjCMethod("initWithNumber:") public init(number a0: NSNumber?)
-    @ObjCMethod("initWithInt:") public init(int a0: Int)
     @ObjCProperty(readonly: true) public var value: NSNumber?
     @ObjCProperty(readonly: true) public var numberValue: NSNumber
     @ObjCProperty(readonly: true) public var stringValue: String
@@ -610,6 +633,13 @@ extension VLCTimeMethods {
     @ObjCProperty(readonly: true) public var minuteStringValue: String
     @ObjCProperty(readonly: true) public var intValue: Int
     @ObjCMethod("compare:") public func compare(_ a0: some VLCTimeMethods) -> Int
+}
+extension VLCTimeMethods where Self: ObjCWrapper {
+    @ObjCMethod("nullTime") public static func nullTime() -> VLCTime
+    @ObjCMethod("timeWithNumber:") public static func timeWithNumber(_ a0: NSNumber?) -> VLCTime
+    @ObjCMethod("timeWithInt:") public static func timeWithInt(_ a0: Int) -> VLCTime
+    @ObjCMethod("initWithNumber:") public init(number a0: NSNumber?)
+    @ObjCMethod("initWithInt:") public init(int a0: Int)
 }
 
 /// The Objective-C class VLCTranscoder, a subclass of NSObject.
