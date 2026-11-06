@@ -9,19 +9,20 @@
 import Foundation
 import PCloudSDKSwift
 
-@objc class VLCPCloudCellContentWrapper: NSObject {
+@ObjCImplementation
+class VLCPCloudCellContentWrapper: NSObjectMethods {
 
     let content: Content
 
-    @objc var folderID: NSNumber?
-    @objc var fileID: NSNumber?
-    @objc var fileSize: NSNumber?
-    @objc var parent: NSNumber?
-    @objc var name: String?
-    @objc var isDirectory: Bool
-    @objc var isAudioFile: Bool = false
-    @objc var isVideoFile: Bool = false
-    @objc var hasThumbnail: Bool = false
+    var folderID: NSNumber?
+    var fileID: NSNumber?
+    var fileSize: NSNumber?
+    var parent: NSNumber?
+    var name: String?
+    var isDirectory: Bool
+    var isAudioFile: Bool = false
+    var isVideoFile: Bool = false
+    var hasThumbnail: Bool = false
 
     init(content: Content) {
         self.content = content
@@ -41,5 +42,6 @@ import PCloudSDKSwift
             self.isVideoFile = content.fileMetadata?.isVideo ?? false
             self.hasThumbnail = content.fileMetadata?.hasThumbnail ?? false
         }
+        objcInit()
     }
 }
