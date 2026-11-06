@@ -10,12 +10,10 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc(VLCMediaScrubProgressBarDelegate)
 protocol MediaScrubProgressBarDelegate: AnyObject {
-    @objc optional func mediaScrubProgressBarShouldResetIdleTimer()
+    optional func mediaScrubProgressBarShouldResetIdleTimer()
 }
 
-@objc(VLCMediaScrubProgressBar)
 class MediaScrubProgressBar: UIStackView {
     weak var delegate: MediaScrubProgressBarDelegate?
     private var playbackService = PlaybackService.sharedInstance()
@@ -23,7 +21,7 @@ class MediaScrubProgressBar: UIStackView {
     private(set) var isScrubbing: Bool = false
     var shouldHideScrubLabels: Bool = false
 
-    @objc lazy private(set) var progressSlider: VLCOBSlider = {
+    lazy private(set) var progressSlider: VLCOBSlider = {
         var slider = VLCOBSlider()
         slider.minimumValue = 0
         slider.maximumValue = 1
@@ -34,12 +32,12 @@ class MediaScrubProgressBar: UIStackView {
         slider.isContinuous = true
         slider.semanticContentAttribute = .forceLeftToRight
         slider.accessibilityIdentifier = VLCAccessibilityIdentifier.videoPlayerScrubBar
-        slider.addTarget(self, action: #selector(handleSlide(slider:)), for: .valueChanged)
-        slider.addTarget(self, action: #selector(progressSliderTouchDown), for: .touchDown)
-        slider.addTarget(self, action: #selector(progressSliderTouchUp), for: .touchUpInside)
-        slider.addTarget(self, action: #selector(progressSliderTouchUp), for: .touchUpOutside)
-        slider.addTarget(self, action: #selector(updateScrubLabel), for: .touchDragInside)
-        slider.addTarget(self, action: #selector(updateScrubLabel), for: .touchDragOutside)
+        slider.addTarget(self, action: ObjC.selector("handleSlideSlider:"), for: .valueChanged)
+        slider.addTarget(self, action: ObjC.selector("progressSliderTouchDown"), for: .touchDown)
+        slider.addTarget(self, action: ObjC.selector("progressSliderTouchUp"), for: .touchUpInside)
+        slider.addTarget(self, action: ObjC.selector("progressSliderTouchUp"), for: .touchUpOutside)
+        slider.addTarget(self, action: ObjC.selector("updateScrubLabel"), for: .touchDragInside)
+        slider.addTarget(self, action: ObjC.selector("updateScrubLabel"), for: .touchDragOutside)
         return slider
     }()
     
@@ -57,7 +55,7 @@ class MediaScrubProgressBar: UIStackView {
     private(set) lazy var remainingTimeButton: UIButton = {
         let remainingTimeButton = UIButton(type: .custom)
         remainingTimeButton.addTarget(self,
-                                      action: #selector(handleTimeDisplay),
+                                      action: ObjC.selector("handleTimeDisplay"),
                                       for: .touchUpInside)
         remainingTimeButton.setTitle("--:--", for: .normal)
         remainingTimeButton.setTitleColor(.white, for: .normal)
@@ -125,7 +123,7 @@ class MediaScrubProgressBar: UIStackView {
         setupViews()
         initAccessibility()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handleWillResignActive),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("handleWillResignActive"),
                                                name: UIApplication.willResignActiveNotification, object: nil)
     }
 
@@ -138,38 +136,38 @@ class MediaScrubProgressBar: UIStackView {
             .create(name: NSLocalizedString("FWD_BUTTON", comment: ""),
                     image: UIImage(systemName: "plus.arrow.trianglehead.clockwise"),
                     target: self,
-                    selector: #selector(handleAccessibilityForward))
+                    selector: ObjC.selector("handleAccessibilityForward"))
 
         let backward = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("BWD_BUTTON", comment: ""),
                     image: UIImage(systemName: "minus.arrow.trianglehead.counterclockwise"),
                     target: self,
-                    selector: #selector(handleAccessibilityBackward))
+                    selector: ObjC.selector("handleAccessibilityBackward"))
 
         let timeDisplay = UIAccessibilityCustomAction
             .create(name: NSLocalizedString("PLAYBACK_SCRUB_ACCESSIBILITY_TIME_DISPLAY", comment: ""),
                     image: nil,
                     target: self,
-                    selector: #selector(handleAccessibilityTimeDisplay))
+                    selector: ObjC.selector("handleAccessibilityTimeDisplay"))
 
         accessibilityCustomActions = [forward, backward, timeDisplay]
 
         updateAccessibilityValue()
     }
 
-    @objc private func handleAccessibilityForward() -> Bool {
+    @ObjCMethod private func handleAccessibilityForward() -> Bool {
         let defaults = UserDefaults.standard
         playbackService.jumpForward(Int32(defaults.integer(forKey: kVLCSettingPlaybackForwardSkipLength)))
         return true
     }
 
-    @objc private func handleAccessibilityBackward() -> Bool {
+    @ObjCMethod private func handleAccessibilityBackward() -> Bool {
         let defaults = UserDefaults.standard
         playbackService.jumpBackward(Int32(defaults.integer(forKey: kVLCSettingPlaybackBackwardSkipLength)))
         return true
     }
 
-    @objc private func handleAccessibilityTimeDisplay() -> Bool {
+    @ObjCMethod private func handleAccessibilityTimeDisplay() -> Bool {
         handleTimeDisplay()
         return true
     }
@@ -184,7 +182,7 @@ class MediaScrubProgressBar: UIStackView {
         updateAccessibilityValue()
     }
 
-    @objc func updateInterfacePosition() {
+    @ObjCMethod func updateInterfacePosition() {
         if !isScrubbing {
             progressSlider.value = playbackService.playbackPosition
         }
@@ -221,7 +219,7 @@ class MediaScrubProgressBar: UIStackView {
     }
 
     func updateSliderWithValue(value: Float) {
-        perform(#selector(updatePlaybackPosition), with: nil, afterDelay: 0.3)
+        perform(ObjC.selector("updatePlaybackPosition"), with: nil, afterDelay: 0.3)
         progressSlider.value = value / Float(playbackService.mediaDuration)
         playbackService.playbackPosition = value / Float(playbackService.mediaDuration)
 
@@ -333,7 +331,7 @@ private extension MediaScrubProgressBar {
         }
     }
 
-    @objc private func updateScrubLabel() {
+    @ObjCMethod private func updateScrubLabel() {
         guard !shouldHideScrubLabels else {
             return
         }
@@ -350,7 +348,7 @@ private extension MediaScrubProgressBar {
         }
     }
 
-    @objc private func updatePlaybackPosition() {
+    @ObjCMethod private func updatePlaybackPosition() {
         if !positionSet {
             playbackService.playbackPosition = progressSlider.value
             playbackService.setNeedsMetadataUpdate()
@@ -375,7 +373,7 @@ private extension MediaScrubProgressBar {
 
     // MARK: -
 
-    @objc private func handleTimeDisplay() {
+    @ObjCMethod private func handleTimeDisplay() {
         RemainingTimeMode.toggle()
 
         updateCurrentTime()
@@ -384,11 +382,11 @@ private extension MediaScrubProgressBar {
 
     // MARK: - Slider Methods
 
-    @objc private func handleSlide(slider: UISlider) {
+    @ObjCMethod private func handleSlide(slider: UISlider) {
         /* we need to limit the number of events sent by the slider, since otherwise, the user
          * wouldn't see the I-frames when seeking on current mobile devices. This isn't a problem
          * within the Simulator, but especially on older ARMv7 devices, it's clearly noticeable. */
-        perform(#selector(updatePlaybackPosition), with: nil, afterDelay: 0.3)
+        perform(ObjC.selector("updatePlaybackPosition"), with: nil, afterDelay: 0.3)
         if playbackService.mediaDuration > 0 {
             if !isScrubbing {
                 progressSlider.value = playbackService.playbackPosition
@@ -414,18 +412,18 @@ private extension MediaScrubProgressBar {
         delegate?.mediaScrubProgressBarShouldResetIdleTimer?()
     }
 
-    @objc private func progressSliderTouchDown() {
+    @ObjCMethod private func progressSliderTouchDown() {
         updateScrubLabel()
         isScrubbing = true
         scrubInfoStackView.isHidden = shouldHideScrubLabels ? true : !isScrubbing
     }
 
-    @objc private func progressSliderTouchUp() {
+    @ObjCMethod private func progressSliderTouchUp() {
         isScrubbing = false
         scrubInfoStackView.isHidden = shouldHideScrubLabels ? true : !isScrubbing
     }
 
-    @objc private func handleWillResignActive() {
+    @ObjCMethod private func handleWillResignActive() {
         progressSliderTouchUp()
     }
 }
