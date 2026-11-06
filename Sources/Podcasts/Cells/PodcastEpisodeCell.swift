@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastEpisodeCell: UITableViewCell {
+@ObjCImplementation
+class PodcastEpisodeCell: UITableViewCellMethods {
     static let reuseIdentifier = "PodcastEpisodeCell"
 
     private let artworkView = PodcastArtworkView()
@@ -61,13 +62,13 @@ class PodcastEpisodeCell: UITableViewCell {
         return stack
     }()
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setupUI()
     }
 
@@ -79,10 +80,10 @@ class PodcastEpisodeCell: UITableViewCell {
         contentView.addSubview(textStack)
         contentView.addSubview(downloadButton)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapArtwork))
+        let tap = UITapGestureRecognizer(target: self, action: ObjC.selector("didTapArtwork"))
         artworkView.addGestureRecognizer(tap)
 
-        downloadButton.addTarget(self, action: #selector(didTapDownload), for: .touchUpInside)
+        downloadButton.addTarget(self, action: ObjC.selector("didTapDownload"), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
             artworkView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -105,7 +106,7 @@ class PodcastEpisodeCell: UITableViewCell {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(applyTheme),
+                                                selector: ObjC.selector("applyTheme"),
                                                 name: .VLCThemeDidChangeNotification,
                                                 object: nil)
     }
@@ -156,11 +157,11 @@ class PodcastEpisodeCell: UITableViewCell {
         accessibilityLabel = ([episode.title] + detailComponents).joined(separator: ", ")
     }
 
-    @objc private func didTapArtwork() {
+    @ObjCMethod private func didTapArtwork() {
         artworkTapTarget?()
     }
 
-    @objc private func didTapDownload() {
+    @ObjCMethod private func didTapDownload() {
         if downloadButton.isDownloading {
             cancelDownloadTapTarget?()
         } else if downloadButton.isDownloaded {
@@ -170,7 +171,7 @@ class PodcastEpisodeCell: UITableViewCell {
         }
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         backgroundColor = colors.background
         contentView.backgroundColor = colors.background
@@ -179,8 +180,8 @@ class PodcastEpisodeCell: UITableViewCell {
         detailLabel.textColor = colors.cellDetailTextColor
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         artworkTapTarget = nil
         downloadTapTarget = nil
         cancelDownloadTapTarget = nil
