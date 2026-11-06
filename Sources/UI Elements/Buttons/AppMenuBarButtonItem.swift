@@ -10,14 +10,14 @@
 
 import UIKit
 
-@objc(VLCAppMenuBarButtonItem)
-class AppMenuBarButtonItem: UIBarButtonItem {
+@ObjCImplementation("VLCAppMenuBarButtonItem")
+class AppMenuBarButtonItem: UIBarButtonItemMethods {
 
     private weak var presenter: UIViewController?
 
-    @objc init(presenter: UIViewController) {
+    init(presenter: UIViewController) {
         self.presenter = presenter
-        super.init()
+        objcInit("init")
 
         image = UIImage(named: "MenuCone")
         accessibilityLabel = NSLocalizedString("Settings", comment: "")
@@ -26,9 +26,6 @@ class AppMenuBarButtonItem: UIBarButtonItem {
         menu = buildMenu()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func buildMenu() -> UIMenu {
         let about = UIAction(title: NSLocalizedString("SETTINGS_ABOUT", comment: ""),
