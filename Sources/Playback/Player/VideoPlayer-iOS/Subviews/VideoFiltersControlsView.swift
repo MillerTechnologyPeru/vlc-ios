@@ -17,7 +17,8 @@ protocol VideoFiltersControlsViewDelegate: AnyObject {
     func videoFiltersControlsViewDidRequestDismissal(_ controlsView: VideoFiltersControlsView)
 }
 
-final class VideoFiltersControlsView: UIView {
+@ObjCImplementation
+final class VideoFiltersControlsView: UIViewMethods {
     private enum Metrics {
         static let horizontalPadding: CGFloat = 14
         static let verticalPadding: CGFloat = 10
@@ -113,7 +114,7 @@ final class VideoFiltersControlsView: UIView {
         button.setImage(UIImage(systemName: "arrow.counterclockwise", withConfiguration: configuration), for: .normal)
         button.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
         button.accessibilityLabel = NSLocalizedString("VIDEO_FILTER_RESET_BUTTON", comment: "")
-        button.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapReset"), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -141,7 +142,7 @@ final class VideoFiltersControlsView: UIView {
                                                                     neutralValue: Self.neutralSliderValue,
                                                                     ticks: [.init(position: Self.neutralSliderValue)])
         }
-        slider.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+        slider.addTarget(self, action: ObjC.selector("sliderValueChanged:"), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }
@@ -160,7 +161,7 @@ final class VideoFiltersControlsView: UIView {
     // MARK: - Lifecycle
 
     init() {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
         overrideUserInterfaceStyle = .dark
 
@@ -168,34 +169,31 @@ final class VideoFiltersControlsView: UIView {
         updateRowAxis()
         updateInterface(updatingSliders: true)
 
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(requestDismissal))
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: ObjC.selector("requestDismissal"))
         swipeDownRecognizer.direction = .down
         addGestureRecognizer(swipeDownRecognizer)
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(reduceTransparencyChanged),
+                                       selector: ObjC.selector("reduceTransparencyChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(darkerSystemColorsChanged),
+                                       selector: ObjC.selector("darkerSystemColorsChanged"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        callSuper("traitCollectionDidChange:", previousTraitCollection)
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             updateRowAxis()
             superview?.setNeedsLayout()
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
+    @ObjCMethod("accessibilityPerformEscape") func accessibilityPerformEscape() -> Bool {
         requestDismissal()
         return true
     }
@@ -342,17 +340,17 @@ final class VideoFiltersControlsView: UIView {
 
     // MARK: - Actions
 
-    @objc private func requestDismissal() {
+    @ObjCMethod private func requestDismissal() {
         delegate?.videoFiltersControlsViewDidRequestDismissal(self)
     }
 
-    @objc private func didTapReset() {
+    @ObjCMethod private func didTapReset() {
         playbackService.adjustFilter.reset()
         updateInterface(updatingSliders: true)
         delegate?.videoFiltersControlsViewDidChangeFilters(self)
     }
 
-    @objc private func sliderValueChanged(_ sender: UISlider) {
+    @ObjCMethod private func sliderValueChanged(_ sender: UISlider) {
         if abs(sender.value - Self.neutralSliderValue) < Self.neutralSnapDistance {
             sender.value = Self.neutralSliderValue
         }
@@ -363,12 +361,12 @@ final class VideoFiltersControlsView: UIView {
         delegate?.videoFiltersControlsViewDidChangeFilters(self)
     }
 
-    @objc private func reduceTransparencyChanged() {
+    @ObjCMethod private func reduceTransparencyChanged() {
         installBackgroundEffect()
         updateInterface(updatingSliders: false)
     }
 
-    @objc private func darkerSystemColorsChanged() {
+    @ObjCMethod private func darkerSystemColorsChanged() {
         updateInterface(updatingSliders: false)
     }
 
