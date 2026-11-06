@@ -11,10 +11,9 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc(VLCMediaMoreOptionsActionSheetDelegate)
 protocol MediaMoreOptionsActionSheetDelegate {
     func mediaMoreOptionsActionSheetDidToggleInterfaceLock(state: Bool)
-    @objc optional func mediaMoreOptionsActionSheetDidAppeared()
+    optional func mediaMoreOptionsActionSheetDidAppeared()
     func mediaMoreOptionsActionSheetShowIcon(for option: OptionsNavigationBarIdentifier)
     func mediaMoreOptionsActionSheetHideIcon(for option: OptionsNavigationBarIdentifier)
     func mediaMoreOptionsActionSheetHideAlertIfNecessary()
@@ -38,8 +37,8 @@ protocol MediaMoreOptionsActionSheetDelegate {
     func mediaMoreOptionsActionSheetDidSelectBMark()
 }
 
-@objc(VLCMediaMoreOptionsActionSheet)
-@objcMembers class MediaMoreOptionsActionSheet: MediaPlayerActionSheet {
+@ObjCImplementation("VLCMediaMoreOptionsActionSheet")
+class MediaMoreOptionsActionSheet: MediaPlayerActionSheet {
 
     // MARK: - Instance variables
     weak var moreOptionsDelegate: MediaMoreOptionsActionSheetDelegate?
@@ -54,7 +53,7 @@ protocol MediaMoreOptionsActionSheetDelegate {
         return v
     }()
 
-    @objc var interfaceDisabled: Bool = false {
+    var interfaceDisabled: Bool = false {
         didSet {
             collectionView.visibleCells.forEach {
                 if let cell = $0 as? ActionSheetCell, let id = cell.identifier {
@@ -109,11 +108,8 @@ protocol MediaMoreOptionsActionSheetDelegate {
         mediaPlayerActionSheetDataSource = self
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
         removeCurrentChild()
         removeActionSheet()
         moreOptionsDelegate?.mediaMoreOptionsActionSheetDidAppeared?()
