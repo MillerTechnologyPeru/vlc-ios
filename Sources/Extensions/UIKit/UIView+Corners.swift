@@ -13,12 +13,12 @@
 import UIKit
 
 extension UIView {
-    @objc func roundCorners(radius: CGFloat) {
+    @ObjCMethod func roundCorners(radius: CGFloat) {
         layer.cornerRadius = radius
         layer.cornerCurve = .continuous
     }
 
-    @objc func roundCorners(radius: CGFloat, maskedCorners: CACornerMask) {
+    @ObjCMethod func roundCorners(radius: CGFloat, maskedCorners: CACornerMask) {
         roundCorners(radius: radius)
         layer.maskedCorners = maskedCorners
     }
@@ -33,7 +33,7 @@ extension UIView {
     }
 }
 
-@objc extension UIButton {
+extension UIButton {
     // Accent-filled call to action on a card. Shape stays with the caller, so this
     // suits both the pill-shaped and the circular buttons.
     func styleAsPrimaryAction() {
