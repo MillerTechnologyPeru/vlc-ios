@@ -10,7 +10,6 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc(VLCMiniPlayer)
 protocol MiniPlayer: VLCMiniPlaybackViewInterface, VLCPlaybackServiceDelegate {
     var contentHeight: Float { get }
     func updatePlayPauseButton()
