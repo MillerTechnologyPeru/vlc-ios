@@ -12,7 +12,10 @@
 
 import UIKit
 
-class PodcastDirectoryViewController: UIViewController {
+@ObjCImplementation(protocols: ["UISearchResultsUpdating", "UISearchControllerDelegate", "UITableViewDataSource", "UITableViewDelegate"], extensions: ["UISearchResultsUpdating", "UITableViewDataSource"])
+class PodcastDirectoryViewController: UIViewControllerMethods {
+    init() { objcInit() }
+
     private static let railLimit = 25
     private static let searchDelay: TimeInterval = 0.5
     private static let searchCellIdentifier = "LocalNetworkCell"
@@ -67,8 +70,8 @@ class PodcastDirectoryViewController: UIViewController {
         store.removeObserver(self)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
 
         title = NSLocalizedString("PODCAST_DIRECTORY_TITLE", comment: "")
         navigationItem.largeTitleDisplayMode = .always
@@ -88,25 +91,25 @@ class PodcastDirectoryViewController: UIViewController {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(shelvesDidUpdate),
+                                       selector: ObjC.selector("shelvesDidUpdate"),
                                        name: NSNotification.Name.VLCPodcastIndexShelvesDidUpdate,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(applyTheme),
+                                       selector: ObjC.selector("applyTheme"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsShown),
+                                       selector: ObjC.selector("miniPlayerIsShown"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerDisplayMiniPlayer),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsHidden),
+                                       selector: ObjC.selector("miniPlayerIsHidden"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerHideMiniPlayer),
                                        object: nil)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
 
         navigationController?.navigationBar.prefersLargeTitles = true
 
@@ -116,16 +119,16 @@ class PodcastDirectoryViewController: UIViewController {
             ? miniPlayerIsShown() : miniPlayerIsHidden()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @ObjCMethod("viewWillDisappear:") func viewWillDisappear(_ animated: Bool) {
+        callSuper("viewWillDisappear:", animated)
 
         if isMovingFromParent {
             cancelSearch()
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
 
         let width = tableView.bounds.width
         guard width != laidOutWidth else {
@@ -146,17 +149,17 @@ class PodcastDirectoryViewController: UIViewController {
                                                    columns: VLCRadioFavoritesGridCell.columns(forWidth: width))
     }
 
-    @objc private func miniPlayerIsShown() {
+    @ObjCMethod private func miniPlayerIsShown() {
         tableView.setMiniPlayerInset(true)
     }
 
-    @objc private func miniPlayerIsHidden() {
+    @ObjCMethod private func miniPlayerIsHidden() {
         tableView.setMiniPlayerInset(false)
     }
 
     private func setupNavigationItem() {
         let languageButton = UIBarButtonItem(image: UIImage(systemName: "globe.europe.africa"), style: .plain, target: self,
-                                             action: #selector(didTapLanguage))
+                                             action: ObjC.selector("didTapLanguage"))
         languageButton.accessibilityLabel = NSLocalizedString("PODCAST_DIRECTORY_LANGUAGE", comment: "")
         languageButton.accessibilityIdentifier = VLCAccessibilityIdentifier.podcastLanguage
 
@@ -169,13 +172,13 @@ class PodcastDirectoryViewController: UIViewController {
             navigationItem.searchController = searchController
         } else {
             let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self,
-                                               action: #selector(didTapSearch))
+                                               action: ObjC.selector("didTapSearch"))
             searchButton.accessibilityLabel = NSLocalizedString("SEARCH", comment: "")
             navigationItem.rightBarButtonItems = [searchButton, languageButton]
         }
     }
 
-    @objc private func shelvesDidUpdate() {
+    @ObjCMethod private func shelvesDidUpdate() {
         let previous = shelves
         shelves = service.shelves
 
@@ -264,7 +267,7 @@ class PodcastDirectoryViewController: UIViewController {
             loadingView.stopAnimating()
             tableView.backgroundView = VLCRadioErrorView(message: NSLocalizedString("PODCAST_DIRECTORY_ERROR", comment: ""),
                                                          retryTarget: self,
-                                                         retryAction: #selector(retrySearch))
+                                                         retryAction: ObjC.selector("retrySearch"))
         } else {
             loadingView.stopAnimating()
             tableView.backgroundView = noResultsView()
@@ -274,7 +277,7 @@ class PodcastDirectoryViewController: UIViewController {
     private func backgroundView() -> UIView {
         return VLCRadioErrorView(message: NSLocalizedString("PODCAST_DIRECTORY_ERROR", comment: ""),
                                  retryTarget: self,
-                                 retryAction: #selector(retryLoading))
+                                 retryAction: ObjC.selector("retryLoading"))
     }
 
     private func noResultsView() -> UIView {
@@ -288,21 +291,21 @@ class PodcastDirectoryViewController: UIViewController {
         return label
     }
 
-    @objc private func retryLoading() {
+    @ObjCMethod private func retryLoading() {
         service.reloadShelves()
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         view.backgroundColor = PresentationTheme.current.colors.background
         tableView.backgroundColor = PresentationTheme.current.colors.background
     }
 
-    @objc private func didTapLanguage() {
+    @ObjCMethod private func didTapLanguage() {
         let languageViewController = VLCPodcastDirectoryLanguageViewController(service: service)
         navigationController?.pushViewController(languageViewController, animated: true)
     }
 
-    @objc private func didTapSearch() {
+    @ObjCMethod private func didTapSearch() {
         navigationItem.searchController = searchController
         DispatchQueue.main.async { [weak self] in
             self?.searchController.isActive = true
@@ -320,7 +323,7 @@ class PodcastDirectoryViewController: UIViewController {
 
         if isSearching {
             isSearchLoading = true
-            perform(#selector(performSearch), with: nil, afterDelay: PodcastDirectoryViewController.searchDelay)
+            perform(ObjC.selector("performSearch"), with: nil, afterDelay: PodcastDirectoryViewController.searchDelay)
         } else {
             searchResults = []
             searchFailed = false
@@ -333,13 +336,13 @@ class PodcastDirectoryViewController: UIViewController {
     }
 
     private func cancelSearch() {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(performSearch), object: nil)
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: ObjC.selector("performSearch"), object: nil)
         searchTask?.cancel()
         searchTask = nil
         isSearchLoading = false
     }
 
-    @objc private func retrySearch() {
+    @ObjCMethod private func retrySearch() {
         guard isSearching else {
             return
         }
@@ -349,7 +352,7 @@ class PodcastDirectoryViewController: UIViewController {
         performSearch()
     }
 
-    @objc private func performSearch() {
+    @ObjCMethod private func performSearch() {
         let query = searchQuery
         searchTask = service.searchFeeds(matching: query) { [weak self] feeds, error in
             if let error = error as NSError?, error.domain == NSURLErrorDomain, error.code == NSURLErrorCancelled {
@@ -381,7 +384,7 @@ class PodcastDirectoryViewController: UIViewController {
         navigationController?.pushViewController(feedViewController, animated: true)
     }
 
-    @objc private func didTapSeeAll(_ sender: UIButton) {
+    @ObjCMethod private func didTapSeeAll(_ sender: UIButton) {
         guard sender.tag < shelves.count else {
             return
         }
@@ -394,16 +397,17 @@ class PodcastDirectoryViewController: UIViewController {
 
 // MARK: - UISearchResultsUpdating / UISearchControllerDelegate
 
-extension PodcastDirectoryViewController: UISearchResultsUpdating, UISearchControllerDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
+@ObjCExtension("UISearchResultsUpdating")
+extension PodcastDirectoryViewController {
+    @ObjCMethod("updateSearchResultsForSearchController:") func updateSearchResults(for searchController: UISearchController) {
         applySearchQuery(searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "")
     }
 
-    func didPresentSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("didPresentSearchController:") func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
     }
 
-    func willDismissSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("willDismissSearchController:") func willDismissSearchController(_ searchController: UISearchController) {
         if #unavailable(iOS 26.0, visionOS 26.0) {
             navigationItem.searchController = nil
         }
@@ -413,16 +417,17 @@ extension PodcastDirectoryViewController: UISearchResultsUpdating, UISearchContr
 
 // MARK: - UITableViewDataSource / UITableViewDelegate
 
-extension PodcastDirectoryViewController: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
+@ObjCExtension("UITableViewDataSource")
+extension PodcastDirectoryViewController {
+    @ObjCMethod("numberOfSectionsInTableView:") func numberOfSections(in tableView: UITableView) -> Int {
         return isSearching ? 1 : shelves.count
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return isSearching ? searchResults.count : 1
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if isSearching {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PodcastDirectoryViewController.searchCellIdentifier,
                                                            for: indexPath) as? VLCNetworkListCell else {
@@ -445,12 +450,12 @@ extension PodcastDirectoryViewController: UITableViewDataSource, UITableViewDele
         return cell
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    @ObjCMethod("tableView:heightForRowAtIndexPath:") func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return isSearching ? VLCNetworkListCell.podcastFeedHeight
                            : VLCOnAirRailCell.height(withTileSide: railTileSide, subtitles: true)
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    @ObjCMethod("tableView:viewForHeaderInSection:") func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard !isSearching,
               let header = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: PodcastSectionHeaderView.reuseIdentifier) as? PodcastSectionHeaderView else {
@@ -461,15 +466,15 @@ extension PodcastDirectoryViewController: UITableViewDataSource, UITableViewDele
                          actionTitle: NSLocalizedString("SEE_ALL", comment: ""),
                          tag: section,
                          target: self,
-                         action: #selector(didTapSeeAll(_:)))
+                         action: ObjC.selector("didTapSeeAll:"))
         return header
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    @ObjCMethod("tableView:heightForHeaderInSection:") func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return isSearching ? .leastNormalMagnitude : UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
         guard isSearching, indexPath.row < searchResults.count else {
