@@ -69,6 +69,16 @@ Foundation's Swift API for the classes (`Bundle`, `UserDefaults`,
 `UIKit` re-exports it, and `VLCiOS6` is imported into every file in place of
 the bridging header.
 
+`SDK/generate.sh` writes the wrappers for VLCKit, VLCMediaLibraryKit and
+`VLCApp`: the app's own Objective-C classes (`VLCPlaybackService`,
+`VLCAppCoordinator`…), from the headers the bridging header imports. Then it
+gives them, and Foundation's and UIKit's, Swift's names: objcgen.py names
+members after their selectors (`presentViewController(_:animated:completion:)`,
+`UIColor.whiteColor()`), so `SDK/swiftnames.py` adds members with the names
+Swift gives them (`present(_:animated:completion:)`, `UIColor.white`), and
+type aliases for renamed classes (`PlaybackService`). The names come from the
+symbol graphs `SDK/selectors.py` extracts into `SDK/selectors.json`.
+
 `make census` type-checks the app's 192 iOS Swift files against it and
 lists the errors left by kind and the names most wanted, counting errors in
 macro expansions against the file they come from. It needs
@@ -95,4 +105,4 @@ which rewrites them for ObjCInterop's `@ObjCImplementation`:
 
 It converted 159 classes and left 10 whose superclasses have no iOS 6
 wrapper: UIStackView and UIAlertController, which are newer than iOS 6, and
-the app's own Objective-C classes.
+the app's own Objective-C classes, which had no wrappers yet.
