@@ -12,7 +12,8 @@ import UIKit
 
 // MARK: - CustomEqualizerProfile
 
-@objcMembers class CustomEqualizerProfile: NSObject, NSCoding {
+@ObjCImplementation(protocols: ["NSCoding"])
+class CustomEqualizerProfile: NSObjectMethods {
     var name: String
     var preAmpLevel: Float
     var frequencies: [Float]
@@ -21,9 +22,10 @@ import UIKit
         self.name = name
         self.preAmpLevel = preAmpLevel
         self.frequencies = frequencies
+        objcInit()
     }
 
-    required init?(coder: NSCoder) {
+    init?(coder: NSCoder) {
         guard let name = coder.decodeObject(forKey: "name") as? String,
               let frequencies = coder.decodeObject(forKey: "frequencies") as? [Float] else {
             self.name = ""
@@ -35,9 +37,10 @@ import UIKit
         self.name = name
         self.preAmpLevel = coder.decodeFloat(forKey: "preAmpLevel")
         self.frequencies = frequencies
+        objcInit()
     }
 
-    func encode(with coder: NSCoder) {
+    @ObjCMethod("encodeWithCoder:") func encode(with coder: NSCoder) {
         coder.encode(name, forKey: "name")
         coder.encode(preAmpLevel, forKey: "preAmpLevel")
         coder.encode(frequencies, forKey: "frequencies")
@@ -46,23 +49,26 @@ import UIKit
 
 // MARK: - CustomEqualizerProfiles
 
-@objcMembers class CustomEqualizerProfiles: NSObject, NSCoding {
+@ObjCImplementation(protocols: ["NSCoding"])
+class CustomEqualizerProfiles: NSObjectMethods {
     var profiles: [CustomEqualizerProfile]
 
-    required init?(coder: NSCoder) {
+    init?(coder: NSCoder) {
         guard let customProfiles = coder.decodeObject(forKey: "profiles") as? [CustomEqualizerProfile] else {
             self.profiles = []
             return
         }
 
         self.profiles = customProfiles
+        objcInit()
     }
 
     init(profiles: [CustomEqualizerProfile]) {
         self.profiles = profiles
+        objcInit()
     }
 
-    func encode(with coder: NSCoder) {
+    @ObjCMethod("encodeWithCoder:") func encode(with coder: NSCoder) {
         coder.encode(self.profiles, forKey: "profiles")
     }
 
