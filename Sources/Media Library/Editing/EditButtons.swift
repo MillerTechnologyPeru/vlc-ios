@@ -9,7 +9,7 @@
 * Refer to the COPYING file of the official project for license.
 *****************************************************************************/
 
-@objc enum EditButtonType: Int {
+enum EditButtonType: Int {
     case addToPlaylist
     case addToMediaGroup
     case removeFromMediaGroup
