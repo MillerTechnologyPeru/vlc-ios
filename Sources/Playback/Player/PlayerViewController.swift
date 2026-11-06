@@ -29,7 +29,8 @@ fileprivate enum PlayerSeekGestureType {
     case swipe
 }
 
-class PlayerViewController: UIViewController {
+@ObjCImplementation(extensions: ["Extension"])
+class PlayerViewController: UIViewControllerMethods {
     // MARK: - Slider Gesture Contol
 
     /* This struct is a small data container used for brightness and volume
@@ -346,47 +347,47 @@ class PlayerViewController: UIViewController {
 
     lazy var panRecognizer: UIPanGestureRecognizer = {
         let panRecognizer = UIPanGestureRecognizer(target: self,
-                                                   action: #selector(handlePanGesture(recognizer:)))
+                                                   action: ObjC.selector("handlePanGestureRecognizer:"))
         panRecognizer.maximumNumberOfTouches = 1
         return panRecognizer
     }()
 
     lazy var playPauseRecognizer: UITapGestureRecognizer = {
         let playPauseRecognizer = UITapGestureRecognizer(target: self,
-                                                         action: #selector(handlePlayPauseGesture))
+                                                         action: ObjC.selector("handlePlayPauseGesture"))
         playPauseRecognizer.numberOfTouchesRequired = 2
         return playPauseRecognizer
     }()
 
     lazy var pinchRecognizer: UIPinchGestureRecognizer = {
         let pinchRecognizer = UIPinchGestureRecognizer(target: self,
-                                                       action: #selector(handlePinchGesture(recognizer:)))
+                                                       action: ObjC.selector("handlePinchGestureRecognizer:"))
         return pinchRecognizer
     }()
 
     lazy var leftSwipeRecognizer: UISwipeGestureRecognizer = {
         let leftSwipeRecognizer = UISwipeGestureRecognizer(target: self,
-                                                           action: #selector(handleSwipeGestures(recognizer:)))
+                                                           action: ObjC.selector("handleSwipeGesturesRecognizer:"))
         leftSwipeRecognizer.direction = .left
         return leftSwipeRecognizer
     }()
 
     lazy var rightSwipeRecognizer: UISwipeGestureRecognizer = {
         let rightSwipeRecognizer = UISwipeGestureRecognizer(target: self,
-                                                            action: #selector(handleSwipeGestures(recognizer:)))
+                                                            action: ObjC.selector("handleSwipeGesturesRecognizer:"))
         rightSwipeRecognizer.direction = .right
         return rightSwipeRecognizer
     }()
 
     lazy var minimizeGestureRecognizer: UIPanGestureRecognizer = {
         let minimizeGestureRecognizer = UIPanGestureRecognizer(target: self,
-                                                               action: #selector(handleMinimizeGesture(_:)))
+                                                               action: ObjC.selector("handleMinimizeGesture:"))
         return minimizeGestureRecognizer
     }()
 
     lazy var doubleTapGestureRecognizer: UITapGestureRecognizer = {
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                action: #selector(handleDoubleTapGesture(_:)))
+                                                                action: ObjC.selector("handleDoubleTapGesture:"))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
         return doubleTapGestureRecognizer
     }()
@@ -403,7 +404,7 @@ class PlayerViewController: UIViewController {
         self.playerController = playerController
         self.isBrightnessControlAvailable = isBrightnessControlAvailable
 
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
 
         mediaNavigationBar.chromeCastButton = rendererButton
         mediaNavigationBar.addGestureRecognizer(minimizeGestureRecognizer)
@@ -415,18 +416,15 @@ class PlayerViewController: UIViewController {
         self.isBrightnessControlAvailable = false
         self.systemBrightness = 1.0
 
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
 
         mediaNavigationBar.addGestureRecognizer(minimizeGestureRecognizer)
     }
 #endif
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
 
         setupObservers()
         updateSleepTimerIcon()
@@ -434,8 +432,8 @@ class PlayerViewController: UIViewController {
         hideSystemVolumeInfo()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
 
 #if os(iOS)
         setupRendererDiscovererManager()
@@ -462,8 +460,8 @@ class PlayerViewController: UIViewController {
     }
 
 #if os(iOS)
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
 
         guard isBrightnessControlAvailable else {
             return
@@ -488,21 +486,21 @@ class PlayerViewController: UIViewController {
     }
 #endif
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    @ObjCMethod("viewWillLayoutSubviews") func viewWillLayoutSubviews() {
+        callSuper("viewWillLayoutSubviews")
 
         // Adjust the position of the AB Repeat marks if needed based on the device's orientation.
         mediaScrubProgressBar.adjustABRepeatMarks(aMark: aMark, bMark: bMark)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
         layoutOverlayCardIfNeeded()
     }
 
 #if os(iOS)
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
+        callSuper("viewDidDisappear:", animated)
 
         if playerController.isRememberBrightnessEnabled && isBrightnessControlAvailable,
            let currentBrightness = playerScreen?.brightness {
@@ -544,7 +542,7 @@ class PlayerViewController: UIViewController {
     }
 
 #if os(iOS)
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+    @ObjCMethod("observeValueForKeyPath:ofObject:change:context:") func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         // We're observing outputVolume to handle volume changes from physical volume buttons
         // To processd properly we have to check we're not interacting with UI controls or gesture
         if  keyPath == "outputVolume" &&
@@ -760,7 +758,7 @@ class PlayerViewController: UIViewController {
         sleepTimerCard.focusForAccessibility()
     }
 
-    @objc var areGesturesEnabled: Bool {
+    var areGesturesEnabled: Bool {
         return playPauseRecognizer.isEnabled
     }
 
@@ -769,7 +767,7 @@ class PlayerViewController: UIViewController {
 
         let backdropView = UIView()
         backdropView.translatesAutoresizingMaskIntoConstraints = false
-        backdropView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissOverlayCard)))
+        backdropView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: ObjC.selector("dismissOverlayCard")))
         view.addSubview(backdropView)
         NSLayoutConstraint.activate([
             backdropView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -793,7 +791,7 @@ class PlayerViewController: UIViewController {
         }
     }
 
-    @objc func dismissOverlayCard() {
+    @ObjCMethod func dismissOverlayCard() {
         guard let card = overlayCardView else {
             return
         }
@@ -858,7 +856,7 @@ class PlayerViewController: UIViewController {
         NSLayoutConstraint.activate(overlayCardConstraints)
     }
 
-    @objc func updatePlaybackSpeedIcon() {
+    @ObjCMethod func updatePlaybackSpeedIcon() {
         let isSpeedModified = abs(playbackService.playbackRate - 1) > 0.001
         if isSpeedModified || playbackService.audioDelay != 0 || playbackService.subtitleDelay != 0 {
             showIcon(button: optionsNavigationBar.playbackSpeedButton)
@@ -879,11 +877,11 @@ class PlayerViewController: UIViewController {
         hideEqualizerIcon()
     }
 
-    @objc private func hideEqualizerIcon() {
+    @ObjCMethod private func hideEqualizerIcon() {
         hideIcon(button: optionsNavigationBar.equalizerButton)
     }
 
-    @objc func updateSleepTimerIcon() {
+    @ObjCMethod func updateSleepTimerIcon() {
         if playbackService.sleepTimer != nil || playbackService.stopAfterCurrentItem {
             showIcon(button: optionsNavigationBar.sleepTimerButton)
         } else {
@@ -1003,11 +1001,11 @@ class PlayerViewController: UIViewController {
         try? AVAudioSession.sharedInstance().setActive(true)
         AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: NSKeyValueObservingOptions.new, context: nil)
 
-        notificationCenter.addObserver(self, selector: #selector(updatePlaybackSpeedIcon), name: Notification.Name(VLCPlaybackServicePlaybackRateDidChange), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(updatePlayerControls), name: .VLCDidAppendMediaToQueue, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(updatePlayerControls), name: .VLCDidRemoveMediaFromQueue, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(updateSleepTimerIcon), name: Notification.Name(VLCPlaybackServiceSleepTimerDidChange), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(hideEqualizerIcon), name: Notification.Name(VLCPlaybackServicePlaybackDidStop), object: nil)
+        notificationCenter.addObserver(self, selector: ObjC.selector("updatePlaybackSpeedIcon"), name: Notification.Name(VLCPlaybackServicePlaybackRateDidChange), object: nil)
+        notificationCenter.addObserver(self, selector: ObjC.selector("updatePlayerControls"), name: .VLCDidAppendMediaToQueue, object: nil)
+        notificationCenter.addObserver(self, selector: ObjC.selector("updatePlayerControls"), name: .VLCDidRemoveMediaFromQueue, object: nil)
+        notificationCenter.addObserver(self, selector: ObjC.selector("updateSleepTimerIcon"), name: Notification.Name(VLCPlaybackServiceSleepTimerDidChange), object: nil)
+        notificationCenter.addObserver(self, selector: ObjC.selector("hideEqualizerIcon"), name: Notification.Name(VLCPlaybackServicePlaybackDidStop), object: nil)
     }
 
     private func setupSeekDurations() {
@@ -1039,17 +1037,17 @@ class PlayerViewController: UIViewController {
 #if os(iOS)
     private func addPlayerBrightnessObservers() {
         notificationCenter.addObserver(self,
-                                       selector: #selector(systemBrightnessChanged),
+                                       selector: ObjC.selector("systemBrightnessChanged"),
                                        name: UIApplication.didBecomeActiveNotification,
                                        object: nil)
 
         notificationCenter.addObserver(self,
-                                       selector: #selector(playerWillResignActive),
+                                       selector: ObjC.selector("playerWillResignActive"),
                                        name: UIApplication.willResignActiveNotification,
                                        object: nil)
 
         notificationCenter.addObserver(self,
-                                       selector: #selector(playerWillEnterForeground),
+                                       selector: ObjC.selector("playerWillEnterForeground"),
                                        name: UIApplication.willEnterForegroundNotification,
                                        object: nil)
     }
@@ -1077,7 +1075,7 @@ class PlayerViewController: UIViewController {
         playerScreen?.animateBrightnessChange(to: value, duration: duration)
     }
 
-    @objc func systemBrightnessChanged() {
+    @ObjCMethod func systemBrightnessChanged() {
         guard let screen = playerScreen, let systemBrightness = self.systemBrightness else {
             return
         }
@@ -1105,7 +1103,7 @@ class PlayerViewController: UIViewController {
         })
     }
 
-    @objc func playerWillResignActive() {
+    @ObjCMethod func playerWillResignActive() {
         guard let systemBrightness = systemBrightness else {
             return
         }
@@ -1113,7 +1111,7 @@ class PlayerViewController: UIViewController {
         animateBrightness(to: systemBrightness)
     }
 
-    @objc func playerWillEnterForeground() {
+    @ObjCMethod func playerWillEnterForeground() {
         //updates the value of system brightness
         //if the brightness is changed when the player was in the background
         guard let brightness = playerScreen?.brightness else {
@@ -1127,7 +1125,7 @@ class PlayerViewController: UIViewController {
 
     // MARK: - Gesture handlers
 
-    @objc func handlePlayPauseGesture() {
+    @ObjCMethod func handlePlayPauseGesture() {
         guard playerController.isPlayPauseGestureEnabled else {
             return
         }
@@ -1135,7 +1133,7 @@ class PlayerViewController: UIViewController {
         togglePlayPause()
     }
 
-    @objc func handlePanGesture(recognizer: UIPanGestureRecognizer) {
+    @ObjCMethod func handlePanGesture(recognizer: UIPanGestureRecognizer) {
         let verticalPanVelocity: Float = Float(recognizer.velocity(in: view).y)
         let horizontalPanVelocity: Float = Float(recognizer.velocity(in: view).x)
 
@@ -1324,11 +1322,11 @@ class PlayerViewController: UIViewController {
         }
     }
 
-    @objc func handlePinchGesture(recognizer: UIPinchGestureRecognizer) {
+    @ObjCMethod func handlePinchGesture(recognizer: UIPinchGestureRecognizer) {
         // Empty implementation. Override in subclasses.
     }
 
-    @objc func handleSwipeGestures(recognizer: UISwipeGestureRecognizer) {
+    @ObjCMethod func handleSwipeGestures(recognizer: UISwipeGestureRecognizer) {
         guard playerController.isSwipeSeekGestureEnabled else {
             return
         }
@@ -1364,7 +1362,7 @@ class PlayerViewController: UIViewController {
         }
     }
 
-    @objc private func handleMinimizeGesture(_ gesture: UIPanGestureRecognizer) {
+    @ObjCMethod private func handleMinimizeGesture(_ gesture: UIPanGestureRecognizer) {
         guard !playerController.isInterfaceLocked else { return }
 
         let translation = gesture.translation(in: view)
@@ -1408,11 +1406,11 @@ class PlayerViewController: UIViewController {
         }
     }
 
-    @objc func handleDoubleTapGesture(_ sender: UITapGestureRecognizer) {
+    @ObjCMethod func handleDoubleTapGesture(_ sender: UITapGestureRecognizer) {
         executeSeekFromGesture(.tap)
     }
 
-    @objc func updatePlayerControls() {
+    @ObjCMethod func updatePlayerControls() {
         // UPDATE THE PLAYER CONTROLS
     }
 }
@@ -1856,85 +1854,86 @@ extension PlayerViewController: VLCRendererDiscovererManagerDelegate {
 
 // MARK: - Keyboard Controls
 
+@ObjCExtension("Extension")
 extension PlayerViewController {
-    @objc func keyLeftArrow() {
+    @ObjCMethod func keyLeftArrow() {
         jumpBackwards(seekBackwardBy)
     }
 
-    @objc func keyRightArrow() {
+    @ObjCMethod func keyRightArrow() {
         jumpForwards(seekForwardBy)
     }
 
-    @objc func keyRightBracket() {
+    @ObjCMethod func keyRightBracket() {
         playbackService.changePlaybackRate(byFactor: 1.5)
     }
 
-    @objc func keyLeftBracket() {
+    @ObjCMethod func keyLeftBracket() {
         playbackService.changePlaybackRate(byFactor: 0.75)
     }
 
-    @objc func keyEqual() {
+    @ObjCMethod func keyEqual() {
         playbackService.playbackRate = 1.0
     }
 
-    @objc func keyNumber(_ n: Int) {
+    @ObjCMethod func keyNumber(_ n: Int) {
         guard playbackService.isSeekable else { return }
 
         // n=6 --> seek to 60%
         playbackService.playbackPosition = (Float(n) / 10.0)
     }
 
-    @objc func keyNumber1() {
+    @ObjCMethod func keyNumber1() {
         keyNumber(1)
     }
 
-    @objc func keyNumber2() {
+    @ObjCMethod func keyNumber2() {
         keyNumber(2)
     }
 
-    @objc func keyNumber3() {
+    @ObjCMethod func keyNumber3() {
         keyNumber(3)
     }
 
-    @objc func keyNumber4() {
+    @ObjCMethod func keyNumber4() {
         keyNumber(4)
     }
 
-    @objc func keyNumber5() {
+    @ObjCMethod func keyNumber5() {
         keyNumber(5)
     }
 
-    @objc func keyNumber6() {
+    @ObjCMethod func keyNumber6() {
         keyNumber(6)
     }
 
-    @objc func keyNumber7() {
+    @ObjCMethod func keyNumber7() {
         keyNumber(7)
     }
 
-    @objc func keyNumber8() {
+    @ObjCMethod func keyNumber8() {
         keyNumber(8)
     }
 
-    @objc func keyNumber9() {
+    @ObjCMethod func keyNumber9() {
         keyNumber(9)
     }
 
-    @objc func keyNumber0() {
+    @ObjCMethod func keyNumber0() {
         keyNumber(0)
     }
 
-    @objc func nextFrame() {
+    @ObjCMethod func nextFrame() {
         playbackService.nextFrame()
         mediaScrubProgressBar.updateProgressValues()
     }
 
-    @objc func previousFrame() {
+    @ObjCMethod func previousFrame() {
         playbackService.previousFrame()
         mediaScrubProgressBar.updateProgressValues()
     }
 
-    @objc func keyEscape() {
+    @ObjCMethod func keyEscape() {
         guard overlayCardView == nil else {
             dismissOverlayCard()
             return
@@ -1966,30 +1965,30 @@ extension PlayerViewController {
     }
 
     override var keyCommands: [UIKeyCommand]? {
-        let spaceCommand = UIKeyCommand(input: " ", modifierFlags: [], action: #selector(handlePlayPauseGesture))
+        let spaceCommand = UIKeyCommand(input: " ", modifierFlags: [], action: ObjC.selector("handlePlayPauseGesture"))
         spaceCommand.discoverabilityTitle = NSLocalizedString("PLAY_PAUSE_BUTTON", comment: "")
 
-        let returnCommand = UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(handlePlayPauseGesture))
+        let returnCommand = UIKeyCommand(input: "\r", modifierFlags: [], action: ObjC.selector("handlePlayPauseGesture"))
         returnCommand.discoverabilityTitle = NSLocalizedString("PLAY_PAUSE_BUTTON", comment: "")
 
-        let leftArrowCommand = UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(keyLeftArrow))
+        let leftArrowCommand = UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: ObjC.selector("keyLeftArrow"))
         leftArrowCommand.discoverabilityTitle = NSLocalizedString("KEY_JUMP_BACKWARDS", comment: "")
 
-        let rightArrowCommand = UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(keyRightArrow))
+        let rightArrowCommand = UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: ObjC.selector("keyRightArrow"))
         rightArrowCommand.discoverabilityTitle = NSLocalizedString("KEY_JUMP_FORWARDS", comment: "")
 
-        let leftBracketCommand = UIKeyCommand(input: "[", modifierFlags: [], action: #selector(keyLeftBracket))
+        let leftBracketCommand = UIKeyCommand(input: "[", modifierFlags: [], action: ObjC.selector("keyLeftBracket"))
         leftBracketCommand.discoverabilityTitle = NSLocalizedString("KEY_DECREASE_PLAYBACK_SPEED", comment: "")
 
-        let rightBracketCommand = UIKeyCommand(input: "]", modifierFlags: [], action: #selector(keyRightBracket))
+        let rightBracketCommand = UIKeyCommand(input: "]", modifierFlags: [], action: ObjC.selector("keyRightBracket"))
         rightBracketCommand.discoverabilityTitle = NSLocalizedString("KEY_INCREASE_PLAYBACK_SPEED", comment: "")
 
-        let eCommand = UIKeyCommand(input: "e", modifierFlags: [], action: #selector(nextFrame))
+        let eCommand = UIKeyCommand(input: "e", modifierFlags: [], action: ObjC.selector("nextFrame"))
         eCommand.discoverabilityTitle = NSLocalizedString("KEY_NEXT_FRAME", comment: "")
 
-        let zCommand = UIKeyCommand(input: "e", modifierFlags: [.shift], action: #selector(previousFrame))
+        let zCommand = UIKeyCommand(input: "e", modifierFlags: [.shift], action: ObjC.selector("previousFrame"))
 
-        let escapeCommand = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(keyEscape))
+        let escapeCommand = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: ObjC.selector("keyEscape"))
         escapeCommand.discoverabilityTitle = NSLocalizedString("BUTTON_CLOSE", comment: "")
 
         var commands: [UIKeyCommand] = [
@@ -2009,7 +2008,7 @@ extension PlayerViewController {
         if abs(playbackService.playbackRate - 1.0) > .ulpOfOne {
             let resetSpeed = UIKeyCommand(input: "=",
                                           modifierFlags: [],
-                                          action: #selector(keyEqual))
+                                          action: ObjC.selector("keyEqual"))
             resetSpeed.discoverabilityTitle = NSLocalizedString("KEY_RESET_PLAYBACK_SPEED",
                                                                 comment: "")
             commands.append(resetSpeed)
