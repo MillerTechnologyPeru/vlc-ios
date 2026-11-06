@@ -12,7 +12,8 @@
 
 import Foundation
 
-class FavoriteSectionHeader: UICollectionReusableView {
+@ObjCImplementation
+class FavoriteSectionHeader: UICollectionReusableViewMethods {
     static var identifier = "FavoriteSectionHeader"
     static var height: CGFloat = 100
     
@@ -20,12 +21,9 @@ class FavoriteSectionHeader: UICollectionReusableView {
         return FavoriteHeaderContentView()
     }()
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupheaderView()
     }
     
