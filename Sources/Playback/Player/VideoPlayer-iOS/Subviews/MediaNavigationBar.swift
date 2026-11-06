@@ -15,15 +15,14 @@ import MediaPlayer
 
 // MARK: - MediaNavigationBarDelegate
 
-@objc(VLCMediaNavigationBarDelegate)
 protocol MediaNavigationBarDelegate {
     func mediaNavigationBarDidTapClose(_ mediaNavigationBar: MediaNavigationBar)
-    @objc optional func mediaNavigationBarDidTapPictureInPicture(_ mediaNavigationBar: MediaNavigationBar)
-    @objc optional func mediaNavigationBarDidToggleQueueView(_ mediaNavigationBar: MediaNavigationBar)
-    @objc optional func mediaNavigationBarDidToggleFavorite(_ mediaNavigationBar: MediaNavigationBar)
-    @objc optional func mediaNavigationBarDidToggleChromeCast(_ mediaNavigationBar: MediaNavigationBar)
+    optional func mediaNavigationBarDidTapPictureInPicture(_ mediaNavigationBar: MediaNavigationBar)
+    optional func mediaNavigationBarDidToggleQueueView(_ mediaNavigationBar: MediaNavigationBar)
+    optional func mediaNavigationBarDidToggleFavorite(_ mediaNavigationBar: MediaNavigationBar)
+    optional func mediaNavigationBarDidToggleChromeCast(_ mediaNavigationBar: MediaNavigationBar)
     func mediaNavigationBarDidCloseLongPress(_ mediaNavigationBar: MediaNavigationBar)
-    @objc optional func mediaNavigationBarDisplayCloseAlert(_ mediaNavigationBar: MediaNavigationBar)
+    optional func mediaNavigationBarDisplayCloseAlert(_ mediaNavigationBar: MediaNavigationBar)
 }
 
 // MARK: - RendererActionSheetContent
@@ -35,8 +34,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
 // MARK: - MediaNavigationBar
 
-@objc(VLCMediaNavigationBar)
-@objcMembers class MediaNavigationBar: UIStackView {
+class MediaNavigationBar: UIStackView {
     // MARK: - Instance Variables
 
     weak var delegate: MediaNavigationBarDelegate?
@@ -44,9 +42,9 @@ private enum RendererActionSheetContent: Int, CaseIterable {
     lazy var closePlaybackButton: UIButton = {
         var closeButton = UIButton(type: .system)
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                        action: #selector(handleCloseTap))
+                                                                        action: ObjC.selector("handleCloseTap"))
         let longPressGesture: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self,
-                                                                                          action: #selector(handleLongPressPlayPause(_:)))
+                                                                                          action: ObjC.selector("handleLongPressPlayPause:"))
         longPressGesture.shouldRequireFailure(of: tapGesture)
         closeButton.setImage(UIImage(named: "close"), for: .normal)
         closeButton.tintColor = .white
@@ -70,7 +68,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
     lazy var favoriteButton: UIButton = {
         var favoriteButton = UIButton(type: .system)
-        favoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchDown)
+        favoriteButton.addTarget(self, action: ObjC.selector("toggleFavorite"), for: .touchDown)
         favoriteButton.tintColor = .white
         favoriteButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         favoriteButton.isHidden = true
@@ -79,7 +77,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
     lazy var queueButton: UIButton = {
         var queueButton = UIButton(type: .system)
-        queueButton.addTarget(self, action: #selector(toggleQueueView), for: .touchDown)
+        queueButton.addTarget(self, action: ObjC.selector("toggleQueueView"), for: .touchDown)
         queueButton.setImage(UIImage(named: "play-queue"), for: .normal)
         queueButton.tintColor = .white
         queueButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -88,7 +86,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
     lazy var rotateButton: UIButton = {
         var rotateButton = UIButton(type: .system)
-        rotateButton.addTarget(self, action: #selector(toggleOrientation), for: .touchDown)
+        rotateButton.addTarget(self, action: ObjC.selector("toggleOrientation"), for: .touchDown)
         rotateButton.setImage(UIImage(named: "rectangle.landscape.rotate"), for: .normal)
         rotateButton.tintColor = .white
         rotateButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -103,7 +101,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 #if os(iOS)
     lazy var chromeCastButton: UIButton = {
         var chromeButton = UIButton(type: .system)
-        chromeButton.addTarget(self, action: #selector(toggleChromeCast), for: .touchDown)
+        chromeButton.addTarget(self, action: ObjC.selector("toggleChromeCast"), for: .touchDown)
         chromeButton.setImage(UIImage(named: "renderer"), for: .normal)
         chromeButton.tintColor = .white
         chromeButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -112,7 +110,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
     lazy var deviceButton: UIButton = {
         var chromeButton = UIButton(type: .system)
-        chromeButton.addTarget(self, action: #selector(toggleDeviceActionSheet),
+        chromeButton.addTarget(self, action: ObjC.selector("toggleDeviceActionSheet"),
                                for: .touchDown)
         chromeButton.setImage(UIImage(named: "renderer"), for: .normal)
         chromeButton.tintColor = .white
@@ -122,7 +120,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
     lazy var pictureInPictureButton: UIButton = {
         var button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(togglePictureInPicture),
+        button.addTarget(self, action: ObjC.selector("togglePictureInPicture"),
                                for: .touchDown)
         button.setImage(UIImage(named: "pip.enter"), for: .normal)
         button.tintColor = .white
@@ -263,7 +261,7 @@ private enum RendererActionSheetContent: Int, CaseIterable {
 
     // MARK: Gesture recognizer
 
-    @objc private func handleLongPressPlayPause(_ sender: UILongPressGestureRecognizer) {
+    @ObjCMethod private func handleLongPressPlayPause(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             let accessibility: (String, String) = (NSLocalizedString("STOP_BUTTON", comment: ""), NSLocalizedString("CLOSE_HINT", comment: ""))
             updateCloseButton(with: UIImage(named: "close"), accessibility: accessibility)
