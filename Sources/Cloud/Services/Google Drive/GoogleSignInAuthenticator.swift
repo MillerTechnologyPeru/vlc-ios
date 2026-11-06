@@ -12,13 +12,15 @@
 import UIKit
 import GoogleSignIn
 
-@objc(VLCGoogleSignInAuthenticator)
-class GoogleSignInAuthenticator: NSObject {
-    @objc class func create() -> GoogleSignInAuthenticator {
+@ObjCImplementation("VLCGoogleSignInAuthenticator")
+class GoogleSignInAuthenticator: NSObjectMethods {
+    init() { objcInit() }
+
+    @ObjCMethod class func create() -> GoogleSignInAuthenticator {
         return GoogleSignInAuthenticator()
     }
 
-    @objc class func signIn(_ signIn: GIDSignIn, presentingView: VLCGoogleDriveTableViewController) {
+    @ObjCMethod class func signIn(_ signIn: GIDSignIn, presentingView: VLCGoogleDriveTableViewController) {
         signIn.configuration = GIDConfiguration(clientID: kVLCGoogleDriveClientID)
 
         signIn.signIn(withPresenting: presentingView,
