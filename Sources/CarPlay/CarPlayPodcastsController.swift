@@ -39,7 +39,7 @@ class CarPlayPodcastsController: VLCCarPlayBrowserController {
         return item
     }()
 
-    @objc func podcastList() -> CPListTemplate {
+    @ObjCMethod func podcastList() -> CPListTemplate {
         podcastListItems = [:]
         let content = podcastSections()
         let template = CPListTemplate(title: NSLocalizedString("ONAIR_PODCASTS", comment: ""),
@@ -49,7 +49,7 @@ class CarPlayPodcastsController: VLCCarPlayBrowserController {
         return template
     }
 
-    @objc func podcastsNeedUpdate() {
+    @ObjCMethod func podcastsNeedUpdate() {
         guard !updateScheduled else {
             return
         }
