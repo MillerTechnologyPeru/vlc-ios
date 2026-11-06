@@ -30,7 +30,8 @@ class EqualizerValueFormatter {
     }
 }
 
-class EqualizerView: UIView {
+@ObjCImplementation(extensions: ["Extension", "Extension2", "Extension3"])
+class EqualizerView: UIViewMethods {
 
     // MARK: - EqualizerFrequency structure
     private struct EqualizerFrequency {
@@ -158,7 +159,7 @@ class EqualizerView: UIView {
         button.setImage(UIImage(systemName: "arrow.counterclockwise", withConfiguration: configuration), for: .normal)
         button.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
         button.accessibilityLabel = NSLocalizedString("BUTTON_RESET", comment: "")
-        button.addTarget(self, action: #selector(resetEqualizer), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("resetEqualizer"), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -194,7 +195,7 @@ class EqualizerView: UIView {
                                                                     neutralValue: Self.preampNeutralSliderValue,
                                                                     ticks: [.init(position: Self.preampNeutralSliderValue)])
         }
-        slider.addTarget(self, action: #selector(preampSliderDidChangeValue), for: .valueChanged)
+        slider.addTarget(self, action: ObjC.selector("preampSliderDidChangeValueSender:"), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -269,7 +270,7 @@ class EqualizerView: UIView {
         snapBandsSwitch.onTintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
         snapBandsSwitch.isOn = UserDefaults.standard.bool(forKey: kVLCEqualizerSnapBands)
         snapBandsSwitch.accessibilityLabel = NSLocalizedString("SNAP_BANDS", comment: "")
-        snapBandsSwitch.addTarget(self, action: #selector(snapBandsSwitchDidChangeValue), for: .valueChanged)
+        snapBandsSwitch.addTarget(self, action: ObjC.selector("snapBandsSwitchDidChangeValueSender:"), for: .valueChanged)
         snapBandsSwitch.translatesAutoresizingMaskIntoConstraints = false
         return snapBandsSwitch
     }()
@@ -277,7 +278,7 @@ class EqualizerView: UIView {
     // MARK: - Init
 
     init(isModified: Bool) {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
         overrideUserInterfaceStyle = .dark
 
@@ -287,27 +288,24 @@ class EqualizerView: UIView {
         reloadData()
         resetButton.isEnabled = isModified
 
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(requestDismissal))
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: ObjC.selector("requestDismissal"))
         swipeDownRecognizer.direction = .down
         addGestureRecognizer(swipeDownRecognizer)
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(reduceTransparencyChanged),
+                                       selector: ObjC.selector("reduceTransparencyChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(darkerSystemColorsChanged),
+                                       selector: ObjC.selector("darkerSystemColorsChanged"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        callSuper("traitCollectionDidChange:", previousTraitCollection)
         if previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             updateBandSliderHeight()
         }
@@ -316,7 +314,7 @@ class EqualizerView: UIView {
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
+    @ObjCMethod("accessibilityPerformEscape") func accessibilityPerformEscape() -> Bool {
         requestDismissal()
         return true
     }
@@ -331,9 +329,9 @@ class EqualizerView: UIView {
         for i in 0..<numberOfBands {
             let frequency = playbackService.frequencyOfBand(at: i)
             let eqFrequency = EqualizerFrequency(frequency: Int(frequency), index: Int(i))
-            eqFrequency.slider.addTarget(self, action: #selector(sliderDidChangeValue), for: .valueChanged)
-            eqFrequency.slider.addTarget(self, action: #selector(sliderWillChangeValue), for: .touchDown)
-            eqFrequency.slider.addTarget(self, action: #selector(sliderDidDrag), for: .touchDragInside)
+            eqFrequency.slider.addTarget(self, action: ObjC.selector("sliderDidChangeValueSender:"), for: .valueChanged)
+            eqFrequency.slider.addTarget(self, action: ObjC.selector("sliderWillChangeValueSender:"), for: .touchDown)
+            eqFrequency.slider.addTarget(self, action: ObjC.selector("sliderDidDragSender:"), for: .touchDragInside)
             eqFrequencies.append(eqFrequency)
         }
     }
@@ -459,8 +457,8 @@ class EqualizerView: UIView {
         NSLayoutConstraint.activate(newConstraints)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         updateLabelsVisibility()
     }
 
@@ -717,8 +715,9 @@ extension EqualizerView {
 
 // MARK: - Slider events
 
+@ObjCExtension("Extension")
 extension EqualizerView {
-    @objc func preampSliderDidChangeValue(sender: UISlider) {
+    @ObjCMethod func preampSliderDidChangeValue(sender: UISlider) {
         if abs(sender.value - Self.preampNeutralSliderValue) < Self.preampSnapDistance {
             sender.value = Self.preampNeutralSliderValue
         }
@@ -727,11 +726,11 @@ extension EqualizerView {
         setModified(true)
     }
 
-    @objc func sliderWillChangeValue(sender: VerticalSliderControl) {
+    @ObjCMethod func sliderWillChangeValue(sender: VerticalSliderControl) {
         oldValues = eqFrequencies.map { $0.slider.value }
     }
 
-    @objc func sliderDidChangeValue(sender: VerticalSliderControl) {
+    @ObjCMethod func sliderDidChangeValue(sender: VerticalSliderControl) {
         playbackService.setAmplification(CGFloat(sender.value), forBand: UInt32(sender.tag))
         if let eqFrequency = eqFrequencies.objectAtIndex(index: sender.tag) {
             updateLabels(of: eqFrequency)
@@ -739,7 +738,7 @@ extension EqualizerView {
         setModified(true)
     }
 
-    @objc func sliderDidDrag(sender: VerticalSliderControl) {
+    @ObjCMethod func sliderDidDrag(sender: VerticalSliderControl) {
         let index = sender.tag
 
         guard snapBandsSwitch.isOn, oldValues.count == eqFrequencies.count else {
@@ -764,14 +763,16 @@ extension EqualizerView {
 
 // MARK: - Snap Bands event
 
+@ObjCExtension("Extension2")
 extension EqualizerView {
-    @objc func snapBandsSwitchDidChangeValue(sender: UISwitch) {
+    @ObjCMethod func snapBandsSwitchDidChangeValue(sender: UISwitch) {
         UserDefaults.standard.setValue(sender.isOn, forKey: kVLCEqualizerSnapBands)
     }
 }
 
 // MARK: - Buttons event
 
+@ObjCExtension("Extension3")
 extension EqualizerView {
     private func saveNewProfile() {
         let alertController = UIAlertController(title: NSLocalizedString("CUSTOM_EQUALIZER_ALERT_TITLE", comment: ""),
@@ -803,23 +804,23 @@ extension EqualizerView {
         delegate?.equalizerView(self, present: alertController)
     }
 
-    @objc func resetEqualizer() {
+    @ObjCMethod func resetEqualizer() {
         playbackService.restoreSavedEqualizerProfile()
         setModified(false)
         reloadData()
         announceSelectedPreset()
     }
 
-    @objc private func requestDismissal() {
+    @ObjCMethod private func requestDismissal() {
         delegate?.equalizerViewDidRequestDismissal(self)
     }
 
-    @objc private func reduceTransparencyChanged() {
+    @ObjCMethod private func reduceTransparencyChanged() {
         installBackgroundEffect()
         updatePresetButton()
     }
 
-    @objc private func darkerSystemColorsChanged() {
+    @ObjCMethod private func darkerSystemColorsChanged() {
         updatePresetButton()
     }
 
