@@ -13,20 +13,21 @@
 
 import QuartzCore
 
-public class VLCConfettiView: UIView {
+@ObjCImplementation
+public class VLCConfettiView: UIViewMethods {
 
     var emitter: CAEmitterLayer!
     public var intensity: Float!
     private var active: Bool!
     private var dots: [CGImage?]!
 
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    public init?(coder aDecoder: NSCoder) {
+        objcInit("initWithCoder:", aDecoder)
         setup()
     }
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    public init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setup()
     }
 
@@ -36,7 +37,7 @@ public class VLCConfettiView: UIView {
         dots = [UIImage(named: "dot1")!.cgImage, UIImage(named: "dot2")!.cgImage, UIImage(named: "dot3")!.cgImage]
     }
 
-    @objc public func startConfetti() {
+    @ObjCMethod public func startConfetti() {
         emitter = CAEmitterLayer()
 
         emitter.emitterPosition = CGPoint(x: frame.size.width / 2.0, y: 0)
@@ -51,7 +52,7 @@ public class VLCConfettiView: UIView {
         active = true
     }
 
-    @objc public func stopConfetti() {
+    @ObjCMethod public func stopConfetti() {
         emitter?.birthRate = 0
         active = false
     }
@@ -73,7 +74,7 @@ public class VLCConfettiView: UIView {
         return confetti
     }
 
-    @objc public func isActive() -> Bool {
+    @ObjCMethod public func isActive() -> Bool {
         return self.active
     }
 }
