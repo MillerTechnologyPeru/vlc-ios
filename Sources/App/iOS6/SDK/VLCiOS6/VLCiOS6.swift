@@ -16,3 +16,4 @@
 @_exported import UIKit
 @_exported import VLCKit
 @_exported import VLCMediaLibraryKit
+@_exported import VLCApp
