@@ -28,12 +28,12 @@ class FavoriteListViewController: VLCRemoteBrowsingCollectionViewController {
         super.collectionView.register(FavoriteSectionHeader.self, forSupplementaryViewOfKind:
                                         UICollectionView.elementKindSectionHeader, withReuseIdentifier: FavoriteSectionHeader.identifier)
 
-        let deleteRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(startEditMode))
+        let deleteRecognizer = UILongPressGestureRecognizer(target: self, action: ObjC.selector("startEditMode"))
         deleteRecognizer.allowedPressTypes = [NSNumber(value: UIPress.PressType.select.rawValue)]
         deleteRecognizer.minimumPressDuration = 1.0
         self.view.addGestureRecognizer(deleteRecognizer)
 
-        let cancelRecognizer = UITapGestureRecognizer(target: self, action: #selector(endEditMode))
+        let cancelRecognizer = UITapGestureRecognizer(target: self, action: ObjC.selector("endEditMode"))
         cancelRecognizer.allowedPressTypes = [NSNumber(value: UIPress.PressType.select.rawValue), NSNumber(value: UIPress.PressType.menu.rawValue)]
         cancelRecognizer.isEnabled = self.isEditing
         self.view.addGestureRecognizer(cancelRecognizer)
@@ -162,7 +162,7 @@ extension FavoriteListViewController {
 
 // MARK: - Deletion
 extension FavoriteListViewController {
-    @objc private func startEditMode() {
+    @ObjCMethod private func startEditMode() {
         self.isEditing = true
         let alertController = UIAlertController(title: NSLocalizedString("UNFAVORITE_ALERT_TITLE", comment: ""), message: nil, preferredStyle: .alert)
 
@@ -188,7 +188,7 @@ extension FavoriteListViewController {
         }
     }
 
-    @objc private func endEditMode() {
+    @ObjCMethod private func endEditMode() {
         self.isEditing = false
     }
 }
