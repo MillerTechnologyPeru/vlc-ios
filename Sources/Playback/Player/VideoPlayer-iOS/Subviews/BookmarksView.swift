@@ -20,12 +20,13 @@ protocol BookmarksViewDelegate: AnyObject {
     func bookmarksViewCloseAddBookmarksView()
 }
 
-@objc enum BookmarkActionIdentifier: Int {
+enum BookmarkActionIdentifier: Int {
     case rename = 1
     case delete
 }
 
-class BookmarksView: UIView {
+@ObjCImplementation(protocols: ["UITableViewDelegate", "UITableViewDataSource"], extensions: ["UITableViewDelegate"])
+class BookmarksView: UIViewMethods {
     private let addBookmarkButton = UIButton()
     private let addBookmarkAtTimeButton = UIButton()
     private var bookmarksTableView: UITableView!
@@ -39,13 +40,13 @@ class BookmarksView: UIView {
 
     weak var delegate: BookmarksViewDelegate?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         commonInit()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         commonInit()
     }
 
@@ -95,7 +96,7 @@ class BookmarksView: UIView {
 
         addBookmarkButton.imageView?.contentMode = .scaleAspectFit
         addBookmarkButton.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
-        addBookmarkButton.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+        addBookmarkButton.addTarget(self, action: ObjC.selector("addBookmark"), for: .touchUpInside)
         addBookmarkButton.setContentHuggingPriority(.required, for: .horizontal)
         addBookmarkButton.setContentHuggingPriority(.required, for: .vertical)
         addBookmarkButton.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -104,13 +105,13 @@ class BookmarksView: UIView {
 
         addBookmarkAtTimeButton.imageView?.contentMode = .scaleAspectFit
         addBookmarkAtTimeButton.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
-        addBookmarkAtTimeButton.addTarget(self, action: #selector(openAddView), for: .touchUpInside)
+        addBookmarkAtTimeButton.addTarget(self, action: ObjC.selector("openAddView"), for: .touchUpInside)
         addBookmarkAtTimeButton.setContentHuggingPriority(.required, for: .horizontal)
         addBookmarkAtTimeButton.setContentHuggingPriority(.required, for: .vertical)
         addBookmarkAtTimeButton.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
-    @objc private func addBookmark() {
+    @ObjCMethod private func addBookmark() {
         if let currentMedia = delegate?.bookmarksViewGetCurrentPlayingMedia() {
             let playbackService = PlaybackService.sharedInstance()
             let currentTime = playbackService.playedTime()
@@ -123,7 +124,7 @@ class BookmarksView: UIView {
         }
     }
 
-    @objc private func openAddView() {
+    @ObjCMethod private func openAddView() {
         delegate?.bookmarksViewOpenAddBookmarksView()
         bookmarksTableView.removeFromSuperview()
         addBookmarksView.updateTableView()
@@ -173,12 +174,13 @@ class BookmarksView: UIView {
     }
 }
 
-extension BookmarksView: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+@ObjCExtension("UITableViewDelegate")
+extension BookmarksView {
+    @ObjCMethod("tableView:canEditRowAtIndexPath:") func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    @ObjCMethod("tableView:trailingSwipeActionsConfigurationForRowAtIndexPath:") func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "", handler: { _, _, _ in
             self.delegate?.bookmarksViewDisplayAlert(action: .delete, index: indexPath.row, isEditing: self.isEditing)
         })
@@ -197,7 +199,7 @@ extension BookmarksView: UITableViewDelegate, UITableViewDataSource {
 
 
     #if os(iOS)
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    @ObjCMethod("tableView:editActionsForRowAtIndexPath:") func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteLabel = NSLocalizedString("BUTTON_DELETE", comment: "")
         let deleteAction = UITableViewRowAction(style: .destructive, title: deleteLabel, handler: { _, _ in
             self.delegate?.bookmarksViewDisplayAlert(action: .delete, index: indexPath.row, isEditing: self.isEditing)
@@ -216,15 +218,15 @@ extension BookmarksView: UITableViewDelegate, UITableViewDataSource {
     #warning("fix table view interaction")
     #endif
 
-    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:willBeginEditingRowAtIndexPath:") func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
         delegate?.bookmarksViewShouldDisableGestures(true)
     }
 
-    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+    @ObjCMethod("tableView:didEndEditingRowAtIndexPath:") func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         delegate?.bookmarksViewShouldDisableGestures(false)
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let currentMedia = delegate?.bookmarksViewGetCurrentPlayingMedia() {
             if let bookmarks = currentMedia.bookmarks {
                 return bookmarks.count
@@ -233,7 +235,7 @@ extension BookmarksView: UITableViewDelegate, UITableViewDataSource {
         return 0
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: bookmarksTableViewCellReuseIdentifier, for: indexPath)
         let row = indexPath.row
         let colors = PresentationTheme.currentExcludingWhite.colors
@@ -251,7 +253,7 @@ extension BookmarksView: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let currentMedia = delegate?.bookmarksViewGetCurrentPlayingMedia() {
             if let bookmarks = currentMedia.bookmarks {
                 let time = bookmarks[indexPath.row].time
@@ -260,13 +262,13 @@ extension BookmarksView: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewWillBeginDragging:") func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if frame.minX == 0 {
             delegate?.bookmarksViewShouldDisableGestures(true)
         }
     }
 
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    @ObjCMethod("scrollViewDidEndDragging:willDecelerate:") func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         delegate?.bookmarksViewShouldDisableGestures(false)
     }
 }
