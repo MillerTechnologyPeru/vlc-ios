@@ -16,7 +16,8 @@ protocol ChapterViewDelegate: AnyObject {
     func chapterViewDelegateDidSelectChapter(_ chapterView: ChapterView)
 }
 
-class ChapterView: UIView {
+@ObjCImplementation(protocols: ["UITableViewDelegate", "UITableViewDataSource"], extensions: ["UITableViewDelegate"])
+class ChapterView: UIViewMethods {
     private var chapterTableView: UITableView!
     private let chapterTitleViewCellIdentifier = "chapterTitleViewCellIdentifier"
 
@@ -27,13 +28,10 @@ class ChapterView: UIView {
         UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func updateContent() {
         if chapterTableView == nil {
@@ -87,8 +85,9 @@ class ChapterView: UIView {
     }
 }
 
-extension ChapterView: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+@ObjCExtension("UITableViewDelegate")
+extension ChapterView {
+    @ObjCMethod("numberOfSectionsInTableView:") func numberOfSections(in tableView: UITableView) -> Int {
         var sections = 0
 
         if hasMultipleTitles() {
@@ -101,14 +100,14 @@ extension ChapterView: UITableViewDelegate, UITableViewDataSource {
         return sections
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if hasMultipleTitles() && section == 0 {
             return playbackService.numberOfTitles
         }
         return playbackService.numberOfChaptersForCurrentTitle
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    @ObjCMethod("tableView:titleForHeaderInSection:") func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if hasMultipleTitles() && section == 0 {
             return NSLocalizedString("CHOOSE_TITLE", comment: "")
         }
@@ -118,7 +117,7 @@ extension ChapterView: UITableViewDelegate, UITableViewDataSource {
         return NSLocalizedString("UNKNOWN_TRACK_TYPE", comment: "")
     }
 
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    @ObjCMethod("tableView:willDisplayHeaderView:forSection:") func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
             let colors = PresentationTheme.currentExcludingWhite.colors
             headerView.textLabel?.textColor = colors.cellTextColor
@@ -126,7 +125,7 @@ extension ChapterView: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: chapterTitleViewCellIdentifier, for: indexPath)
 
         let section = indexPath.section
@@ -162,7 +161,7 @@ extension ChapterView: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
         let section = indexPath.section
