@@ -23,6 +23,16 @@ make run
 
 `SWIFT_IOS6`, `VLCKIT`, `SSH_CONF` and `SSH_HOST` point elsewhere.
 
+For looking into problems on the device, which keeps no syslog:
+
+```bash
+make log                    # the app's and libvlc's warnings, Documents/VLC.log
+make autoplay FILE=a.mp4    # launch and play a file, without touching the device
+```
+
+`make run` and `make autoplay` need the device unlocked. Documents must
+belong to `mobile` (`make media` sees to it), or the app can't write there.
+
 ## How it's put together
 
 - **`VLCiOS6App.swift`:** the app and the media list, in SwiftUI. The list
@@ -34,6 +44,8 @@ make run
 - **`VLCKit.swift`:** MobileVLCKit's API for Swift, as `@ObjC` wrappers
   (`VLCMediaPlayer`, `VLCMedia`, `VLCTime`). Embedded Swift has no
   Objective-C interop; the macros generate the messages.
+- **`DebugLog.swift`:** the log file, with libvlc's messages through a
+  VLCKit logger implemented in Swift.
 - **`Localization.swift`:** `NSLocalizedString` on `NSBundle`, so the
   screens and shared code use VLC's `Localizable.strings`.
 - **Shared with the iOS app:** `AspectRatio.swift` and `Array+Safety.swift`

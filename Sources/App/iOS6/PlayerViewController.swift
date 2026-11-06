@@ -44,6 +44,8 @@ final class PlayerViewController {
     private let name: String
     private var aspectRatio = AspectRatio.Default
     private var seeking = false
+    /// Whether playback started: VLCKit reports Stopped when a file ends
+    private var started = false
     private var timer: NSTimer?
 
     private var videoView: UIView?
@@ -70,8 +72,21 @@ final class PlayerViewController {
 
     // MARK: UIViewController
 
+    /// Full screen, under the hidden status bar, as VLC's video player is
+    @ObjCMethod func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: 1 /* fade */)
+    }
+
+    @ObjCMethod func viewWillDisappear(_ animated: Bool) {
+        callSuper("viewWillDisappear:", animated)
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: 1)
+    }
+
     @ObjCMethod func viewDidLoad() {
         callSuper("viewDidLoad")
+        viewController.wantsFullScreenLayout = true
+        DebugLog.log("player viewDidLoad")
         let view = viewController.view!
         view.backgroundColor = UIColor.blackColor()
         let bounds = view.bounds
@@ -151,6 +166,7 @@ final class PlayerViewController {
         player.drawable = video.object
         player.media = VLCMedia.mediaWithPath(path)
         player.play()
+        DebugLog.log("playing \(path)")
         timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: object, selector: ObjC.selector("tick:"),
                                                        userInfo: ObjC.nil, repeats: true)
     }
@@ -222,7 +238,10 @@ final class PlayerViewController {
             slider?.value = player.position
         }
         updatePlayButton()
-        if player.playerState == .ended || player.playerState == .error {
+        let state = player.playerState
+        if player.playing { started = true }
+        if state == .ended || state == .error || (started && state == .stopped) {
+            DebugLog.log("player state \(player.state), closing")
             done(ObjC.nil)
         }
     }

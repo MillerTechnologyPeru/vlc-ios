@@ -47,7 +47,23 @@ final class MediaLibrary: ObservableObject {
         // NSDocumentDirectory in NSUserDomainMask
         let urls = NSFileManager.defaultManager().URLsForDirectory(9, inDomains: 1)
         documentsPath = urls.count > 0 ? NSURL(urls.objectAtIndex(0)).path ?? "" : ""
+        DebugLog.start(documents: documentsPath)
+        DebugLog.log("Documents: \(documentsPath)")
         reload()
+    }
+
+    /// For testing on a device without touching it: Documents/.autoplay names
+    /// a file to play at launch (`make autoplay FILE=…`). It's read once.
+    func autoplay() {
+        let path = documentsPath + "/.autoplay"
+        guard let name = NSString.stringWithContentsOfFile(path, encoding: 4, error: ObjC.nil) else { return }
+        _ = NSFileManager.defaultManager().removeItemAtPath(path, error: ObjC.nil)
+        var trimmed = name.object.asString ?? ""
+        while trimmed.hasSuffix("\n") || trimmed.hasSuffix(" ") { trimmed.removeLast() }
+        DebugLog.log("autoplay \(trimmed)")
+        if let file = files.first(where: { $0.name == trimmed }) {
+            play(file)
+        }
     }
 
     func reload() {
@@ -72,7 +88,15 @@ final class MediaLibrary: ObservableObject {
     }
 
     func play(_ file: MediaFile) {
-        guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else { return }
+        DebugLog.log("play \(file.id)")
+        guard let window = UIApplication.sharedApplication().keyWindow else {
+            DebugLog.log("no key window")
+            return
+        }
+        guard let root = window.rootViewController else {
+            DebugLog.log("no root view controller")
+            return
+        }
         let player = PlayerViewController.make(path: file.id, name: file.name)
         self.player = player
         root.presentModalViewController(UIViewController(player), animated: true)
@@ -120,6 +144,9 @@ struct MediaListView: View {
         }
         .navigationTitle(NSLocalizedString("SHARED_VLC_IOS_LIBRARY_SHORT", comment: ""))
         .task {
+            // Let the window come up before a test autoplay presents the player
+            do { try await Task.sleep(nanoseconds: 1_000_000_000) } catch { return }
+            library.autoplay()
             // Files arrive through iTunes file sharing while the app runs
             while true {
                 library.reload()

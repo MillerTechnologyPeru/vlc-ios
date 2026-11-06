@@ -80,3 +80,19 @@ extension VLCMediaPlayer {
         }
     }
 }
+
+@ObjC("VLCLibrary")
+struct VLCLibrary {
+    @ObjCMethod static func sharedLibrary() -> VLCLibrary
+    @ObjCProperty(readonly: true) var version: String
+    /// VLCLogging objects that receive libvlc's log
+    @ObjCProperty var loggers: NSArray?
+}
+
+/// Writes libvlc's log to a file
+@ObjC("VLCFileLogger")
+struct VLCFileLogger {
+    @ObjCMethod init(fileHandle: NSFileHandle)
+    /// VLCLogLevel: 0 errors, 1 warnings, 2 info, 3 debug
+    @ObjCProperty var level: Int
+}

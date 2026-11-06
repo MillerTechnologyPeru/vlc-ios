@@ -47,7 +47,7 @@ SWIFTUI_MAKE = $(MAKE) -C $(SWIFT_IOS6)/SwiftUI APP=$(APP) APP_DIR=$(CURDIR) BUI
                APP_SRCS="$(APP_SRCS)" LDFLAGS="$(LDFLAGS)" \
                SSH_CONF=$(SSH_CONF) SSH_HOST=$(SSH_HOST)
 
-.PHONY: all install run media clean
+.PHONY: all install run media autoplay log clean
 
 all: $(SHARED_LINKS)
 	$(SWIFTUI_MAKE) all
@@ -77,8 +77,18 @@ run:
 media:
 	@test -n "$(FILES)" || { echo 'usage: make media FILES="a.mp4 b.mkv"'; exit 2; }
 	for f in $(FILES); do \
-	  ssh -F $(SSH_CONF) $(SSH_HOST) "mkdir -p $(DOCUMENTS) && cat > '$(DOCUMENTS)/$$(basename $$f)' && chown mobile '$(DOCUMENTS)/$$(basename $$f)'" < "$$f" || exit 1; \
+	  ssh -F $(SSH_CONF) $(SSH_HOST) "mkdir -p $(DOCUMENTS) && chown mobile:mobile $(DOCUMENTS) && cat > '$(DOCUMENTS)/$$(basename $$f)' && chown mobile '$(DOCUMENTS)/$$(basename $$f)'" < "$$f" || exit 1; \
 	done
+
+# Plays FILE (a name in Documents) at the next launch, then launches the app
+autoplay:
+	@test -n "$(FILE)" || { echo 'usage: make autoplay FILE=movie.mp4'; exit 2; }
+	ssh -F $(SSH_CONF) $(SSH_HOST) "printf '%s' '$(FILE)' > $(DOCUMENTS)/.autoplay && chown mobile $(DOCUMENTS)/.autoplay && killall $(APP) 2>/dev/null; true"
+	$(SWIFTUI_MAKE) run
+
+# The app's and libvlc's log
+log:
+	ssh -F $(SSH_CONF) $(SSH_HOST) cat $(DOCUMENTS)/VLC.log
 
 clean:
 	rm -rf $(BUILD)
