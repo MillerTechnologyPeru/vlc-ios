@@ -22,8 +22,8 @@ protocol PlayerControllerDelegate: AnyObject {
     func playerControllerApplicationBecameActive(_ playerController: PlayerController)
 }
 
-@objc(VLCPlayerController)
-class PlayerController: NSObject {
+@ObjCImplementation("VLCPlayerController", extensions: ["Extension"])
+class PlayerController: NSObjectMethods {
     weak var delegate: PlayerControllerDelegate?
 
     // MARK: - States
@@ -76,8 +76,8 @@ class PlayerController: NSObject {
         return UserDefaults.standard.bool(forKey: kVLCPlayerShouldRememberBrightness)
     }
 
-    @objc override init() {
-        super.init()
+    init() {
+        objcInit("init")
         setupObservers()
     }
 
@@ -86,16 +86,16 @@ class PlayerController: NSObject {
 
         // External Screen
         notificationCenter.addObserver(self,
-                                       selector: #selector(handleExternalScreenDidConnect),
+                                       selector: ObjC.selector("handleExternalScreenDidConnect"),
                                        name: NSNotification.Name(rawValue: VLCNonInteractiveWindowSceneBecameActive),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(handleExternalScreenDidDisconnect),
+                                       selector: ObjC.selector("handleExternalScreenDidDisconnect"),
                                        name: NSNotification.Name(rawValue: VLCNonInteractiveWindowSceneDisconnected),
                                        object: nil)
         // UIApplication
         notificationCenter.addObserver(self,
-                                       selector: #selector(handleAppBecameActive),
+                                       selector: ObjC.selector("handleAppBecameActive"),
                                        name: UIApplication.didBecomeActiveNotification,
                                        object: nil)
     }
@@ -103,16 +103,17 @@ class PlayerController: NSObject {
 
 // MARK: - Observers
 
+@ObjCExtension("Extension")
 extension PlayerController {
-    @objc func handleExternalScreenDidConnect() {
+    @ObjCMethod func handleExternalScreenDidConnect() {
         delegate?.playerControllerExternalScreenDidConnect(self)
     }
 
-    @objc func handleExternalScreenDidDisconnect() {
+    @ObjCMethod func handleExternalScreenDidDisconnect() {
         delegate?.playerControllerExternalScreenDidDisconnect(self)
     }
 
-    @objc func handleAppBecameActive() {
+    @ObjCMethod func handleAppBecameActive() {
         delegate?.playerControllerApplicationBecameActive(self)
     }
 }
