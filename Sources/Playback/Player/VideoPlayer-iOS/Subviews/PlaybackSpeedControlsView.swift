@@ -17,7 +17,8 @@ protocol PlaybackSpeedControlsViewDelegate: AnyObject {
     func playbackSpeedControlsViewDidRequestDismissal(_ controlsView: PlaybackSpeedControlsView)
 }
 
-final class PlaybackSpeedControlsView: UIView {
+@ObjCImplementation
+final class PlaybackSpeedControlsView: UIViewMethods {
     private enum Metrics {
         static let horizontalPadding: CGFloat = 14
         static let verticalPadding: CGFloat = 10
@@ -79,7 +80,7 @@ final class PlaybackSpeedControlsView: UIView {
         button.setImage(UIImage(systemName: "arrow.counterclockwise", withConfiguration: configuration), for: .normal)
         button.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
         button.accessibilityLabel = NSLocalizedString("BUTTON_RESET", comment: "")
-        button.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapReset"), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -98,7 +99,7 @@ final class PlaybackSpeedControlsView: UIView {
         control.setTitleTextAttributes([.font: font], for: .normal)
         control.setTitleTextAttributes([.font: font], for: .selected)
         control.selectedSegmentIndex = speedManager.appliesToAllMedia ? 1 : 0
-        control.addTarget(self, action: #selector(scopeChanged), for: .valueChanged)
+        control.addTarget(self, action: ObjC.selector("scopeChanged"), for: .valueChanged)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -122,7 +123,7 @@ final class PlaybackSpeedControlsView: UIView {
                                                                     neutralValue: neutralValue,
                                                                     ticks: [.init(position: neutralValue)])
         }
-        slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+        slider.addTarget(self, action: ObjC.selector("sliderValueChanged"), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -138,7 +139,7 @@ final class PlaybackSpeedControlsView: UIView {
     private lazy var presetButtons: [UIButton] = Self.presetSpeeds.enumerated().map { index, _ in
         let button = UIButton(type: .custom)
         button.tag = index
-        button.addTarget(self, action: #selector(didTapPreset(_:)), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapPreset:"), for: .touchUpInside)
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumControlHeight).isActive = true
         return button
     }
@@ -156,7 +157,7 @@ final class PlaybackSpeedControlsView: UIView {
 
     init(isAudioPlayer: Bool) {
         self.isAudioPlayer = isAudioPlayer
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
         overrideUserInterfaceStyle = .dark
 
@@ -166,38 +167,35 @@ final class PlaybackSpeedControlsView: UIView {
         updateInterface(updatingSlider: true)
         updatePresetButtons(force: true)
 
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(requestDismissal))
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: ObjC.selector("requestDismissal"))
         swipeDownRecognizer.direction = .down
         addGestureRecognizer(swipeDownRecognizer)
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(playbackRateChanged),
+                                       selector: ObjC.selector("playbackRateChanged"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackRateDidChange),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(reduceTransparencyChanged),
+                                       selector: ObjC.selector("reduceTransparencyChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(darkerSystemColorsChanged),
+                                       selector: ObjC.selector("darkerSystemColorsChanged"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        callSuper("traitCollectionDidChange:", previousTraitCollection)
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             updatePresetAxis()
             superview?.setNeedsLayout()
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
+    @ObjCMethod("accessibilityPerformEscape") func accessibilityPerformEscape() -> Bool {
         requestDismissal()
         return true
     }
@@ -208,8 +206,8 @@ final class PlaybackSpeedControlsView: UIView {
         UIAccessibility.post(notification: .screenChanged, argument: titleLabel)
     }
 
-    @objc func storeDefaultSpeed() {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(storeDefaultSpeed), object: nil)
+    @ObjCMethod func storeDefaultSpeed() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: ObjC.selector("storeDefaultSpeed"), object: nil)
         guard hasPendingDefaultSpeed else {
             return
         }
@@ -361,22 +359,22 @@ final class PlaybackSpeedControlsView: UIView {
 
     private func scheduleDefaultSpeedStore() {
         hasPendingDefaultSpeed = true
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(storeDefaultSpeed), object: nil)
-        perform(#selector(storeDefaultSpeed), with: nil, afterDelay: Self.defaultSpeedStoreDelay)
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: ObjC.selector("storeDefaultSpeed"), object: nil)
+        perform(ObjC.selector("storeDefaultSpeed"), with: nil, afterDelay: Self.defaultSpeedStoreDelay)
     }
 
     // MARK: - Actions
 
-    @objc private func requestDismissal() {
+    @ObjCMethod private func requestDismissal() {
         delegate?.playbackSpeedControlsViewDidRequestDismissal(self)
     }
 
-    @objc private func didTapReset() {
+    @ObjCMethod private func didTapReset() {
         apply(speed: resetSpeed)
         announceSpeed()
     }
 
-    @objc private func scopeChanged() {
+    @ObjCMethod private func scopeChanged() {
         storeDefaultSpeed()
         let appliesToAllMedia = scopeControl.selectedSegmentIndex == 1
         if appliesToAllMedia {
@@ -392,11 +390,11 @@ final class PlaybackSpeedControlsView: UIView {
         delegate?.playbackSpeedControlsViewDidChangeSpeed(self)
     }
 
-    @objc private func sliderValueChanged() {
+    @ObjCMethod private func sliderValueChanged() {
         apply(speed: PlaybackSpeedScale.speed(forSliderValue: slider.value))
     }
 
-    @objc private func didTapPreset(_ sender: UIButton) {
+    @ObjCMethod private func didTapPreset(_ sender: UIButton) {
         apply(speed: Self.presetSpeeds[sender.tag])
         announceSpeed()
     }
@@ -406,7 +404,7 @@ final class PlaybackSpeedControlsView: UIView {
         UIAccessibility.post(notification: .announcement, argument: announcement)
     }
 
-    @objc private func playbackRateChanged() {
+    @ObjCMethod private func playbackRateChanged() {
         let speed = PlaybackSpeedScale.rounded(playbackService.playbackRate)
         guard abs(speed - displayedSpeed) > 0.001, !slider.isTracking else {
             return
@@ -415,13 +413,13 @@ final class PlaybackSpeedControlsView: UIView {
         updateInterface(updatingSlider: true)
     }
 
-    @objc private func reduceTransparencyChanged() {
+    @ObjCMethod private func reduceTransparencyChanged() {
         installBackgroundEffect()
         updateInterface(updatingSlider: false)
         updatePresetButtons(force: true)
     }
 
-    @objc private func darkerSystemColorsChanged() {
+    @ObjCMethod private func darkerSystemColorsChanged() {
         updateInterface(updatingSlider: false)
         updatePresetButtons(force: true)
     }
