@@ -17,7 +17,6 @@ enum PlayerSeekState {
     case backward
 }
 
-@objc(VLCGameControllerManagerDelegate)
 protocol GameControllerManagerDelegate: AnyObject {
     func gameControllerManagerDelegateDidTapForward(_ gameControllerManager: GameControllerManager)
     func gameControllerManagerDelegateDidTapPlayPause(_ gameControllerManager: GameControllerManager)
@@ -34,12 +33,15 @@ protocol GameControllerManagerDelegate: AnyObject {
     func gameControllerManagerDelegateDidTogglePlayerOptions(_ gameControllerManager: GameControllerManager)
 }
 
-class GameControllerManager: NSObject {
+@ObjCImplementation
+class GameControllerManager: NSObjectMethods {
+    init() { objcInit() }
+
     
     private(set) var connectedControllers: [GCController] = []
     
     private var observers: [NSObjectProtocol] = []
-    @objc weak var delegate: GameControllerManagerDelegate?
+    weak var delegate: GameControllerManagerDelegate?
     
     private var seekTimer: Timer?
     private var currentDirection: PlayerSeekState?
@@ -47,7 +49,7 @@ class GameControllerManager: NSObject {
     private let xValueThreshold: Float = 0.5
     private let scrubTimeInterval: TimeInterval = 0.2
     
-    @objc func startMonitoring() {
+    @ObjCMethod func startMonitoring() {
         // Get the controllers that were connected before the app launched.
         connectedControllers = GCController.controllers()
 
