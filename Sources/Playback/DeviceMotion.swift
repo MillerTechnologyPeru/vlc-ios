@@ -14,7 +14,6 @@
 import CoreMotion
 import Foundation
 
-@objc(VLCDeviceMotionDelegate)
 protocol DeviceMotionDelegate: NSObjectProtocol {
 
     func deviceMotionHasAttitude(deviceMotion: DeviceMotion, pitch: Double, yaw: Double)
@@ -25,12 +24,14 @@ struct EulerAngles {
     var pitch: Double = 0
 }
 
-@objc(VLCDeviceMotion)
-class DeviceMotion: NSObject {
+@ObjCImplementation("VLCDeviceMotion")
+class DeviceMotion: NSObjectMethods {
+    init() { objcInit() }
 
-    @objc weak var delegate: DeviceMotionDelegate? = nil
-    @objc var yaw: CGFloat = 0
-    @objc var pitch: CGFloat {
+
+    weak var delegate: DeviceMotionDelegate? = nil
+    var yaw: CGFloat = 0
+    var pitch: CGFloat {
         //limiting the axis
         set { _pitch = min(max(newValue, -90), 90) }
         get { return _pitch }
@@ -70,7 +71,7 @@ class DeviceMotion: NSObject {
         return vp
     }
 
-    @objc func startDeviceMotion() {
+    @ObjCMethod func startDeviceMotion() {
         if motion.isDeviceMotionAvailable {
             motion.gyroUpdateInterval = 1.0 / 60.0 // 60 Hz
             motion.startDeviceMotionUpdates(using: .xArbitraryZVertical, to: .main) {
@@ -94,7 +95,7 @@ class DeviceMotion: NSObject {
         }
     }
 
-    @objc func stopDeviceMotion() {
+    @ObjCMethod func stopDeviceMotion() {
         if motion.isDeviceMotionActive {
             lastEulerAngle = nil
             motion.stopDeviceMotionUpdates()
