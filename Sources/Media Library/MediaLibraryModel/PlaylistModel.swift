@@ -10,7 +10,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class PlaylistModel: NSObject, MLBaseModel {
+@ObjCImplementation
+class PlaylistModel: NSObjectMethods, MLBaseModel {
     typealias MLType = VLCMLPlaylist
 
     var sortModel = SortModel([.alpha, .duration, .insertionDate, .lastModificationDate])
@@ -18,7 +19,7 @@ class PlaylistModel: NSObject, MLBaseModel {
     var observable = VLCObservable<MediaLibraryBaseModelObserver>()
 
     var fileArrayLock = NSRecursiveLock()
-    @objc var files = [VLCMLPlaylist]()
+    var files = [VLCMLPlaylist]()
 
     #if !os(tvOS)
     var cellType: BaseCollectionViewCell.Type {
@@ -36,9 +37,9 @@ class PlaylistModel: NSObject, MLBaseModel {
     var hasMorePages = true
     var isLoading = false
 
-    @objc required init(medialibrary: MediaLibraryService) {
+    init(medialibrary: MediaLibraryService) {
         self.medialibrary = medialibrary
-        super.init()
+        objcInit("init")
         medialibrary.observable.addObserver(self)
     }
 
@@ -166,7 +167,7 @@ extension VLCMLPlaylist {
         return String(format: "%@", VLCTime(number: NSNumber.init(value: duration())))
     }
 
-    @objc func thumbnailImage() -> UIImage? {
+    @ObjCMethod func thumbnailImage() -> UIImage? {
         let artworkMRL = URL.init(string: artworkMrl())
         var image = VLCThumbnailsCache.thumbnail(for: artworkMRL)
         if image == nil {
@@ -205,7 +206,8 @@ extension VLCMLPlaylist: MediaCollectionModel {
 
 // MARK: - Last Played Playlist Model
 
-class LastPlayedPlaylistModel: NSObject, NSCoding {
+@ObjCImplementation(protocols: ["NSCoding"])
+class LastPlayedPlaylistModel: NSObjectMethods {
     var identifier: Int64
     var title: String
     var lastPlayedMedia: LastPlayed
@@ -214,9 +216,10 @@ class LastPlayedPlaylistModel: NSObject, NSCoding {
         self.identifier = identifier
         self.title = title
         self.lastPlayedMedia = lastPlayedMedia
+        objcInit()
     }
 
-    required init?(coder: NSCoder) {
+    init?(coder: NSCoder) {
         self.identifier = coder.decodeInt64(forKey: "identifier")
         guard let title = coder.decodeObject(forKey: "title") as? String,
               let lastPlayedMedia = coder.decodeObject(forKey: "lastPlayedMedia") as? LastPlayed else {
@@ -225,33 +228,37 @@ class LastPlayedPlaylistModel: NSObject, NSCoding {
 
         self.title = title
         self.lastPlayedMedia = lastPlayedMedia
+        objcInit()
     }
 
-    func encode(with coder: NSCoder) {
+    @ObjCMethod("encodeWithCoder:") func encode(with coder: NSCoder) {
         coder.encode(identifier, forKey: "identifier")
         coder.encode(title, forKey: "title")
         coder.encode(lastPlayedMedia, forKey: "lastPlayedMedia")
     }
 }
 
-class LastPlayed: NSObject, NSCoding {
+@ObjCImplementation(protocols: ["NSCoding"])
+class LastPlayed: NSObjectMethods {
     var identifier: Int64
     var title: String
 
     init(identifier: Int64, title: String) {
         self.identifier = identifier
         self.title = title
+        objcInit()
     }
 
-    required init?(coder: NSCoder) {
+    init?(coder: NSCoder) {
         self.identifier = coder.decodeInt64(forKey: "identifier")
         guard let title = coder.decodeObject(forKey: "title") as? String else {
             return nil
         }
         self.title = title
+        objcInit()
     }
 
-    func encode(with coder: NSCoder) {
+    @ObjCMethod("encodeWithCoder:") func encode(with coder: NSCoder) {
         coder.encode(identifier, forKey: "identifier")
         coder.encode(title, forKey: "title")
     }
