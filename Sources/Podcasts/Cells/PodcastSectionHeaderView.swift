@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastSectionHeaderView: UITableViewHeaderFooterView {
+@ObjCImplementation
+class PodcastSectionHeaderView: UITableViewHeaderFooterViewMethods {
     static let reuseIdentifier = "PodcastSectionHeaderView"
 
     private let titleLabel: UILabel = {
@@ -22,13 +23,13 @@ class PodcastSectionHeaderView: UITableViewHeaderFooterView {
         return label
     }()
 
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    init(reuseIdentifier: String?) {
+        objcInit("initWithReuseIdentifier:", reuseIdentifier)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setupUI()
     }
 
@@ -72,7 +73,7 @@ class PodcastSectionHeaderView: UITableViewHeaderFooterView {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(applyTheme),
+                                                selector: ObjC.selector("applyTheme"),
                                                 name: .VLCThemeDidChangeNotification,
                                                 object: nil)
     }
@@ -105,7 +106,7 @@ class PodcastSectionHeaderView: UITableViewHeaderFooterView {
         sortButton.menu = sortMenu
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         backgroundView?.backgroundColor = colors.background
         titleLabel.textColor = colors.cellTextColor
