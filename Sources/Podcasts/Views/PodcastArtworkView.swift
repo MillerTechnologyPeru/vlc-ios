@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastArtworkView: UIView {
+@ObjCImplementation
+class PodcastArtworkView: UIViewMethods {
     private let artworkView: VLCNetworkImageView = {
         let imageView = VLCNetworkImageView()
         imageView.contentMode = .scaleAspectFill
@@ -23,13 +24,13 @@ class PodcastArtworkView: UIView {
 
     private var artworkURL: URL?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setup()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setup()
     }
 
