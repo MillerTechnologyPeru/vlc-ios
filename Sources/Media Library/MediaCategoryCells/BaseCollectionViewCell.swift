@@ -14,7 +14,10 @@
 
 import Foundation
 
-class BaseCollectionViewCell: UICollectionViewCell {
+@ObjCImplementation
+class BaseCollectionViewCell: UICollectionViewCellMethods {
+    init() { objcInit() }
+
 
     static var defaultReuseIdentifier: String {
         return NSStringFromClass(self)
