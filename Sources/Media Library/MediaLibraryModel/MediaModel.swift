@@ -40,22 +40,22 @@ extension MediaModel {
 // MARK: - ViewModel
 
 extension VLCMLMedia {
-    @objc func deleteMainFile() {
+    @ObjCMethod func deleteMainFile() {
         if let mainFile = mainFile() {
             mainFile.delete()
         }
     }
 
-    @objc func mediaDuration() -> String {
+    @ObjCMethod func mediaDuration() -> String {
         return String(format: "%@", VLCTime(number: NSNumber.init(value: duration())))
     }
 
-    @objc func formatSize() -> String {
+    @ObjCMethod func formatSize() -> String {
         return ByteCountFormatter.string(fromByteCount: Int64(mainFile()?.size() ?? 0),
                                          countStyle: .file)
     }
 
-    @objc func videoDimensions() -> String {
+    @ObjCMethod func videoDimensions() -> String {
         if let firstTrack = videoTracks?.first {
             return String(format: NSLocalizedString("FORMAT_VIDEO_DIMENSIONS", comment: ""),
                           firstTrack.width(), firstTrack.height())
@@ -63,7 +63,7 @@ extension VLCMLMedia {
         return ""
     }
 
-    @objc func resolutionClass() -> String? {
+    @ObjCMethod func resolutionClass() -> String? {
         guard let firstTrack = videoTracks?.first else {
             return nil
         }
@@ -82,7 +82,7 @@ extension VLCMLMedia {
         return nil
     }
 
-    @objc func thumbnailImage() -> UIImage? {
+    @ObjCMethod func thumbnailImage() -> UIImage? {
         if (!UserDefaults.standard.bool(forKey: kVLCSettingShowThumbnails) && subtype() != .albumTrack)
             || (!UserDefaults.standard.bool(forKey: kVLCSettingShowArtworks) && subtype() == .albumTrack) {
             return nil
@@ -99,7 +99,7 @@ extension VLCMLMedia {
         return VLCThumbnailsCache.thumbnail(for: show.artworkMRL)
     }
 
-    @objc func placeholderName() -> String {
+    @ObjCMethod func placeholderName() -> String {
         if nbSubscriptions() > 0,
            let show = linkedSubscriptions(with: .default, desc: false)?.first {
             return show.name
@@ -249,7 +249,7 @@ extension VLCMLMedia {
 
 // MARK: - Search
 extension VLCMLMedia: SearchableMLModel {
-    @objc func contains(_ searchString: String) -> Bool {
+    @ObjCMethod func contains(_ searchString: String) -> Bool {
         var matches = false
 
         matches = matches || search(searchString, in: title)
