@@ -10,7 +10,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class SortModel: NSObject {
+@ObjCImplementation
+class SortModel: NSObjectMethods {
     var currentSort: VLCMLSortingCriteria
     var desc: Bool
     var sortingCriteria: [VLCMLSortingCriteria]
@@ -19,6 +20,7 @@ class SortModel: NSObject {
         sortingCriteria = criteria
         currentSort = .default
         desc = false
+        objcInit()
     }
 }
 
