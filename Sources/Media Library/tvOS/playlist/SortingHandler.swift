@@ -11,7 +11,8 @@
  *****************************************************************************/
 import Foundation
 
-class SortingHandler: NSObject {
+@ObjCImplementation
+class SortingHandler: NSObjectMethods {
 
     enum MediaType {
         case video
@@ -22,25 +23,25 @@ class SortingHandler: NSObject {
     private var mediaModel: Any?
     private var mediaType: MediaType = .video
 
-    @objc init(videoModel: VideoModel) {
+    init(videoModel: VideoModel) {
         mediaModel = videoModel
         mediaType = .video
-        super.init()
+        objcInit("init")
     }
 
-    @objc init(audioModel: TrackModel) {
+    init(audioModel: TrackModel) {
         mediaModel = audioModel
         mediaType = .audio
-        super.init()
+        objcInit("init")
     }
 
     init(playlistModel: PlaylistModel) {
         mediaModel = playlistModel
         mediaType = .playlist
-        super.init()
+        objcInit("init")
     }
 
-    @objc func sortMedia(by criterion: VLCMLSortingCriteria, desc: Bool) {
+    @ObjCMethod func sortMedia(by criterion: VLCMLSortingCriteria, desc: Bool) {
         switch mediaType {
         case .video:
             (mediaModel as? VideoModel)?.sort(by: criterion, desc: desc)
@@ -51,7 +52,7 @@ class SortingHandler: NSObject {
         }
     }
 
-    @objc func constructSortAlert(remotePlaybackView: VLCRemotePlaybackViewController? = nil, playlistView: PlaylistViewController? = nil) {
+    @ObjCMethod func constructSortAlert(remotePlaybackView: VLCRemotePlaybackViewController? = nil, playlistView: PlaylistViewController? = nil) {
         guard let mediaModel = mediaModel else {
             return
         }
