@@ -15,7 +15,10 @@ protocol ActionSheetSpecifierDelegate: AnyObject {
     func actionSheetSpecifierHandleToggleSwitch(for cell: ActionSheetCell, state: Bool)
 }
 
-class ActionSheetSpecifier: NSObject {
+@ObjCImplementation
+class ActionSheetSpecifier: NSObjectMethods {
+    init() { objcInit() }
+
 
     var settingsBundle = Bundle()
     var playbackTitle: String?
