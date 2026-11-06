@@ -19,18 +19,19 @@ extension Notification.Name {
 }
 
 extension NSNotification {
-    @objc static let VLCPodcastsContentDidChange = Notification.Name.VLCPodcastsContentDidChange
-    @objc static let VLCPodcastsRefreshDidEnd = Notification.Name.VLCPodcastsRefreshDidEnd
-    @objc static let VLCPodcastsCachingDidEnd = Notification.Name.VLCPodcastsCachingDidEnd
+    static let VLCPodcastsContentDidChange = Notification.Name.VLCPodcastsContentDidChange
+    static let VLCPodcastsRefreshDidEnd = Notification.Name.VLCPodcastsRefreshDidEnd
+    static let VLCPodcastsCachingDidEnd = Notification.Name.VLCPodcastsCachingDidEnd
 }
 
-@objc final class PodcastResumeItem: NSObject {
-    @objc let episodeId: String
-    @objc let showId: String
-    @objc let title: String
-    @objc let artworkURL: URL?
-    @objc let progress: CGFloat
-    @objc let lastPlayedDate: Date
+@ObjCImplementation
+final class PodcastResumeItem: NSObjectMethods {
+    let episodeId: String
+    let showId: String
+    let title: String
+    let artworkURL: URL?
+    let progress: CGFloat
+    let lastPlayedDate: Date
 
     init(episode: PodcastEpisode, artworkURL: URL?, lastPlayedDate: Date) {
         self.episodeId = episode.id
@@ -39,7 +40,7 @@ extension NSNotification {
         self.artworkURL = artworkURL
         self.progress = episode.progressFraction
         self.lastPlayedDate = lastPlayedDate
-        super.init()
+        objcInit("init")
     }
 }
 
@@ -50,16 +51,19 @@ extension VLCOnAirRailItem {
     }
 }
 
-@objc final class PodcastsOnAirBridge: NSObject {
+@ObjCImplementation
+final class PodcastsOnAirBridge: NSObjectMethods {
+    init() { objcInit() }
+
     private static var store: PodcastStore {
         return VLCAppCoordinator.sharedInstance().podcastStore
     }
 
-    @objc static var numberOfShows: Int {
+    static var numberOfShows: Int {
         return store.shows.count
     }
 
-    @objc static var resumeEpisode: PodcastResumeItem? {
+    static var resumeEpisode: PodcastResumeItem? {
         guard let episode = store.resumeEpisode, let lastPlayedDate = episode.lastPlayedDate else {
             return nil
         }
@@ -69,37 +73,37 @@ extension VLCOnAirRailItem {
                                  lastPlayedDate: lastPlayedDate)
     }
 
-    @objc static func playResumeEpisode(_ item: PodcastResumeItem) {
+    @ObjCMethod static func playResumeEpisode(_ item: PodcastResumeItem) {
         store.playEpisode(episodeId: item.episodeId, showId: item.showId)
     }
 
-    @objc static func refreshAllSubscriptions() -> Bool {
+    @ObjCMethod static func refreshAllSubscriptions() -> Bool {
         return store.refreshAllSubscriptions()
     }
 
-    @objc static var automaticDownloadsEnabled: Bool {
+    static var automaticDownloadsEnabled: Bool {
         return store.automaticDownloadsEnabled
     }
 
-    @objc static func cacheNewEpisodes() -> Bool {
+    @ObjCMethod static func cacheNewEpisodes() -> Bool {
         return store.cacheNewEpisodes()
     }
 
-    @objc static func interruptCaching() {
+    @ObjCMethod static func interruptCaching() {
         store.interruptCaching()
     }
 
-    @objc static var showRailItems: [VLCOnAirRailItem] {
+    static var showRailItems: [VLCOnAirRailItem] {
         let shows = store.shows
         shows.forEach { store.requestArtwork(for: $0) }
         return shows.map { VLCOnAirRailItem(show: $0) }
     }
 
-    @objc static func makePodcastsViewController() -> UIViewController {
+    @ObjCMethod static func makePodcastsViewController() -> UIViewController {
         return PodcastsViewController()
     }
 
-    @objc static func presentAddSubscriptionAlert(from viewController: UIViewController) {
+    @ObjCMethod static func presentAddSubscriptionAlert(from viewController: UIViewController) {
         viewController.presentAddSubscriptionAlert { feed in
             let podcastsViewController = PodcastsViewController()
             viewController.navigationController?.pushViewController(podcastsViewController, animated: true)
@@ -107,11 +111,11 @@ extension VLCOnAirRailItem {
         }
     }
 
-    @objc static func makeDirectoryViewController() -> UIViewController {
+    @ObjCMethod static func makeDirectoryViewController() -> UIViewController {
         return PodcastDirectoryViewController()
     }
 
-    @objc static func makeShowDetailViewController(forShowAt index: Int) -> UIViewController? {
+    @ObjCMethod static func makeShowDetailViewController(forShowAt index: Int) -> UIViewController? {
         let shows = store.shows
         guard shows.indices.contains(index) else {
             return nil
