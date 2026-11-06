@@ -70,5 +70,29 @@ Foundation's Swift API for the classes (`Bundle`, `UserDefaults`,
 the bridging header.
 
 `make census` type-checks the app's 192 iOS Swift files against it and
-lists the errors left by kind and the names most wanted. It needs
+lists the errors left by kind and the names most wanted, counting errors in
+macro expansions against the file they come from. It needs
 swift-embedded-foundation beside this repository (or `FOUNDATION_EMBEDDED`).
+
+VLC's classes went through `SDK/port.py` (`python3 SDK/port.py <repository>`),
+which rewrites them for ObjCInterop's `@ObjCImplementation`:
+
+- `class Cell: UITableViewCell, UITableViewDelegate` becomes
+  `@ObjCImplementation(protocols: ["UITableViewDelegate"]) class Cell:
+  UITableViewCellMethods`: a subclass of UITableViewCell, with its members.
+  The subclasses of converted classes are converted too.
+- Overrides and the methods of adopted Objective-C protocols, in the class
+  or its extensions (`@ObjCExtension`), are exported with `@ObjCMethod` and
+  their real selectors. Swift renames them
+  (`tableView(_:cellForRowAt:)` is `tableView:cellForRowAtIndexPath:`), so
+  `SDK/selectors.py` writes `SDK/selectors.json` from the current iOS SDK's
+  symbol graphs.
+- `super.m(…)` calls become `callSuper("m:", …)`, `super.init(…)` becomes
+  `objcInit("init…", …)`, and initializers that relied on Swift's implicit
+  `super.init()` call `objcInit()`.
+- `@objc` becomes `@ObjCMethod`, and `#selector(m(_:))` becomes
+  `ObjC.selector("m:")`.
+
+It converted 159 classes and left 10 whose superclasses have no iOS 6
+wrapper: UIStackView and UIAlertController, which are newer than iOS 6, and
+the app's own Objective-C classes.
