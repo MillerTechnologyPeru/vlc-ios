@@ -25,7 +25,8 @@ extension PodcastEpisodeRowCellDelegate {
     func podcastEpisodeRowCellDidTapDeleteDownload(_ cell: PodcastEpisodeRowCell) {}
 }
 
-class PodcastEpisodeRowCell: UITableViewCell {
+@ObjCImplementation
+class PodcastEpisodeRowCell: UITableViewCellMethods {
     static let reuseIdentifier = "PodcastEpisodeRowCell"
 
     private static let horizontalPadding: CGFloat = 16
@@ -149,13 +150,13 @@ class PodcastEpisodeRowCell: UITableViewCell {
     private var isPlaying = false
     private var isUnplayed = false
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setupUI()
     }
 
@@ -176,9 +177,9 @@ class PodcastEpisodeRowCell: UITableViewCell {
         contentView.addSubview(playButton)
         contentView.addSubview(downloadButton)
 
-        playButton.addTarget(self, action: #selector(didTapPlay), for: .touchUpInside)
+        playButton.addTarget(self, action: ObjC.selector("didTapPlay"), for: .touchUpInside)
         downloadButton.contentEdgeInsets = .zero
-        downloadButton.addTarget(self, action: #selector(didTapDownload), for: .touchUpInside)
+        downloadButton.addTarget(self, action: ObjC.selector("didTapDownload"), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
             separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -227,7 +228,7 @@ class PodcastEpisodeRowCell: UITableViewCell {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applyTheme),
+                                               selector: ObjC.selector("applyTheme"),
                                                name: .VLCThemeDidChangeNotification,
                                                object: nil)
     }
@@ -291,12 +292,12 @@ class PodcastEpisodeRowCell: UITableViewCell {
         var customActions = [
             UIAccessibilityCustomAction(name: NSLocalizedString("PLAY_PAUSE_BUTTON", comment: ""),
                                         target: self,
-                                        selector: #selector(didTapPlay))
+                                        selector: ObjC.selector("didTapPlay"))
         ]
         if inLibrary {
             customActions.append(UIAccessibilityCustomAction(name: downloadButton.accessibilityLabel ?? "",
                                                              target: self,
-                                                             selector: #selector(didTapDownload)))
+                                                             selector: ObjC.selector("didTapDownload")))
         }
         accessibilityCustomActions = customActions
     }
@@ -329,11 +330,11 @@ class PodcastEpisodeRowCell: UITableViewCell {
                             for: .normal)
     }
 
-    @objc private func didTapPlay() {
+    @ObjCMethod private func didTapPlay() {
         delegate?.podcastEpisodeRowCellDidTapPlay(self)
     }
 
-    @objc private func didTapDownload() {
+    @ObjCMethod private func didTapDownload() {
         if downloadButton.isDownloading {
             delegate?.podcastEpisodeRowCellDidTapCancelDownload(self)
         } else if downloadButton.isDownloaded {
@@ -343,7 +344,7 @@ class PodcastEpisodeRowCell: UITableViewCell {
         }
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         backgroundColor = colors.background
         contentView.backgroundColor = colors.background
@@ -356,8 +357,8 @@ class PodcastEpisodeRowCell: UITableViewCell {
         updatePlayButtonImage()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         delegate = nil
         textStack.alpha = 1
     }
