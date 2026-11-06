@@ -15,8 +15,9 @@ import UIKit
 // 10 second jumps, a seek slider and the aspect ratios of VLC's video
 // player (AspectRatio, shared with the iOS app). UIKit is driven from Swift
 // through the generated UIKit module, and this class is the view
-// controller's Objective-C class, so UIKit calls its overrides and the
-// controls' actions. Frames and autoresizing masks lay it out: iOS 6 has no
+// controller's Objective-C class, a subclass of UIViewController, so UIKit
+// calls its overrides and the controls' actions, and it has
+// UIViewController's members (UIViewControllerMethods). Frames and autoresizing masks lay it out: iOS 6 has no
 // layout anchors.
 
 private enum Autoresizing {
@@ -37,8 +38,8 @@ private let controlStateNormal = 0
 private let buttonTypeCustom = 0
 private let barHeight: Float = 44
 
-@ObjCImplementation("VLCiOS6PlayerViewController", superclass: "UIViewController")
-final class PlayerViewController {
+@ObjCImplementation("VLCiOS6PlayerViewController")
+final class PlayerViewController: UIViewControllerMethods {
     let player = VLCMediaPlayer()
     private let path: String
     private let name: String
@@ -68,8 +69,6 @@ final class PlayerViewController {
         return object
     }
 
-    var viewController: UIViewController { UIViewController(object) }
-
     // MARK: UIViewController
 
     /// Full screen, under the hidden status bar, as VLC's video player is
@@ -85,9 +84,9 @@ final class PlayerViewController {
 
     @ObjCMethod func viewDidLoad() {
         callSuper("viewDidLoad")
-        viewController.wantsFullScreenLayout = true
+        wantsFullScreenLayout = true
         DebugLog.log("player viewDidLoad")
-        let view = viewController.view!
+        let view = self.view!
         view.backgroundColor = UIColor.blackColor()
         let bounds = view.bounds
         let width = bounds.size.width, height = bounds.size.height
@@ -185,7 +184,7 @@ final class PlayerViewController {
         timer?.invalidate()
         timer = nil
         player.stop()
-        viewController.dismissModalViewControllerAnimated(true)
+        dismissModalViewControllerAnimated(true)
     }
 
     @ObjCMethod func togglePlay(_ sender: ObjCValue) {
