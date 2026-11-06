@@ -10,7 +10,6 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc(VLCCustomDialogRendererHandlerCompletionType)
 enum CustomDialogRendererHandlerCompletionType: Int {
     case cancel
     case stop
@@ -20,17 +19,17 @@ enum CustomDialogRendererHandlerCompletionType: Int {
 
 typealias CustomDialogRendererHandlerClosure = (_ status: CustomDialogRendererHandlerCompletionType) -> Void
 
-@objc(VLCCustomDialogRendererHandler)
-class CustomDialogRendererHandler: NSObject {
+@ObjCImplementation("VLCCustomDialogRendererHandler", protocols: ["VLCCustomDialogRendererProtocol"])
+class CustomDialogRendererHandler: NSObjectMethods {
     private var dialogProvider: VLCDialogProvider
 
     private var selectedSMBv1 = false
 
-    @objc var completionHandler: CustomDialogRendererHandlerClosure?
+    var completionHandler: CustomDialogRendererHandlerClosure?
 
-    @objc init(dialogProvider: VLCDialogProvider) {
+    init(dialogProvider: VLCDialogProvider) {
         self.dialogProvider = dialogProvider
-        super.init()
+        objcInit("init")
     }
 }
 
@@ -125,7 +124,7 @@ private extension CustomDialogRendererHandler {
 
 // MARK: - VLCCustomDialogRendererProtocol
 
-extension CustomDialogRendererHandler: VLCCustomDialogRendererProtocol {
+extension CustomDialogRendererHandler {
     func showError(withTitle error: String, message: String) {
         completionHandler?(.error)
     }
