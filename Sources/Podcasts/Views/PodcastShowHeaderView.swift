@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastShowHeaderView: UIView {
+@ObjCImplementation
+class PodcastShowHeaderView: UIViewMethods {
     private let show: PodcastShow
 
     private let artworkView = PodcastArtworkView()
@@ -42,13 +43,10 @@ class PodcastShowHeaderView: UIView {
 
     init(show: PodcastShow) {
         self.show = show
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setupUI() {
         translatesAutoresizingMaskIntoConstraints = false
@@ -88,12 +86,12 @@ class PodcastShowHeaderView: UIView {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(applyTheme),
+                                                selector: ObjC.selector("applyTheme"),
                                                 name: .VLCThemeDidChangeNotification,
                                                 object: nil)
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         backgroundColor = colors.background
         nameLabel.textColor = colors.cellTextColor
