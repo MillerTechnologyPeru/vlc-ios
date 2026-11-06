@@ -17,7 +17,8 @@ protocol PodcastSubscriptionModelDelegate: AnyObject {
     func podcastSubscriptionModelDidChange(_ model: PodcastSubscriptionModel)
 }
 
-final class PodcastSubscriptionModel: NSObject {
+@ObjCImplementation
+final class PodcastSubscriptionModel: NSObjectMethods {
     private let medialibrary: MediaLibraryService
     let observable = VLCObservable<MediaLibraryBaseModelObserver>()
 
@@ -31,7 +32,7 @@ final class PodcastSubscriptionModel: NSObject {
 
     init(medialibrary: MediaLibraryService) {
         self.medialibrary = medialibrary
-        super.init()
+        objcInit("init")
         medialibrary.observable.addObserver(self)
         refresh()
     }
