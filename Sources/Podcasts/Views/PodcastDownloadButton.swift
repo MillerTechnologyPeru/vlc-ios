@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastDownloadButton: UIButton {
+@ObjCImplementation
+class PodcastDownloadButton: UIButtonMethods {
     private static let downloadImage = UIImage(systemName: "arrow.down.circle",
                                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .regular))
 
@@ -25,13 +26,13 @@ class PodcastDownloadButton: UIButton {
     private(set) var isDownloaded = false
     private(set) var isDownloading = false
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setup()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setup()
     }
 
@@ -41,7 +42,7 @@ class PodcastDownloadButton: UIButton {
         imageView?.contentMode = .scaleAspectFit
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                                selector: #selector(applyTheme),
+                                                selector: ObjC.selector("applyTheme"),
                                                 name: .VLCThemeDidChangeNotification,
                                                 object: nil)
     }
@@ -70,7 +71,7 @@ class PodcastDownloadButton: UIButton {
             : NSLocalizedString("PODCAST_EPISODE_DOWNLOAD", comment: "")
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         configure(downloaded: isDownloaded, downloading: isDownloading)
     }
 }
