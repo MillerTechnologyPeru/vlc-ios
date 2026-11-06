@@ -11,7 +11,7 @@
 
 import AVKit
 
-@objc enum OptionsNavigationBarIdentifier: Int {
+enum OptionsNavigationBarIdentifier: Int {
     case videoFilters
     case playbackSpeed
     case sleepTimer
@@ -30,7 +30,7 @@ class OptionsNavigationBar: UIStackView {
 
     lazy var videoFiltersButton: UIButton = {
         var videoFiltersButton = UIButton(type: .system)
-        videoFiltersButton.addTarget(self, action: #selector(handleVideoFiltersTap), for: .touchUpInside)
+        videoFiltersButton.addTarget(self, action: ObjC.selector("handleVideoFiltersTap"), for: .touchUpInside)
         let image = UIImage(named: "filter")?.withRenderingMode(.alwaysTemplate)
         videoFiltersButton.setImage(image, for: .normal)
         videoFiltersButton.tintColor = PresentationTheme.current.colors.orangeUI
@@ -44,7 +44,7 @@ class OptionsNavigationBar: UIStackView {
 
     lazy var playbackSpeedButton: UIButton = {
         var playbackSpeedButton = UIButton(type: .system)
-        playbackSpeedButton.addTarget(self, action: #selector(handlePlaybackSpeedTap), for: .touchUpInside)
+        playbackSpeedButton.addTarget(self, action: ObjC.selector("handlePlaybackSpeedTap"), for: .touchUpInside)
         let image = UIImage(named: "playback")?.withRenderingMode(.alwaysTemplate)
         playbackSpeedButton.setImage(image, for: .normal)
         playbackSpeedButton.tintColor = PresentationTheme.current.colors.orangeUI
@@ -58,7 +58,7 @@ class OptionsNavigationBar: UIStackView {
 
     lazy var equalizerButton: UIButton = {
         var equalizerButton = UIButton(type: .system)
-        equalizerButton.addTarget(self, action: #selector(handleEqualizerTap), for: .touchUpInside)
+        equalizerButton.addTarget(self, action: ObjC.selector("handleEqualizerTap"), for: .touchUpInside)
         let image = UIImage(named: "equalizer")?.withRenderingMode(.alwaysTemplate)
         equalizerButton.setImage(image, for: .normal)
         equalizerButton.tintColor = PresentationTheme.current.colors.orangeUI
@@ -72,7 +72,7 @@ class OptionsNavigationBar: UIStackView {
 
     lazy var sleepTimerButton: UIButton = {
         var sleepTimerButton = UIButton(type: .system)
-        sleepTimerButton.addTarget(self, action: #selector(handleSleepTimerTap), for: .touchUpInside)
+        sleepTimerButton.addTarget(self, action: ObjC.selector("handleSleepTimerTap"), for: .touchUpInside)
         let image = UIImage(named: "sleepTimer")?.withRenderingMode(.alwaysTemplate)
         sleepTimerButton.setImage(image, for: .normal)
         sleepTimerButton.tintColor = PresentationTheme.current.colors.orangeUI
@@ -86,7 +86,7 @@ class OptionsNavigationBar: UIStackView {
 
     lazy var abRepeatButton: UIButton = {
         var abRepeatButton = UIButton(type: .system)
-        abRepeatButton.addTarget(self, action: #selector(handleABRepeatTap), for: .touchUpInside)
+        abRepeatButton.addTarget(self, action: ObjC.selector("handleABRepeatTap"), for: .touchUpInside)
         let image = UIImage(named: "abRepeat")?.withRenderingMode(.alwaysTemplate)
         abRepeatButton.setImage(image, for: .normal)
         abRepeatButton.tintColor = PresentationTheme.current.colors.orangeUI
@@ -100,7 +100,7 @@ class OptionsNavigationBar: UIStackView {
 
     lazy var abRepeatMarksButton: UIButton = {
         var abRepeatMarksButton = UIButton(type: .system)
-        abRepeatMarksButton.addTarget(self, action: #selector(handleABRepeatMarksTap), for: .touchUpInside)
+        abRepeatMarksButton.addTarget(self, action: ObjC.selector("handleABRepeatMarksTap"), for: .touchUpInside)
         let image = UIImage(named: "abRepeatMarker")?.withRenderingMode(.alwaysTemplate)
         abRepeatMarksButton.setImage(image, for: .normal)
         abRepeatMarksButton.tintColor = PresentationTheme.current.colors.orangeUI
@@ -137,25 +137,25 @@ class OptionsNavigationBar: UIStackView {
     }
 
     // MARK: - Button Actions
-    @objc private func handleVideoFiltersTap() {
+    @ObjCMethod private func handleVideoFiltersTap() {
         let title = NSLocalizedString("VIDEO_FILTER", comment: "")
         let message = NSLocalizedString("RESET_VIDEO_FILTERS", comment: "")
         delegate?.optionsNavigationBarDisplayAlert(title: title, message: message, button: videoFiltersButton)
     }
 
-    @objc private func handlePlaybackSpeedTap() {
+    @ObjCMethod private func handlePlaybackSpeedTap() {
         let title = NSLocalizedString("PLAYBACK_SPEED", comment: "")
         let message = NSLocalizedString("RESET_PLAYBACK_SPEED", comment: "")
         delegate?.optionsNavigationBarDisplayAlert(title: title, message: message, button: playbackSpeedButton)
     }
 
-    @objc private func handleEqualizerTap() {
+    @ObjCMethod private func handleEqualizerTap() {
         let title = NSLocalizedString("EQUALIZER_CELL_TITLE", comment: "")
         let message = NSLocalizedString("RESET_EQUALIZER", comment: "")
         delegate?.optionsNavigationBarDisplayAlert(title: title, message: message, button: equalizerButton)
     }
 
-    @objc private func handleSleepTimerTap() {
+    @ObjCMethod private func handleSleepTimerTap() {
         let title = NSLocalizedString("BUTTON_SLEEP_TIMER", comment: "")
         let firstLine = delegate?.optionsNavigationBarGetRemainingTime() ?? ""
         let secondLine = NSLocalizedString("RESET_SLEEP_TIMER", comment: "")
@@ -163,13 +163,13 @@ class OptionsNavigationBar: UIStackView {
         delegate?.optionsNavigationBarDisplayAlert(title: title, message: message, button: sleepTimerButton)
     }
 
-    @objc private func handleABRepeatTap() {
+    @ObjCMethod private func handleABRepeatTap() {
         let title = NSLocalizedString("AB_LOOP", comment: "")
         let message = NSLocalizedString("RESET_AB_LOOP", comment: "")
         delegate?.optionsNavigationBarDisplayAlert(title: title, message: message, button: abRepeatButton)
     }
 
-    @objc private func handleABRepeatMarksTap() {
+    @ObjCMethod private func handleABRepeatMarksTap() {
         let title = NSLocalizedString("AB_LOOP_MARKS", comment: "")
         let message = NSLocalizedString("RESET_AB_LOOP_MARKS", comment: "")
         delegate?.optionsNavigationBarDisplayAlert(title: title, message: message, button: abRepeatMarksButton)
