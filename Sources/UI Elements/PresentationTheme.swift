@@ -17,7 +17,8 @@ extension Notification.Name {
     static let VLCThemeDidChangeNotification = Notification.Name("themeDidChangeNotfication")
 }
 
-@objcMembers class ColorPalette: NSObject {
+@ObjCImplementation
+class ColorPalette: NSObjectMethods {
 
     let isDark: Bool
     let name: String
@@ -124,6 +125,7 @@ extension Notification.Name {
         self.transparentDarkBackgroundColor = transparentDarkBackgroundColor
         self.cardBackground = cardBackground
         self.accentTint = accentTint
+        objcInit()
     }
 #else
     init(isDark: Bool,
@@ -194,18 +196,21 @@ extension Notification.Name {
         self.transparentDarkBackgroundColor = transparentDarkBackgroundColor
         self.cardBackground = cardBackground
         self.accentTint = accentTint
+        objcInit()
     }
 #endif
 }
 
 // MARK: - Typography
 
-@objcMembers class Typography: NSObject {
+@ObjCImplementation
+class Typography: NSObjectMethods {
 
     let tableHeaderFont: UIFont
 
     init(tableHeaderFont: UIFont) {
         self.tableHeaderFont = tableHeaderFont
+        objcInit()
     }
 }
 
@@ -219,7 +224,8 @@ enum PresentationThemeType: Int {
 
 // MARK: - PresentationTheme
 
-@objcMembers class PresentationTheme: NSObject {
+@ObjCImplementation
+class PresentationTheme: NSObjectMethods {
 
     static let brightTheme = PresentationTheme(colors: brightPalette)
     static let darkTheme = PresentationTheme(colors: darkPalette)
@@ -273,10 +279,10 @@ enum PresentationThemeType: Int {
 
     init(colors: ColorPalette) {
         self.colors = colors
-        super.init()
+        objcInit("init")
     }
 
-    @objc static func themeDidUpdate() {
+    @ObjCMethod static func themeDidUpdate() {
         let themeSettings = UserDefaults.standard.integer(forKey: kVLCSettingAppTheme)
         PresentationTheme.current = PresentationTheme.respectiveTheme(for:
             PresentationThemeType(rawValue: themeSettings))
@@ -320,7 +326,7 @@ enum PresentationThemeType: Int {
 
 // MARK: - UIColor
 
-@objc extension UIColor {
+extension UIColor {
 
     convenience init(_ rgbValue: UInt32, _ alpha: CGFloat = 1.0) {
         let r = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
