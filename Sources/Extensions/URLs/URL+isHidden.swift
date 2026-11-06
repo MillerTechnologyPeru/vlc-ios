@@ -61,8 +61,8 @@ extension URL {
 
 }
 
-@objc extension NSURL {
-    @objc func isHidden() -> Bool {
+extension NSURL {
+    @ObjCMethod func isHidden() -> Bool {
         if let path = path {
             let url = URL(fileURLWithPath: path)
             return url.isHidden()
@@ -70,7 +70,7 @@ extension URL {
         return false
     }
 
-    @objc func setHidden(_ hidden: Bool, recursive: Bool = false, onlyFirstLevel: Bool = false, _ completion: (() -> Void)? = nil) {
+    @ObjCMethod func setHidden(_ hidden: Bool, recursive: Bool = false, onlyFirstLevel: Bool = false, _ completion: (() -> Void)? = nil) {
         if let path = path {
             var url = URL(fileURLWithPath: path)
             url.setHidden(hidden, recursive: recursive, onlyFirstLevel: onlyFirstLevel, completion)
