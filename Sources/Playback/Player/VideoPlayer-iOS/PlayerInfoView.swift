@@ -9,8 +9,9 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class PlayerInfoView: UIView {
-    @objc var displayView: UIView? {
+@ObjCImplementation
+class PlayerInfoView: UIViewMethods {
+    var displayView: UIView? {
         return externalWindow?.rootViewController?.view
     }
     var externalWindow: UIWindow?
@@ -52,18 +53,15 @@ class PlayerInfoView: UIView {
     }()
 
     init() {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         setupStackViews()
 
         titleLabel.text = NSLocalizedString("PLAYING_EXTERNALLY_TITLE", comment: "")
         descriptionLabel.text = NSLocalizedString("PLAYING_EXTERNALLY_DESC", comment:"")
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    @objc func updateUI(rendererName: String?, title: String?) {
+    @ObjCMethod func updateUI(rendererName: String?, title: String?) {
         if let rendererName = rendererName {
             titleLabel.text = NSLocalizedString("PLAYING_EXTERNALLY_ADDITION", comment:"")
             descriptionLabel.text = rendererName
@@ -73,7 +71,7 @@ class PlayerInfoView: UIView {
         }
     }
 
-    @objc func shouldDisplay(_ show: Bool, movieView: UIView) {
+    @ObjCMethod func shouldDisplay(_ show: Bool, movieView: UIView) {
         self.isHidden = !show
 
         if show {
