@@ -12,7 +12,8 @@
 
 import UIKit
 
-class ContinueListeningSectionCell: UITableViewCell {
+@ObjCImplementation(protocols: ["UICollectionViewDataSource", "UICollectionViewDelegateFlowLayout"], extensions: ["UICollectionViewDataSource"])
+class ContinueListeningSectionCell: UITableViewCellMethods {
     static let reuseIdentifier = "ContinueListeningSectionCell"
 
     private static let textAreaHeight: CGFloat = 8 + 16 + 15
@@ -56,13 +57,13 @@ class ContinueListeningSectionCell: UITableViewCell {
         return collectionView
     }()
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setupUI()
     }
 
@@ -79,12 +80,13 @@ class ContinueListeningSectionCell: UITableViewCell {
     }
 }
 
-extension ContinueListeningSectionCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+@ObjCExtension("UICollectionViewDataSource")
+extension ContinueListeningSectionCell {
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return episodes.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContinueListeningCarouselCell.reuseIdentifier,
                                                              for: indexPath) as? ContinueListeningCarouselCell else {
             return UICollectionViewCell()
@@ -100,17 +102,17 @@ extension ContinueListeningSectionCell: UICollectionViewDataSource, UICollection
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let tileWidth = Self.tileWidth(forWidth: collectionView.bounds.width)
         return CGSize(width: tileWidth, height: tileWidth + Self.textAreaHeight)
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         onSelectEpisode?(episodes[indexPath.item])
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:contextMenuConfigurationForItemAtIndexPath:point:") func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
         let episode = episodes[indexPath.item]
