@@ -12,20 +12,21 @@
 
 import UIKit
 
-class PodcastShowHeaderCell: UITableViewCell {
+@ObjCImplementation
+class PodcastShowHeaderCell: UITableViewCellMethods {
     static let reuseIdentifier = "PodcastShowHeaderCell"
 
     private(set) var headerView: PodcastShowHeaderView?
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         selectionStyle = .none
         backgroundColor = .clear
         contentView.backgroundColor = .clear
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         selectionStyle = .none
     }
 
@@ -44,8 +45,8 @@ class PodcastShowHeaderCell: UITableViewCell {
         return headerView
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         headerView?.removeFromSuperview()
         headerView = nil
     }
