@@ -13,7 +13,8 @@
 
 import UIKit
 
-class TabBarCoordinator: NSObject {
+@ObjCImplementation(protocols: ["UITabBarControllerDelegate"], extensions: ["MediaLibraryObserver", "UITabBarControllerDelegate"])
+class TabBarCoordinator: NSObjectMethods {
     // MARK: - Properties
 
     private var tabBarController: BottomTabBarController
@@ -72,13 +73,13 @@ class TabBarCoordinator: NSObject {
 
     // MARK: - Init
 
-    @objc init(tabBarController: BottomTabBarController, mediaLibraryService: MediaLibraryService) {
+    init(tabBarController: BottomTabBarController, mediaLibraryService: MediaLibraryService) {
         self.tabBarController = tabBarController
         self.mediaLibraryService = mediaLibraryService
-        super.init()
+        objcInit("init")
         setup()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .VLCThemeDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleDidEnterBackgroundNotification),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"), name: .VLCThemeDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("handleDidEnterBackgroundNotification"),
                                                name: UIApplication.didEnterBackgroundNotification, object: nil)
         mediaLibraryService.observable.addObserver(self)
     }
@@ -217,7 +218,7 @@ class TabBarCoordinator: NSObject {
 
     // MARK: - Helpers
 
-    @objc func updateTheme() {
+    @ObjCMethod func updateTheme() {
         let colors = PresentationTheme.current.colors
         let tabBar = tabBarController.tabBar
         let bottomBar = tabBarController.bottomBar
@@ -267,7 +268,7 @@ class TabBarCoordinator: NSObject {
         }
     }
 
-    @objc func handleShortcutItem(_ item: UIApplicationShortcutItem) {
+    @ObjCMethod func handleShortcutItem(_ item: UIApplicationShortcutItem) {
         switch item.type {
         case kVLCApplicationShortcutLastPlayed:
             handleLastPlayedShortcut()
@@ -292,7 +293,7 @@ class TabBarCoordinator: NSObject {
         }
     }
 
-    @objc(showTabForMedia:) func showTab(for media: VLCMLMedia) {
+    @ObjCMethod("showTabForMedia:") func showTab(for media: VLCMLMedia) {
         let isVideo = media.type() == .video
         if let index = tabBarController.viewControllers?.firstIndex(where: {
             let rootViewController = ($0 as? UINavigationController)?.viewControllers.first
@@ -365,6 +366,7 @@ class TabBarCoordinator: NSObject {
 
 // MARK: - Last played quick action
 
+@ObjCExtension("MediaLibraryObserver")
 extension TabBarCoordinator: MediaLibraryObserver {
     func medialibrary(_ medialibrary: MediaLibraryService, historyChangedOfType type: VLCMLHistoryType) {
         let subtitle = lastPlayedShortcutSubtitle()
@@ -373,7 +375,7 @@ extension TabBarCoordinator: MediaLibraryObserver {
         }
     }
 
-    @objc func handleDidEnterBackgroundNotification() {
+    @ObjCMethod func handleDidEnterBackgroundNotification() {
         updateLastPlayedShortcutItem(subtitle: lastPlayedShortcutSubtitle())
     }
 
@@ -416,15 +418,16 @@ extension TabBarCoordinator: MediaLibraryObserver {
 
 // MARK: - UITabBarControllerDelegate
 
-extension TabBarCoordinator: UITabBarControllerDelegate {
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+@ObjCExtension("UITabBarControllerDelegate")
+extension TabBarCoordinator {
+    @ObjCMethod("tabBarController:shouldSelectViewController:") func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if viewController === tabBarController.selectedViewController {
             ((viewController as? UINavigationController)?.topViewController as? MediaViewController)?.scrollToTop()
         }
         return true
     }
 
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+    @ObjCMethod("tabBarController:didSelectViewController:") func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let viewControllerIndex: Int = tabBarController.viewControllers?.firstIndex(of: viewController) ?? 0
         UserDefaults.standard.set(viewControllerIndex, forKey: kVLCTabBarIndex)
     }
