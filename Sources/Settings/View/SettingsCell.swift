@@ -20,7 +20,8 @@ protocol SettingsCellDelegate: AnyObject {
     func settingsCellInfoButtonPressed(cell: SettingsCell, preferenceKey: String)
 }
 
-class SettingsCell: UITableViewCell {
+@ObjCImplementation
+class SettingsCell: UITableViewCellMethods {
     private enum Constants {
         static let mainLabelFont: UIFont = .preferredFont(forTextStyle: .callout) // 16pt default
         static let subtitleLabelFont: UIFont = .preferredFont(forTextStyle: .footnote) // 13pt default
@@ -51,7 +52,7 @@ class SettingsCell: UITableViewCell {
         switchControl.setContentHuggingPriority(.required, for: .horizontal)
         switchControl.setContentCompressionResistancePriority(.required, for: .horizontal)
         switchControl.addTarget(self,
-                                action: #selector(handleSwitchAction),
+                                action: ObjC.selector("handleSwitchActionSender:"),
                                 for: .valueChanged)
         return switchControl
     }()
@@ -60,7 +61,7 @@ class SettingsCell: UITableViewCell {
         var infoButton = UIButton()
         let buttonType: UIButton.ButtonType = PresentationTheme.current.isDark ? .infoDark : .infoLight
         infoButton = UIButton(type: buttonType)
-        infoButton.addTarget(self, action: #selector(infoTapped), for: .touchDown)
+        infoButton.addTarget(self, action: ObjC.selector("infoTappedSender:"), for: .touchDown)
         return infoButton
     }()
 
@@ -258,22 +259,18 @@ class SettingsCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         setup()
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func themeChanged() {
         setupTheme()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         backgroundColor = .clear // Required to prevent theme mismatch during setupTheme
         activityIndicator.isHidden = true
 
@@ -328,7 +325,7 @@ class SettingsCell: UITableViewCell {
         activityIndicator.color = colors.cellDetailTextColor
     }
 
-    @objc func handleSwitchAction(sender: UISwitch) {
+    @ObjCMethod func handleSwitchAction(sender: UISwitch) {
         guard let settingsItem = settingsItem else { return }
 
         switch settingsItem.action {
@@ -342,7 +339,7 @@ class SettingsCell: UITableViewCell {
         }
     }
 
-    @objc func infoTapped(sender _: UIButton) {
+    @ObjCMethod func infoTapped(sender _: UIButton) {
         guard let settingsItem = settingsItem else { return }
 
         switch settingsItem.action {
