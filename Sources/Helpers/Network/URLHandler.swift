@@ -28,7 +28,7 @@ enum VLCXCallbackType {
     case undefined
 }
 
-@objc public protocol VLCURLHandler {
+public protocol VLCURLHandler {
     var movieURL: URL? { get set }
     var subURL: URL? { get set }
     var successCallback: URL? { get set }
@@ -216,11 +216,14 @@ extension VLCURLHandler {
 #endif
 }
 
-@objc class URLHandlers: NSObject {
-    #if os(iOS)
-    @objc static let googleURLHandler = GoogleURLHandler()
+@ObjCImplementation
+class URLHandlers: NSObjectMethods {
+    init() { objcInit() }
 
-    @objc static let handlers =
+    #if os(iOS)
+    static let googleURLHandler = GoogleURLHandler()
+
+    static let handlers =
         [
             googleURLHandler,
             DropBoxURLHandler(),
@@ -231,7 +234,7 @@ extension VLCURLHandler {
             ElseCallbackURLHandler()
         ]
     #elseif os(tvOS)
-        @objc static let handlers =
+        static let handlers =
             [
                 VLCTopShelfURLHandler(),
                 XCallbackURLHandler(),
@@ -239,7 +242,7 @@ extension VLCURLHandler {
                 ElseCallbackURLHandler()
             ]
     #else
-        @objc static let handlers =
+        static let handlers =
             [
                 PodcastFeedURLHandler(),
                 XCallbackURLHandler(),
@@ -252,7 +255,10 @@ extension VLCURLHandler {
 #if os(tvOS)
 // Handles the deep link emitted by the Top Shelf extension: vlc://topshelf?id=<VLCMLIdentifier>.
 // Registered ahead of VLCCallbackURLHandler, which would otherwise claim every vlc:// URL.
-class VLCTopShelfURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+class VLCTopShelfURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -261,11 +267,11 @@ class VLCTopShelfURLHandler: NSObject, VLCURLHandler {
     var loop = false
     var shuffle = false
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         return url.scheme == "vlc" && url.host == "topshelf"
     }
 
-    @objc func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let idString = components.queryItems?.first(where: { $0.name == "id" })?.value,
               let identifier = VLCMLIdentifier(idString) else {
@@ -284,7 +290,10 @@ class VLCTopShelfURLHandler: NSObject, VLCURLHandler {
 #endif
 
 #if os(iOS)
-class DropBoxURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+class DropBoxURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -293,7 +302,7 @@ class DropBoxURLHandler: NSObject, VLCURLHandler {
     var loop = false
     var shuffle = false
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
 
         let components = url.pathComponents
         let methodName = components.count > 1 ? components[1] : nil
@@ -305,7 +314,7 @@ class DropBoxURLHandler: NSObject, VLCURLHandler {
         return url.scheme == "db-\(kVLCDropboxAppKey)"
     }
 
-    @objc func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         let authResult = DBClientsManager.handleRedirectURL(url) {
             dbAuthResult in
             if dbAuthResult?.tag == .DBAuthSuccess {
@@ -320,7 +329,10 @@ class DropBoxURLHandler: NSObject, VLCURLHandler {
     }
 }
 
-class GoogleURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+class GoogleURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -329,17 +341,20 @@ class GoogleURLHandler: NSObject, VLCURLHandler {
     var loop = false
     var shuffle = false
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         // the scheme is the reversed client ID, which is injected at build time
         return url.scheme?.hasPrefix("com.googleusercontent.apps") == true
     }
 
-    @objc func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         return GIDSignIn.sharedInstance.handle(url)
     }
 }
 
-class FileURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+class FileURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -348,11 +363,11 @@ class FileURLHandler: NSObject, VLCURLHandler {
     var loop = false
     var shuffle = false
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         return url.isFileURL
     }
 
-    @objc func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         let playbackService = PlaybackService.sharedInstance()
         let addsSubtitles = playbackService.playerIsSetup && url.lastPathComponent.isSupportedSubtitleFormat()
 
@@ -391,7 +406,10 @@ class FileURLHandler: NSObject, VLCURLHandler {
 }
 #endif
 
-class XCallbackURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+class XCallbackURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -417,11 +435,11 @@ class XCallbackURLHandler: NSObject, VLCURLHandler {
         }
     }
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         return url.scheme == "vlc-x-callback" || url.scheme == "x-callback-url"
     }
 
-    @objc func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         let action = matchAction(action: url.path.replacingOccurrences(of: "/", with: ""))
 
         cleanState()
@@ -449,7 +467,10 @@ class XCallbackURLHandler: NSObject, VLCURLHandler {
     }
 }
 
-public class VLCCallbackURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+public class VLCCallbackURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     public var movieURL: URL?
     public var subURL: URL?
     public var successCallback: URL?
@@ -458,7 +479,7 @@ public class VLCCallbackURLHandler: NSObject, VLCURLHandler {
     public var loop = false
     public var shuffle = false
 
-    @objc public func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod public func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         return url.scheme == "vlc"
     }
 
@@ -497,7 +518,10 @@ public class VLCCallbackURLHandler: NSObject, VLCURLHandler {
     }
 }
 
-class ElseCallbackURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+class ElseCallbackURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -506,7 +530,7 @@ class ElseCallbackURLHandler: NSObject, VLCURLHandler {
     var loop = false
     var shuffle = false
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         guard let scheme = url.scheme else {
             return false
         }
