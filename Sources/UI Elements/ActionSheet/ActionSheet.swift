@@ -13,33 +13,31 @@
 import Foundation
 import UIKit
 
-@objc(VLCActionSheetDataSource)
 protocol ActionSheetDataSource {
-    @objc func numberOfRows() -> Int
-    @objc func actionSheet(collectionView: UICollectionView,
+    func numberOfRows() -> Int
+    func actionSheet(collectionView: UICollectionView,
                            cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
 }
 
-@objc(VLCActionSheetDelegate)
 protocol ActionSheetDelegate {
-    @objc optional func headerViewTitle() -> String?
-    @objc func itemAtIndexPath(_ indexPath: IndexPath) -> Any?
-    @objc optional func actionSheet(collectionView: UICollectionView,
+    optional func headerViewTitle() -> String?
+    func itemAtIndexPath(_ indexPath: IndexPath) -> Any?
+    optional func actionSheet(collectionView: UICollectionView,
                                     didSelectItem item: Any, At indexPath: IndexPath)
-    @objc optional func actionSheetDidFinishClosingAnimation(_ actionSheet: ActionSheet)
+    optional func actionSheetDidFinishClosingAnimation(_ actionSheet: ActionSheet)
 }
 
 // MARK: ActionSheet
 
-@objc(VLCActionSheet)
-class ActionSheet: UIViewController {
+@ObjCImplementation("VLCActionSheet", protocols: ["UICollectionViewDelegateFlowLayout", "UICollectionViewDelegate", "UICollectionViewDataSource", "UIGestureRecognizerDelegate"], extensions: ["Extension", "UICollectionViewDelegateFlowLayout", "UICollectionViewDelegate", "UICollectionViewDataSource", "UIGestureRecognizerDelegate"])
+class ActionSheet: UIViewControllerMethods {
 
     private let cellHeight: CGFloat = 50
 
-    @objc weak var dataSource: ActionSheetDataSource?
-    @objc weak var delegate: ActionSheetDelegate?
+    weak var dataSource: ActionSheetDataSource?
+    weak var delegate: ActionSheetDelegate?
 
-    @objc var excludesWhiteTheme: Bool = false
+    var excludesWhiteTheme: Bool = false
 
     var themeColors: ColorPalette {
         return excludesWhiteTheme ? PresentationTheme.currentExcludingWhite.colors
@@ -54,7 +52,7 @@ class ActionSheet: UIViewController {
         backgroundView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         backgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                                   action: #selector(self.removeActionSheet)))
+                                                                   action: ObjC.selector("removeActionSheet")))
         return backgroundView
     }()
 
@@ -65,7 +63,7 @@ class ActionSheet: UIViewController {
         return collectionViewLayout
     }()
 
-    @objc lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero,
                                               collectionViewLayout: collectionViewLayout)
         collectionView.delegate = self
@@ -100,7 +98,7 @@ class ActionSheet: UIViewController {
     }()
 
     private lazy var downGesture: UIPanGestureRecognizer = {
-        let downGesture = UIPanGestureRecognizer(target: self, action: #selector(handleDismiss(sender:)))
+        let downGesture = UIPanGestureRecognizer(target: self, action: ObjC.selector("handleDismissSender:"))
         return downGesture
     }()
 
@@ -161,8 +159,8 @@ class ActionSheet: UIViewController {
 
     private var mainStackViewTranslation = CGPoint(x: 0, y: 0)
 
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
+    @ObjCMethod("updateViewConstraints") func updateViewConstraints() {
+        callSuper("updateViewConstraints")
         updateCollectionViewContraints()
     }
 
@@ -185,22 +183,19 @@ class ActionSheet: UIViewController {
     // MARK: UIViewController
 
     init () {
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
     init(header: ActionSheetSectionHeader) {
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
         headerView = header
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"),
                                                name: .VLCThemeDidChangeNotification, object: nil)
 
         view.addSubview(backgroundView)
@@ -224,16 +219,16 @@ class ActionSheet: UIViewController {
         setupCollectionViewConstraints()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         mainStackView.isHidden = true
         collectionView.reloadData()
         headerView.title.text = delegate?.headerViewTitle?()
         updateViewConstraints()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
 
         setHeaderRoundedCorners()
 
@@ -259,9 +254,9 @@ class ActionSheet: UIViewController {
         })
     }
 
-    override func viewWillTransition(to size: CGSize,
+    @ObjCMethod("viewWillTransitionToSize:withTransitionCoordinator:") func viewWillTransition(to size: CGSize,
                                      with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
+        callSuper("viewWillTransitionToSize:withTransitionCoordinator:", size, coordinator)
         coordinator.animate(alongsideTransition: { [weak self] _ in
             self?.updateCollectionViewContraints()
             self?.setHeaderRoundedCorners()
@@ -270,12 +265,12 @@ class ActionSheet: UIViewController {
         }
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    @ObjCMethod("viewWillLayoutSubviews") func viewWillLayoutSubviews() {
+        callSuper("viewWillLayoutSubviews")
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    @objc func updateTheme() {
+    @ObjCMethod func updateTheme() {
         let colors = themeColors
         collectionView.backgroundColor = colors.background
         collectionWrapperView.backgroundColor = colors.background
@@ -354,13 +349,14 @@ private extension ActionSheet {
 
 // MARK: Actions
 
+@ObjCExtension("Extension")
 extension ActionSheet {
-    @objc func setAction(closure action: @escaping (_ item: Any) -> Void) {
+    @ObjCMethod func setAction(closure action: @escaping (_ item: Any) -> Void) {
         self.action = action
     }
 
 
-    @objc func removeActionSheet() {
+    @ObjCMethod func removeActionSheet() {
         let realMainStackView = mainStackView.frame
 
         UIView.animate(withDuration: 0.55, delay: 0,
@@ -385,7 +381,7 @@ extension ActionSheet {
         })
     }
 
-    @objc func handleDismiss(sender: UIPanGestureRecognizer) {
+    @ObjCMethod func handleDismiss(sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .changed:
             mainStackViewTranslation = sender.translation(in: mainStackView)
@@ -412,22 +408,24 @@ extension ActionSheet {
 
 // MARK: UICollectionViewDelegateFlowLayout
 
-extension ActionSheet: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDelegateFlowLayout")
+extension ActionSheet {
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width / numberOfColums, height: cellHeight)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    @ObjCMethod("collectionView:layout:insetForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return collectionViewEdgeInsets
     }
 }
 
 // MARK: UICollectionViewDelegate
 
-extension ActionSheet: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDelegate")
+extension ActionSheet {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
         if let delegate = delegate, let item = delegate.itemAtIndexPath(indexPath) {
             delegate.actionSheet?(collectionView: collectionView, didSelectItem: item, At: indexPath)
@@ -439,8 +437,9 @@ extension ActionSheet: UICollectionViewDelegate {
 
 // MARK: UICollectionViewDataSource
 
-extension ActionSheet: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDataSource")
+extension ActionSheet {
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         if let dataSource = dataSource {
             return dataSource.numberOfRows()
@@ -448,7 +447,7 @@ extension ActionSheet: UICollectionViewDataSource {
         preconditionFailure("VLCActionSheet: No data source")
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let dataSource = dataSource {
             return dataSource.actionSheet(collectionView: collectionView,
@@ -458,8 +457,9 @@ extension ActionSheet: UICollectionViewDataSource {
     }
 }
 
-extension ActionSheet: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+@ObjCExtension("UIGestureRecognizerDelegate")
+extension ActionSheet {
+    @ObjCMethod("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:") func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
