@@ -30,7 +30,8 @@ protocol MediaCollectionViewCellEnqueueDelegate: MediaCollectionViewCellDelegate
 }
 
 // MARK: -
-class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
+@ObjCImplementation(protocols: ["UIScrollViewDelegate"])
+class MediaCollectionViewCell: BaseCollectionViewCell {
 
     // MARK: MediaGroupIndicator
 
@@ -149,8 +150,8 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
 
     // MARK: - Init
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    @ObjCMethod("awakeFromNib") func awakeFromNib() {
+        callSuper("awakeFromNib")
         thumbnailView.accessibilityIgnoresInvertColors = true
 
         newLabel.text = NSLocalizedString("NEW", comment: "")
@@ -184,10 +185,10 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         hideEnqueueButton()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(themeDidChange),
+        notificationCenter.addObserver(self, selector: ObjC.selector("themeDidChange"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
-        notificationCenter.addObserver(self, selector: #selector(dynamicFontSizeChange),
+        notificationCenter.addObserver(self, selector: ObjC.selector("dynamicFontSizeChange"),
                                        name: UIContentSizeCategory.didChangeNotification,
                                        object: nil)
 
@@ -223,7 +224,7 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         scrollView.setContentOffset(offset, animated: true)
     }
 
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewWillBeginDecelerating:") func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         var x: CGFloat = 0
 
         if hasXGoneNegative {
@@ -250,11 +251,11 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         applyScrolling(x: x, y: scrollView.contentOffset.y)
     }
 
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidEndScrollingAnimation:") func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         maxXOffset = 0.0
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidScroll:") func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.x < 0 {
             scrollView.contentOffset.x = 0
             hasXGoneNegative = true
@@ -558,8 +559,8 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         scrollViewLeadingConstraint.constant = constant
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         isEditing = false
         lastPlayed = false
         ignoreThemeDidChange = false
@@ -597,7 +598,7 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
     }
 
     private func setupGestureRecognizer() {
-        let mediaTapGesture = UITapGestureRecognizer(target: self, action: #selector(mediaTapped(_:)))
+        let mediaTapGesture = UITapGestureRecognizer(target: self, action: ObjC.selector("mediaTapped:"))
         scrollContentView.addGestureRecognizer(mediaTapGesture)
 
         // Add tap gesture recognizer to disable the item selection when tapping on the drag image view
@@ -606,7 +607,7 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         dragIndicatorImageView.isUserInteractionEnabled = true
     }
 
-    @objc private func mediaTapped(_ sender: UITapGestureRecognizer) {
+    @ObjCMethod private func mediaTapped(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             delegate?.mediaCollectionViewCellMediaTapped(in: self)
         }
@@ -635,7 +636,7 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         }
     }
 
-    @objc fileprivate func themeDidChange() {
+    @ObjCMethod fileprivate func themeDidChange() {
         guard !ignoreThemeDidChange else { return }
 
         let theme: PresentationTheme
@@ -648,7 +649,7 @@ class MediaCollectionViewCell: BaseCollectionViewCell, UIScrollViewDelegate {
         setTheme(to: theme)
     }
 
-    @objc fileprivate func dynamicFontSizeChange() {
+    @ObjCMethod fileprivate func dynamicFontSizeChange() {
         newLabel.font = UIFont.preferredCustomFont(forTextStyle: .footnote).semibolded
         titleLabel.font = isMediaBeingPlayed ? UIFont.preferredFont(forTextStyle: .title3).bolded : UIFont.preferredFont(forTextStyle: .title3)
         sizeDescriptionLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
