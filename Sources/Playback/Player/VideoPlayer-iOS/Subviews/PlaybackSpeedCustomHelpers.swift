@@ -11,7 +11,10 @@
 
 import UIKit
 
-@objc class PlaybackSpeedFormatter: NSObject {
+@ObjCImplementation
+class PlaybackSpeedFormatter: NSObjectMethods {
+    init() { objcInit() }
+
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -22,7 +25,7 @@ import UIKit
         return formatter
     }()
 
-    @objc static func string(forSpeed speed: Float) -> String {
+    @ObjCMethod static func string(forSpeed speed: Float) -> String {
         let value = formatter.string(from: NSNumber(value: speed)) ?? String(format: "%.2f", speed)
         return String(format: NSLocalizedString("PLAYBACK_SPEED_FORMAT", comment: ""), value)
     }
@@ -82,7 +85,10 @@ class PlaybackSpeedCustomManager {
     private static let presetSpeedValues: [Float] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4]
 }
 
-@objc class PlaybackDelayFormatter: NSObject {
+@ObjCImplementation
+class PlaybackDelayFormatter: NSObjectMethods {
+    init() { objcInit() }
+
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -94,7 +100,7 @@ class PlaybackSpeedCustomManager {
         return formatter
     }()
 
-    @objc static func string(forDelay delay: Float) -> String {
+    @ObjCMethod static func string(forDelay delay: Float) -> String {
         let value = formatter.string(from: NSNumber(value: delay.rounded())) ?? String(format: "%.0f", delay)
         return String(format: NSLocalizedString("DELAY_MS_FORMAT", comment: ""), value)
     }
