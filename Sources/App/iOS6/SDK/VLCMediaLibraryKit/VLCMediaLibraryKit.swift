@@ -332,6 +332,8 @@ extension VLCMLSearchAggregateMethods {
     @ObjCProperty(readonly: true) public var genres: NSArray?
     @ObjCProperty(readonly: true) public var media: NSArray?
     @ObjCProperty(readonly: true) public var playlists: NSArray?
+}
+extension VLCMLSearchAggregateMethods where Self: ObjCWrapper {
     @ObjCMethod("initWithAlbums:artists:genres:media:playlists:") public static func initWithAlbums(_ a0: NSArray?, artists a1: NSArray?, genres a2: NSArray?, media a3: NSArray?, playlists a4: NSArray?) -> Self
 }
 
