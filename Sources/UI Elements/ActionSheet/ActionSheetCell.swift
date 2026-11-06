@@ -17,7 +17,8 @@ enum ActionSheetCellAccessoryType {
     case popup
 }
 
-class ActionSheetCellImageView: UIImageView {
+@ObjCImplementation
+class ActionSheetCellImageView: UIImageViewMethods {
     override var image: UIImage? {
         didSet {
             super.image = image
@@ -25,19 +26,16 @@ class ActionSheetCellImageView: UIImageView {
         }
     }
 
-    override init(image: UIImage? = nil) {
-        super.init(image: image)
+    init(image: UIImage? = nil) {
+        objcInit("initWithImage:", image)
         isHidden = true
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 /// Model that determines the layout presentation of the ActionSheetCell.
-@objc(VLCActionSheetCellModel)
-@objcMembers class ActionSheetCellModel: NSObject {
+@ObjCImplementation("VLCActionSheetCellModel")
+class ActionSheetCellModel: NSObjectMethods {
     var title: String
     var iconImage: UIImage?
     var viewToPresent: UIView?
@@ -55,23 +53,23 @@ class ActionSheetCellImageView: UIImageView {
             self.accessoryType = accessoryType
             self.viewToPresent = viewToPresent
             self.cellIdentifier = cellIdentifier
+        objcInit()
     }
 }
 
-@objc(VLCActionSheetCellDelegate)
 protocol ActionSheetCellDelegate {
     func actionSheetCellShouldUpdateColors() -> Bool
-    @objc optional func actionSheetCellDidToggleSwitch(for cell: ActionSheetCell, state: Bool)
+    optional func actionSheetCellDidToggleSwitch(for cell: ActionSheetCell, state: Bool)
 }
 
-@objc(VLCDoubleActionSheetCellDelegate)
 protocol DoubleActionSheetCellDelegate {
     func doubleActionSheetCellShouldUpdateColors() -> Bool
     func doubleActionSheetCellDidTapLeft(_ cell: DoubleActionSheetCell)
     func doubleActionSheetCellDidTapRight(_ cell: DoubleActionSheetCell)
 }
 
-class DoubleActionSheetCell: UICollectionViewCell {
+@ObjCImplementation
+class DoubleActionSheetCell: UICollectionViewCellMethods {
     // MARK: - Properties
 
     static var reusableIdentifier: String {
@@ -151,17 +149,17 @@ class DoubleActionSheetCell: UICollectionViewCell {
 
     private lazy var rightTapGestureRecognizer: UITapGestureRecognizer = {
         let rightTapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                               action: #selector(handleTapOnCell(_:)))
+                                                               action: ObjC.selector("handleTapOnCell:"))
         return rightTapGestureRecognizer
     }()
 
     private lazy var leftTapGestureRecognizer: UITapGestureRecognizer = {
         let leftTapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                               action: #selector(handleTapOnCell(_:)))
+                                                               action: ObjC.selector("handleTapOnCell:"))
         return leftTapGestureRecognizer
     }()
 
-    @objc func handleTapOnCell(_ sender: UITapGestureRecognizer) {
+    @ObjCMethod func handleTapOnCell(_ sender: UITapGestureRecognizer) {
         if sender == leftTapGestureRecognizer {
             delegate?.doubleActionSheetCellDidTapLeft(self)
         } else {
@@ -171,21 +169,18 @@ class DoubleActionSheetCell: UICollectionViewCell {
 
     // MARK: - Init
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupViews()
         setupConstraints()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
 
     // MARK: - Setup
 
     private func setupViews() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"),
                                                name: .VLCThemeDidChangeNotification, object: nil)
 
         translatesAutoresizingMaskIntoConstraints = false
@@ -214,7 +209,7 @@ class DoubleActionSheetCell: UICollectionViewCell {
             return PresentationTheme.darkTheme.colors
         }
     }
-    @objc private func updateTheme() {
+    @ObjCMethod private func updateTheme() {
         let colors = getThemeColors()
         backgroundColor = colors.background
         leftName.backgroundColor = backgroundColor
@@ -250,8 +245,8 @@ class DoubleActionSheetCell: UICollectionViewCell {
     }
 }
 
-@objc(VLCActionSheetCell)
-class ActionSheetCell: UICollectionViewCell {
+@ObjCImplementation("VLCActionSheetCell")
+class ActionSheetCell: UICollectionViewCellMethods {
 
     /// UIViewController to present on cell selection
     weak var viewToPresent: UIView?
@@ -262,11 +257,11 @@ class ActionSheetCell: UICollectionViewCell {
     var identifier: ActionSheetCellIdentifier?
     var isMediaPlayerActionSheetCell: Bool = false
 
-    @objc static var identifier: String {
+    static var identifier: String {
         return String(describing: self)
     }
 
-    @objc override var isSelected: Bool {
+    override var isSelected: Bool {
         didSet {
             updateColors()
             // only checkmarks should be hidden if they arent selected
@@ -276,7 +271,7 @@ class ActionSheetCell: UICollectionViewCell {
         }
     }
 
-    @objc let icon: ActionSheetCellImageView = {
+    let icon: ActionSheetCellImageView = {
         let icon = ActionSheetCellImageView()
         icon.translatesAutoresizingMaskIntoConstraints = false
         icon.setContentHuggingPriority(.required, for: .horizontal)
@@ -287,7 +282,7 @@ class ActionSheetCell: UICollectionViewCell {
         return icon
     }()
 
-    @objc let name: UILabel = {
+    let name: UILabel = {
         let name = UILabel()
         let colors = PresentationTheme.current.colors
         name.textColor = colors.cellTextColor
@@ -300,7 +295,7 @@ class ActionSheetCell: UICollectionViewCell {
         return name
     }()
 
-    @objc lazy private var accessoryTypeImageView: UIImageView = {
+    lazy private var accessoryTypeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .none
@@ -309,13 +304,13 @@ class ActionSheetCell: UICollectionViewCell {
         return imageView
     }()
     
-    @objc lazy private var toggleSwitch: UISwitch = {
+    lazy private var toggleSwitch: UISwitch = {
         let toggleSwitch = UISwitch()
         toggleSwitch.onTintColor = .orange
         toggleSwitch.setContentHuggingPriority(.required, for: .horizontal)
         toggleSwitch.setContentCompressionResistancePriority(.required, for: .horizontal)
         toggleSwitch.translatesAutoresizingMaskIntoConstraints = false
-        toggleSwitch.addTarget(self, action: #selector(switchToggled(_:)), for: .valueChanged)
+        toggleSwitch.addTarget(self, action: ObjC.selector("switchToggled:"), for: .valueChanged)
         return toggleSwitch
     }()
 
@@ -350,13 +345,13 @@ class ActionSheetCell: UICollectionViewCell {
         return stackView
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupViews()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init?(coder aDecoder: NSCoder) {
+        objcInit("initWithCoder:", aDecoder)
         setupViews()
     }
     
@@ -390,12 +385,12 @@ class ActionSheetCell: UICollectionViewCell {
         viewToPresent?.backgroundColor = colors.background
     }
 
-    @objc private func switchToggled(_ sender: UISwitch) {
+    @ObjCMethod private func switchToggled(_ sender: UISwitch) {
         delegate?.actionSheetCellDidToggleSwitch?(for: self, state: sender.isOn)
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         toggleSwitch.removeFromSuperview()
         accessoryType = .checkmark
         identifier = nil
@@ -457,7 +452,7 @@ class ActionSheetCell: UICollectionViewCell {
     }
 
     private func setupViews() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"),
                                                name: .VLCThemeDidChangeNotification, object: nil)
         updateTheme()
 
@@ -482,7 +477,7 @@ class ActionSheetCell: UICollectionViewCell {
         ])
     }
 
-    @objc private func updateTheme() {
+    @ObjCMethod private func updateTheme() {
         backgroundColor = .clear
         name.backgroundColor = .clear
         updateColors()
