@@ -13,7 +13,7 @@
 import UIKit
 
 extension UIAlertController {
-    @objc static func autoDismissable(title: String, message: String, dismissDelay: Double = 3.0) {
+    @ObjCMethod static func autoDismissable(title: String, message: String, dismissDelay: Double = 3.0) {
         guard let presentingViewController = UIApplication.shared.topViewController else {
             return
         }
