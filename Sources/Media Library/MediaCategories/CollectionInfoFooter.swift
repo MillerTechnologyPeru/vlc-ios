@@ -8,7 +8,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class CollectionInfoFooter: UICollectionReusableView {
+@ObjCImplementation
+class CollectionInfoFooter: UICollectionReusableViewMethods {
     // MARK: - Properties
 
     static let footerID = "CollectionInfoFooterID"
@@ -55,20 +56,17 @@ class CollectionInfoFooter: UICollectionReusableView {
 
     // MARK: - Init
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         backgroundColor = .clear
         setupFooterView()
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTheme),
+                                               selector: ObjC.selector("updateTheme"),
                                                name: .VLCThemeDidChangeNotification,
                                                object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     // MARK: - Private methods
 
@@ -104,7 +102,7 @@ class CollectionInfoFooter: UICollectionReusableView {
         ])
     }
 
-    @objc private func updateTheme() {
+    @ObjCMethod private func updateTheme() {
         let colors: ColorPalette = PresentationTheme.current.colors
 
         backgroundColor = .clear
