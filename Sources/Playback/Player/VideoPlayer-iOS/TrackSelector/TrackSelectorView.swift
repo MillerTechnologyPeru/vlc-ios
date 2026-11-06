@@ -19,7 +19,8 @@ protocol TrackSelectorViewDelegate: AnyObject {
     func trackSelectorViewDidRequestDismissal(_ trackSelectorView: TrackSelectorView)
 }
 
-final class TrackSelectorView: UIView {
+@ObjCImplementation(protocols: ["UITableViewDataSource", "UITableViewDelegate"], extensions: ["UITableViewDataSource"])
+final class TrackSelectorView: UIViewMethods {
     private enum Tab: Int {
         case audio
         case subtitles
@@ -71,7 +72,7 @@ final class TrackSelectorView: UIView {
         let font = UIFont.preferredFont(forTextStyle: .headline)
         control.setTitleTextAttributes([.font: font], for: .normal)
         control.setTitleTextAttributes([.font: font], for: .selected)
-        control.addTarget(self, action: #selector(didChangeTab), for: .valueChanged)
+        control.addTarget(self, action: ObjC.selector("didChangeTab"), for: .valueChanged)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -92,21 +93,21 @@ final class TrackSelectorView: UIView {
     private lazy var secondSubtitleButton: RoundedCornerPlayerButton = {
         let button = RoundedCornerPlayerButton(showsChevron: false)
         button.update(title: NSLocalizedString("SECOND_SUBTITLE", comment: ""))
-        button.addTarget(self, action: #selector(didTapSecondSubtitle), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapSecondSubtitle"), for: .touchUpInside)
         return button
     }()
 
     private lazy var syncRow: RoundedCornerPlayerButton = {
         let row = RoundedCornerPlayerButton(showsChevron: true)
         row.setIcon(systemName: "metronome")
-        row.addTarget(self, action: #selector(didTapSyncRow), for: .touchUpInside)
+        row.addTarget(self, action: ObjC.selector("didTapSyncRow"), for: .touchUpInside)
         return row
     }()
 
     private lazy var loadButton: RoundedCornerPlayerButton = {
         let button = RoundedCornerPlayerButton(showsChevron: true)
         button.setIcon(systemName: "doc.badge.plus")
-        button.addTarget(self, action: #selector(didTapLoad), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapLoad"), for: .touchUpInside)
         return button
     }()
 
@@ -114,14 +115,14 @@ final class TrackSelectorView: UIView {
         let button = RoundedCornerPlayerButton(showsChevron: true)
         button.setIcon(systemName: "arrow.down.doc")
         button.update(title: NSLocalizedString("BUTTON_DOWNLOAD", comment: ""))
-        button.addTarget(self, action: #selector(didTapDownload), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapDownload"), for: .touchUpInside)
         return button
     }()
 
     // MARK: - Lifecycle
 
     init() {
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
         overrideUserInterfaceStyle = .dark
 
@@ -131,31 +132,28 @@ final class TrackSelectorView: UIView {
         segmentedControl.selectedSegmentIndex = activeTab.rawValue
         applyTab()
 
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(requestDismissal))
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: ObjC.selector("requestDismissal"))
         swipeDownRecognizer.direction = .down
         addGestureRecognizer(swipeDownRecognizer)
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(reduceTransparencyChanged),
+                                       selector: ObjC.selector("reduceTransparencyChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(playbackMetadataChanged),
+                                       selector: ObjC.selector("playbackMetadataChanged"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackMetadataDidChange),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(requestDismissal),
+                                       selector: ObjC.selector("requestDismissal"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidMoveOnToNextItem),
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
 
         if let tableHeightConstraint = tableHeightConstraint,
            abs(tableHeightConstraint.constant - tableView.contentSize.height) > 0.5 {
@@ -168,7 +166,7 @@ final class TrackSelectorView: UIView {
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
+    @ObjCMethod("accessibilityPerformEscape") func accessibilityPerformEscape() -> Bool {
         requestDismissal()
         return true
     }
@@ -390,12 +388,12 @@ final class TrackSelectorView: UIView {
 
     // MARK: - Actions
 
-    @objc private func didChangeTab() {
+    @ObjCMethod private func didChangeTab() {
         activeTab = Tab(rawValue: segmentedControl.selectedSegmentIndex) ?? .audio
         applyTab()
     }
 
-    @objc private func didTapSecondSubtitle() {
+    @ObjCMethod private func didTapSecondSubtitle() {
         if dualSubtitleMode {
             playbackService.disableSecondaryVideoSubtitle()
             dualSubtitleMode = false
@@ -406,28 +404,28 @@ final class TrackSelectorView: UIView {
         reloadTable()
     }
 
-    @objc private func didTapSyncRow() {
+    @ObjCMethod private func didTapSyncRow() {
         delegate?.trackSelectorView(self, didRequestDelayForAudio: activeTab == .audio)
     }
 
-    @objc private func didTapLoad() {
+    @ObjCMethod private func didTapLoad() {
         delegate?.trackSelectorView(self, didRequestLoadExternalFileForAudio: activeTab == .audio)
     }
 
-    @objc private func didTapDownload() {
+    @ObjCMethod private func didTapDownload() {
         delegate?.trackSelectorViewDidRequestDownloadSubtitles(self)
     }
 
-    @objc private func requestDismissal() {
+    @ObjCMethod private func requestDismissal() {
         delegate?.trackSelectorViewDidRequestDismissal(self)
     }
 
-    @objc private func playbackMetadataChanged() {
+    @ObjCMethod private func playbackMetadataChanged() {
         rebuildData()
         applyTab()
     }
 
-    @objc private func reduceTransparencyChanged() {
+    @ObjCMethod private func reduceTransparencyChanged() {
         installBackgroundEffect()
     }
 
@@ -439,12 +437,13 @@ final class TrackSelectorView: UIView {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 
-extension TrackSelectorView: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+@ObjCExtension("UITableViewDataSource")
+extension TrackSelectorView {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackSelectorCell.identifier,
                                                        for: indexPath) as? TrackSelectorCell else {
             return UITableViewCell()
@@ -468,7 +467,7 @@ extension TrackSelectorView: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         if activeTab == .subtitles && dualSubtitleMode {
             return
