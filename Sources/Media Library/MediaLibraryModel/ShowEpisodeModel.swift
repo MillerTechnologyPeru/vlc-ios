@@ -9,7 +9,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class ShowEpisodeModel: NSObject, MediaModel {
+@ObjCImplementation
+class ShowEpisodeModel: NSObjectMethods, MediaModel {
     var currentPage: Int = 0
     var hasMorePages: Bool = false
     var isLoading: Bool = false
@@ -39,9 +40,9 @@ class ShowEpisodeModel: NSObject, MediaModel {
 
     var indicatorName: String = NSLocalizedString("EPISODES", comment: "")
 
-    required init(medialibrary: MediaLibraryService) {
+    init(medialibrary: MediaLibraryService) {
         self.medialibrary = medialibrary
-        super.init()
+        objcInit("init")
         medialibrary.observable.addObserver(self)
     }
 
