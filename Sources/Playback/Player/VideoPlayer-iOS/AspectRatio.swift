@@ -15,7 +15,6 @@
 #if !hasFeature(Embedded)
 import UIKit
 
-@objc(VLCAspectRatio)
 enum AspectRatio: Int, CaseIterable {
     case Default = 0
     case fillToScreen
@@ -80,9 +79,11 @@ extension AspectRatio {
 }
 
 #if !hasFeature(Embedded)
-@objc(VLCAspectRatioBridge)
-class AspectRatioBridge: NSObject {
-    @objc class func stringToDisplay(for rawValue: Int) -> String? {
+@ObjCImplementation("VLCAspectRatioBridge")
+class AspectRatioBridge: NSObjectMethods {
+    init() { objcInit() }
+
+    @ObjCMethod class func stringToDisplay(for rawValue: Int) -> String? {
         guard let aspectRatio = AspectRatio(rawValue: rawValue) else {
             return nil
         }
@@ -90,7 +91,7 @@ class AspectRatioBridge: NSObject {
         return aspectRatio.stringToDisplay
     }
 
-    @objc class func value(for rawValue: Int) -> String? {
+    @ObjCMethod class func value(for rawValue: Int) -> String? {
         guard let aspectRatio = AspectRatio(rawValue: rawValue) else {
             return nil
         }
