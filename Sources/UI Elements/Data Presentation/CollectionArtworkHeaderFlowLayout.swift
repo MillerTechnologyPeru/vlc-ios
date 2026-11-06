@@ -8,11 +8,14 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class CollectionArtworkHeaderLayout: UICollectionViewFlowLayout {
+@ObjCImplementation
+class CollectionArtworkHeaderLayout: UICollectionViewFlowLayoutMethods {
+    init() { objcInit() }
+
     // Zoom on the thumbnail when scrolling up
     // Whithout dragging the image down
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        let layoutAttributes = super.layoutAttributesForElements(in: rect)
+    @ObjCMethod("layoutAttributesForElementsInRect:") func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        let layoutAttributes = (callSuper("layoutAttributesForElementsInRect:", rect) as [UICollectionViewLayoutAttributes]?)
 
         layoutAttributes?.forEach({ (attributes) in
             guard attributes.representedElementKind == UICollectionView.elementKindSectionHeader,
@@ -37,7 +40,7 @@ class CollectionArtworkHeaderLayout: UICollectionViewFlowLayout {
         return layoutAttributes
     }
 
-    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    @ObjCMethod("shouldInvalidateLayoutForBoundsChange:") func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
 
