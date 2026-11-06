@@ -17,7 +17,8 @@ protocol PlaybackDelayViewDelegate: AnyObject {
     func playbackDelayViewDidRequestDismissal(_ delayView: PlaybackDelayView)
 }
 
-final class PlaybackDelayView: UIView {
+@ObjCImplementation
+final class PlaybackDelayView: UIViewMethods {
     enum Kind {
         case audio
         case subtitle
@@ -70,7 +71,7 @@ final class PlaybackDelayView: UIView {
         button.setImage(UIImage(systemName: "arrow.counterclockwise", withConfiguration: configuration), for: .normal)
         button.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
         button.accessibilityLabel = NSLocalizedString("BUTTON_RESET", comment: "")
-        button.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapReset"), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -97,7 +98,7 @@ final class PlaybackDelayView: UIView {
 
     init(kind: Kind) {
         self.kind = kind
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
         overrideUserInterfaceStyle = .dark
 
@@ -110,7 +111,7 @@ final class PlaybackDelayView: UIView {
         stepperView.accessibilityLabel = titleLabel.text
 
         for button in [heardMarkButton, seenMarkButton] {
-            button.addTarget(self, action: #selector(didTapMark(_:)), for: .touchUpInside)
+            button.addTarget(self, action: ObjC.selector("didTapMark:"), for: .touchUpInside)
             button.accessibilityHint = NSLocalizedString("SYNC_MARK_HINT", comment: "")
             button.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.controlHeight).isActive = true
         }
@@ -119,41 +120,38 @@ final class PlaybackDelayView: UIView {
         updateMarkAxis()
         refresh()
 
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(requestDismissal))
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: ObjC.selector("requestDismissal"))
         swipeDownRecognizer.direction = .down
         addGestureRecognizer(swipeDownRecognizer)
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(reduceTransparencyChanged),
+                                       selector: ObjC.selector("reduceTransparencyChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(accessibilityDisplayOptionsChanged),
+                                       selector: ObjC.selector("accessibilityDisplayOptionsChanged"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(accessibilityDisplayOptionsChanged),
+                                       selector: ObjC.selector("accessibilityDisplayOptionsChanged"),
                                        name: UIAccessibility.reduceMotionStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(requestDismissal),
+                                       selector: ObjC.selector("requestDismissal"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidMoveOnToNextItem),
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        callSuper("traitCollectionDidChange:", previousTraitCollection)
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             updateMarkAxis()
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
+    @ObjCMethod("accessibilityPerformEscape") func accessibilityPerformEscape() -> Bool {
         requestDismissal()
         return true
     }
@@ -362,13 +360,13 @@ final class PlaybackDelayView: UIView {
 
     // MARK: - Actions
 
-    @objc private func didTapReset() {
+    @ObjCMethod private func didTapReset() {
         heardMarkTime = nil
         seenMarkTime = nil
         setDelay(0)
     }
 
-    @objc private func didTapMark(_ sender: UIButton) {
+    @ObjCMethod private func didTapMark(_ sender: UIButton) {
         let now = CACurrentMediaTime()
         if sender == heardMarkButton {
             heardMarkTime = heardMarkTime == nil ? now : nil
@@ -378,16 +376,16 @@ final class PlaybackDelayView: UIView {
         completeSyncIfPossible()
     }
 
-    @objc private func requestDismissal() {
+    @ObjCMethod private func requestDismissal() {
         delegate?.playbackDelayViewDidRequestDismissal(self)
     }
 
-    @objc private func reduceTransparencyChanged() {
+    @ObjCMethod private func reduceTransparencyChanged() {
         installBackgroundEffect()
         refresh()
     }
 
-    @objc private func accessibilityDisplayOptionsChanged() {
+    @ObjCMethod private func accessibilityDisplayOptionsChanged() {
         refresh()
     }
 
