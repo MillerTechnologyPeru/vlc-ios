@@ -11,7 +11,8 @@
 
 import UIKit
 
-class SettingsHeaderView: UITableViewHeaderFooterView {
+@ObjCImplementation
+class SettingsHeaderView: UITableViewHeaderFooterViewMethods {
 
     private let notificationCenter = NotificationCenter.default
     private let containerView = UIView()
@@ -23,14 +24,11 @@ class SettingsHeaderView: UITableViewHeaderFooterView {
         return sectionHeaderLabel
     }()
 
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    init(reuseIdentifier: String?) {
+        objcInit("initWithReuseIdentifier:", reuseIdentifier)
         setup()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setup() {
         setupObservers()
@@ -53,19 +51,19 @@ class SettingsHeaderView: UITableViewHeaderFooterView {
         ])
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         containerView.backgroundColor = .clear //Required to prevent theme mismatch during themeDidChange Notification
     }
 
     private func setupObservers() {
         notificationCenter.addObserver(self,
-                                       selector: #selector(themeDidChange),
+                                       selector: ObjC.selector("themeDidChange"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
     }
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         let colors = PresentationTheme.current.colors
         containerView.backgroundColor = colors.background
         sectionHeaderLabel.textColor = colors.cellTextColor
@@ -73,19 +71,17 @@ class SettingsHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-class SettingsFooterView: UITableViewHeaderFooterView {
+@ObjCImplementation
+class SettingsFooterView: UITableViewHeaderFooterViewMethods {
 
     private let notificationCenter = NotificationCenter.default
     private let footerView = UIView()
 
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    init(reuseIdentifier: String?) {
+        objcInit("initWithReuseIdentifier:", reuseIdentifier)
         setup()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setup() {
         setupView()
@@ -106,12 +102,12 @@ class SettingsFooterView: UITableViewHeaderFooterView {
 
     private func setupObserver() {
         notificationCenter.addObserver(self,
-                                       selector: #selector(themeDidChange),
+                                       selector: ObjC.selector("themeDidChange"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
     }
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         footerView.backgroundColor = PresentationTheme.current.colors.mediaCategorySeparatorColor
     }
 }
