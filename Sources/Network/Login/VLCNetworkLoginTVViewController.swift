@@ -14,7 +14,10 @@
 
 import UIKit
 
-@objc class VLCNetworkLoginTVViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
+@ObjCImplementation(protocols: ["UITableViewDataSource", "UITableViewDelegate", "UIGestureRecognizerDelegate", "UITextFieldDelegate"])
+class VLCNetworkLoginTVViewController: UIViewControllerMethods {
+    init() { objcInit() }
+
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var serverField: UITextField!
@@ -30,20 +33,20 @@ import UIKit
 
     private var savedServerList: VLCSavedServerList!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         configureAppearance()
 
         savedServerList = VLCAppCoordinator.sharedInstance().savedServerList
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(savedServerListDidChange),
+                                               selector: ObjC.selector("savedServerListDidChange"),
                                                name: NSNotification.Name(VLCSavedServerListDidChange),
                                                object: nil)
 
-        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged), for: .valueChanged)
+        segmentedControl.addTarget(self, action: ObjC.selector("segmentedControlChanged:"), for: .valueChanged)
 
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: ObjC.selector("handleLongPressGestureReconizer:"))
         longPressGestureRecognizer.minimumPressDuration = 1
         longPressGestureRecognizer.delaysTouchesBegan = true
         longPressGestureRecognizer.delegate = self
@@ -53,8 +56,8 @@ import UIKit
         tableView.delegate = self
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         segmentedControl.setTitle(NSLocalizedString("SMB_CIFS_FILE_SERVERS_SHORT", comment: ""), forSegmentAt: 0)
         segmentedControl.setTitle(NSLocalizedString("FTP_SHORT", comment: ""), forSegmentAt: 1)
         segmentedControl.setTitle(NSLocalizedString("PLEX_SHORT", comment: ""), forSegmentAt: 2)
@@ -87,11 +90,11 @@ import UIKit
         nothingFoundLabel.text = NSLocalizedString("NO_SAVING_DATA", comment: "")
     }
 
-    @objc func savedServerListDidChange() {
+    @ObjCMethod func savedServerListDidChange() {
         tableView.reloadData()
     }
 
-    @objc func segmentedControlChanged(_ control: UISegmentedControl) {
+    @ObjCMethod func segmentedControlChanged(_ control: UISegmentedControl) {
         let selectedIndex = control.selectedSegmentIndex
         if selectedIndex == 0 {
             workgroupField.isHidden = false
@@ -103,7 +106,7 @@ import UIKit
     }
 
     // MARK: - UILongPressGestureRecognizer Action
-    @objc func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
+    @ObjCMethod func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
         if gestureReconizer.state == UIGestureRecognizer.State.ended {
             return
         }
@@ -230,13 +233,13 @@ import UIKit
     }
 
     // MARK: - UITableView Data Source
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let serverListCount = savedServerList.serverIdentifiers.count
         nothingFoundView.isHidden = serverListCount > 0
         return serverListCount
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "LoginSavedTableViewCell")
         if cell == nil {
             cell = UITableViewCell.init(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "LoginSavedTableViewCell")
@@ -261,7 +264,7 @@ import UIKit
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
         let login: VLCNetworkServerLoginInformation
@@ -322,7 +325,7 @@ import UIKit
         }
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    @ObjCMethod("textFieldDidEndEditing:") func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == self.serverField {
             self.buttonSave.isEnabled = !(textField.text?.isEmpty)!
             self.buttonConnect.isEnabled = !(textField.text?.isEmpty)!
