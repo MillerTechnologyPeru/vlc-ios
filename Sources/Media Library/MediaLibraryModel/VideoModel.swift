@@ -9,15 +9,16 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class VideoModel: NSObject, MediaModel {
+@ObjCImplementation
+class VideoModel: NSObjectMethods, MediaModel {
     typealias MLType = VLCMLMedia
 
-    @objc var sortModel = SortModel([.alpha, .duration, .insertionDate, .releaseDate, .fileSize, .lastPlaybackDate, .playCount])
+    var sortModel = SortModel([.alpha, .duration, .insertionDate, .releaseDate, .fileSize, .lastPlaybackDate, .playCount])
 
     var observable = VLCObservable<MediaLibraryBaseModelObserver>()
 
     var fileArrayLock = NSRecursiveLock()
-    @objc var files = [VLCMLMedia]()
+    var files = [VLCMLMedia]()
 
 #if !os(tvOS)
     var cellType: BaseCollectionViewCell.Type {
@@ -35,9 +36,9 @@ class VideoModel: NSObject, MediaModel {
     var hasMorePages = true
     var isLoading = false
 
-    @objc required init(medialibrary: MediaLibraryService) {
+    init(medialibrary: MediaLibraryService) {
         self.medialibrary = medialibrary
-        super.init()
+        objcInit("init")
         medialibrary.observable.addObserver(self)
     }
 
@@ -49,7 +50,7 @@ class VideoModel: NSObject, MediaModel {
                                   offset: UInt32(offset))
     }
 
-    @objc func getMedia(at index: Int) -> VLCMLMedia? {
+    @ObjCMethod func getMedia(at index: Int) -> VLCMLMedia? {
         fileArrayLock.lock()
         defer { fileArrayLock.unlock() }
         guard index >= 0, index < files.count else { return nil }
