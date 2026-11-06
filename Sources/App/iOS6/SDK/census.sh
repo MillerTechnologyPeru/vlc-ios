@@ -68,12 +68,29 @@ xargs -0 "$TOOLCHAIN/usr/bin/swiftc" -target armv7-apple-none-macho \
     -parse-as-library -module-name VLC -typecheck < "$BUILD/sources" > "$BUILD/errors.txt" 2>&1
 set -e
 
-echo "$(tr '\0' '\n' < "$BUILD/sources" | wc -l | tr -d ' ') files, $(grep -cE '^Sources/.*: error: ' "$BUILD/errors.txt") errors"
-echo "files with errors: $(grep -E '^Sources/.*\.swift:[0-9]+:[0-9]+: error: ' "$BUILD/errors.txt" | cut -d: -f1 | sort -u | wc -l | tr -d ' ')"
+# Each error once, with its file: an error in a macro expansion (such as an
+# @ObjCMethod body) counts for the file the expanded code comes from.
+awk '
+    /^Sources\/.*\.swift:[0-9]+:[0-9]+: error: / {
+        file = $0; sub(/:[0-9]+:[0-9]+: error: .*/, "", file)
+        message = $0; sub(/^.*: error: /, "", message)
+        print file "\t" message; next
+    }
+    /^macro expansion @[A-Za-z]+:[0-9]+:[0-9]+: error: / {
+        pending = $0; sub(/^.*: error: /, "", pending); next
+    }
+    pending != "" && /expanded code originates here/ {
+        file = $0; sub(/^[^S]*/, "", file); sub(/:[0-9]+:[0-9]+: note: .*/, "", file)
+        print file "\t" pending; pending = ""
+    }
+' "$BUILD/errors.txt" > "$BUILD/located.txt"
+
+echo "$(tr '\0' '\n' < "$BUILD/sources" | wc -l | tr -d ' ') files, $(wc -l < "$BUILD/located.txt" | tr -d ' ') errors"
+echo "files with errors: $(cut -f1 "$BUILD/located.txt" | sort -u | wc -l | tr -d ' ')"
 echo
 echo "by kind:"
-grep -oE " error: .*" "$BUILD/errors.txt" | sed -E "s/'[^']*'/X/g" | sort | uniq -c | sort -rn | head -15
+cut -f2 "$BUILD/located.txt" | sed -E "s/'[^']*'/X/g" | sort | uniq -c | sort -rn | head -15
 echo
 echo "most wanted names:"
-grep -oE "error: cannot find (type )?'[^']+' in scope" "$BUILD/errors.txt" | grep -oE "'[^']+'" |
+grep -oE "cannot find (type )?'[^']+' in scope|has no member '[^']+'" "$BUILD/located.txt" | grep -oE "'[^']+'$|'[^']+' in" | grep -oE "'[^']+'" |
     sort | uniq -c | sort -rn | head -40 | awk '{printf "%s %s  ", $1, $2} END {print ""}'
