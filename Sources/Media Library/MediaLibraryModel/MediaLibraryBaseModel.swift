@@ -10,11 +10,10 @@ import Foundation
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc(VLCMediaLibraryBaseModelObserver)
 protocol MediaLibraryBaseModelObserver {
     func mediaLibraryBaseModelReloadView()
-    @objc optional func mediaLibraryBaseModelReload(at indexPaths: [IndexPath])
-    @objc optional func mediaLibraryBaseModelPopView()
+    optional func mediaLibraryBaseModelReload(at indexPaths: [IndexPath])
+    optional func mediaLibraryBaseModelPopView()
 }
 
 // Expose a "shadow" version without associatedType in order to use it as a type
