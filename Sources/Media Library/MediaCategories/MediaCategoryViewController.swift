@@ -16,7 +16,7 @@
 import Foundation
 import UIKit
 
-@objc protocol MediaCategoryViewControllerDelegate: NSObjectProtocol {
+protocol MediaCategoryViewControllerDelegate: NSObjectProtocol {
     func needsToUpdateNavigationbarIfNeeded(_ viewController: MediaCategoryViewController)
     func enableCategorySwitching(for viewController: MediaCategoryViewController,
                                  enable: Bool)
@@ -26,7 +26,8 @@ import UIKit
     func updateSelectAllButton(for viewController: MediaCategoryViewController)
 }
 
-class MediaCategoryViewController: UICollectionViewController, UISearchBarDelegate, IndicatorInfoProvider {
+@ObjCImplementation(protocols: ["UISearchBarDelegate", "UISearchControllerDelegate", "UISearchResultsUpdating", "UICollectionViewDelegateFlowLayout"], extensions: ["Extension", "Extension2", "Extension3", "VLCRendererDiscovererManagerDelegate", "UISearchControllerDelegate", "Extension4", "Extension5", "UICollectionViewDelegateFlowLayout", "Extension6", "Extension7", "Extension8"])
+class MediaCategoryViewController: UICollectionViewControllerMethods, IndicatorInfoProvider {
     // MARK: - Properties
     var model: MediaLibraryBaseModel
     private var secondModel: MediaLibraryBaseModel
@@ -197,7 +198,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
     private lazy var searchBarButton: UIBarButtonItem = {
         let searchBarButton = UIBarButtonItem(barButtonSystemItem: .search,
                                               target: self,
-                                              action: #selector(handleSearchButton))
+                                              action: ObjC.selector("handleSearchButton"))
         searchBarButton.accessibilityLabel = NSLocalizedString("SEARCH", comment: "")
         return searchBarButton
     }()
@@ -288,7 +289,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
 
     private lazy var fabButton: UIButton = {
         let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(fabButtonPressed), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("fabButtonPressed"), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
 #if !os(visionOS)
         if #available(iOS 26.0, *) {
@@ -351,6 +352,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
     @available(*, unavailable)
     init() {
         fatalError()
+        objcInit()
     }
 
     init(mediaLibraryService: MediaLibraryService, model: MediaLibraryBaseModel) {
@@ -368,10 +370,10 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
 
         self.searchDataSource = LibrarySearchDataSource(model: self.model)
 
-        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        objcInit("initWithCollectionViewLayout:", UICollectionViewFlowLayout())
     }
 
-    @objc private func handleDisableGrouping() {
+    @ObjCMethod private func handleDisableGrouping() {
         let previousModel = model
         model = secondModel
         secondModel = previousModel
@@ -385,12 +387,12 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         reloadData()
     }
 
-    @objc func miniPlayerIsShown() {
+    @ObjCMethod func miniPlayerIsShown() {
         collectionView.contentInset.bottom = CGFloat(AudioMiniPlayer.height)
         handleFABButtonVisibility()
     }
 
-    @objc func miniPlayerIsHidden() {
+    @ObjCMethod func miniPlayerIsHidden() {
         collectionView.contentInset.bottom = 0
         handleFABButtonVisibility()
     }
@@ -486,7 +488,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         ])
     }
 
-    @objc func reloadData() {
+    @ObjCMethod func reloadData() {
         guard Thread.isMainThread else {
             DispatchQueue.main.async {
                 self.reloadData()
@@ -522,13 +524,9 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         return currentDataSet.isEmpty
     }
 
-    @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder: ) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         setupCollectionView()
         setupEditToolBar()
         if let model = model as? CollectionModel,
@@ -571,8 +569,8 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         addThemeChangeObserver()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
 
         guard let collectionViewTopConstraint = collectionViewTopConstraint else {
             return
@@ -584,15 +582,15 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         }
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
         if usesArtworkHeader {
             statusBarView.removeFromSuperview()
             view.addSubview(searchBar)
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
 #if os(iOS)
         let manager = VLCAppCoordinator.sharedInstance().rendererDiscovererManager
         manager.delegate = self
@@ -606,7 +604,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
             }
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(handleEditToolBar), name: Notification.Name("sidebarVisibilityChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("handleEditToolBar"), name: Notification.Name("sidebarVisibilityChanged"), object: nil)
 #endif
         PlaybackService.sharedInstance().setPlayerHidden(isEditing)
 
@@ -637,7 +635,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
         showGuideOnLaunch()
         updateCollectionViewForArtworkHeader()
 #if os(iOS)
@@ -648,8 +646,8 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @ObjCMethod("viewWillDisappear:") func viewWillDisappear(_ animated: Bool) {
+        callSuper("viewWillDisappear:", animated)
 
         fabButton.removeFromSuperview()
 
@@ -663,41 +661,41 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
     private func addInitializationCommonObservers() {
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(themeDidChange),
+        notificationCenter.addObserver(self, selector: ObjC.selector("themeDidChange"),
                                               name: .VLCThemeDidChangeNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(miniPlayerIsShown),
+        notificationCenter.addObserver(self, selector: ObjC.selector("miniPlayerIsShown"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerDisplayMiniPlayer),
                                        object: nil)
-        notificationCenter.addObserver(self, selector: #selector(miniPlayerIsHidden),
+        notificationCenter.addObserver(self, selector: ObjC.selector("miniPlayerIsHidden"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerHideMiniPlayer),
                                        object: nil)
-        notificationCenter.addObserver(self, selector: #selector(preferredContentSizeChanged(_:)),
+        notificationCenter.addObserver(self, selector: ObjC.selector("preferredContentSizeChanged:"),
                                        name: UIContentSizeCategory.didChangeNotification,
                                        object: nil)
 
         if model is MediaGroupViewModel || model is VideoModel {
-            notificationCenter.addObserver(self, selector: #selector(handleDisableGrouping),
+            notificationCenter.addObserver(self, selector: ObjC.selector("handleDisableGrouping"),
                                            name: .VLCDisableGroupingDidChangeNotification,
                                            object: nil)
         }
 
-        notificationCenter.addObserver(self, selector: #selector(playbackDidStop),
+        notificationCenter.addObserver(self, selector: ObjC.selector("playbackDidStop"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidStop), object: nil)
 
         if PlaybackService.sharedInstance().isPlaying && isPlaylistCurrentlyPlaying {
             addPlaybackWillStopObserver()
         }
 
-        notificationCenter.addObserver(self, selector: #selector(playbackDidStart),
+        notificationCenter.addObserver(self, selector: ObjC.selector("playbackDidStart"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidStart), object: nil)
-         notificationCenter.addObserver(self, selector: #selector(playbackDidStop),
+         notificationCenter.addObserver(self, selector: ObjC.selector("playbackDidStop"),
                                                 name: Notification.Name(VLCPlaybackServicePlaybackDidStop), object: nil)
 
         if model is TrackModel || model is CollectionModel {
             for name in [VLCPlaybackServicePlaybackDidMoveOnToNextItem,
                          VLCPlaybackServicePlaybackDidResume,
                          VLCPlaybackServicePlaybackDidPause] {
-                notificationCenter.addObserver(self, selector: #selector(updateNowPlayingIndicators),
+                notificationCenter.addObserver(self, selector: ObjC.selector("updateNowPlayingIndicators"),
                                                name: Notification.Name(name), object: nil)
             }
         }
@@ -726,7 +724,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
     }
 
     private func addThemeChangeObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("themeDidChange"),
                                                name: .VLCThemeDidChangeNotification, object: nil)
     }
 
@@ -764,7 +762,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
 #endif
     }
 
-    @objc func themeDidChange() {
+    @ObjCMethod func themeDidChange() {
         let colors = PresentationTheme.current.colors
 
         collectionView?.backgroundColor = colors.background
@@ -815,7 +813,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         }
     }
 
-    @objc private func playbackDidStop() {
+    @ObjCMethod private func playbackDidStop() {
         //Handles the visibility when stop the playback from a full screen video player
         handleFABButtonVisibility()
 
@@ -824,7 +822,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         }
     }
 
-    @objc private func playbackDidStart() {
+    @ObjCMethod private func playbackDidStart() {
         if model is TrackModel || model is CollectionModel {
             updateNowPlayingIndicators()
         }
@@ -859,8 +857,8 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
 
     // MARK: - Renderer
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
+    @ObjCMethod("viewWillTransitionToSize:withTransitionCoordinator:") func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        callSuper("viewWillTransitionToSize:withTransitionCoordinator:", size, coordinator)
         cachedCellSize = .zero
         collectionView?.collectionViewLayout.invalidateLayout()
 
@@ -871,11 +869,11 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
 
     // MARK: - Edit
 
-    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewWillBeginDragging:") func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         resetScrollView()
     }
 
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidScroll:") func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if #available(iOS 26.0, visionOS 26.0, *) {
             if usesArtworkHeader {
                 updateArtworkHeader()
@@ -918,12 +916,12 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
         }
     }
 
-    override func setEditing(_ editing: Bool, animated: Bool) {
+    @ObjCMethod("setEditing:animated:") func setEditing(_ editing: Bool, animated: Bool) {
         guard editing != isEditing else {
             // Guard in case where setEditing is called twice with the same state
             return
         }
-        super.setEditing(editing, animated: animated)
+        callSuper("setEditing:animated:", editing, animated)
 
         editController.shouldResetCells(!isEditing)
 
@@ -982,7 +980,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
     }
 
 #if os(iOS)
-    @objc private func handleEditToolBar() {
+    @ObjCMethod private func handleEditToolBar() {
         guard #available(iOS 18.0, *),
               UIDevice.current.userInterfaceIdiom == .pad,
               isEditing,
@@ -1028,6 +1026,7 @@ class MediaCategoryViewController: UICollectionViewController, UISearchBarDelega
 
 // MARK: - Automatic Scrolling to currently playing media
 
+@ObjCExtension("Extension")
 extension MediaCategoryViewController {
     func scrollToCurrentlyPlaying() {
         let playbackService = PlaybackService.sharedInstance()
@@ -1276,7 +1275,7 @@ extension MediaCategoryViewController {
     }
 
     //highlight the current playing cell, in case scrolling animation is done
-    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidEndScrollingAnimation:") func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         DispatchQueue.main.async {
             self.shouldHighlightCurrentPlaying()
         }
@@ -1300,6 +1299,7 @@ extension MediaCategoryViewController {
 
 // MARK: - MediaCategoryViewController - Private Helpers
 
+@ObjCExtension("Extension2")
 private extension MediaCategoryViewController {
 
     private func getObject(at indexPath: IndexPath) -> VLCMLObject? {
@@ -1386,7 +1386,7 @@ private extension MediaCategoryViewController {
     }
 #endif
 
-    @objc func preferredContentSizeChanged(_ notification: Notification) {
+    @ObjCMethod func preferredContentSizeChanged(_ notification: Notification) {
         cachedCellSize = .zero
         collectionView?.collectionViewLayout.invalidateLayout()
     }
@@ -1410,11 +1410,12 @@ private extension MediaCategoryViewController {
 
 // MARK: - NavigationItem
 
+@ObjCExtension("Extension3")
 extension MediaCategoryViewController {
     private func setupSelectAllButton() -> UIBarButtonItem {
         let selectAll = UIBarButtonItem(image: UIImage(named: "emptySelectAll"),
                                         style: .plain, target: self,
-                                        action: #selector(handleSelectAll))
+                                        action: ObjC.selector("handleSelectAll"))
         selectAll.accessibilityLabel = NSLocalizedString("BUTTON_SELECT_ALL", comment: "")
         selectAll.accessibilityHint = NSLocalizedString("BUTTON_SELECT_ALL_HINT", comment: "")
         return selectAll
@@ -1423,7 +1424,7 @@ extension MediaCategoryViewController {
     private func setupClearHistoryButton() -> UIBarButtonItem {
         let clearHistory = UIBarButtonItem(title: NSLocalizedString("BUTTON_CLEAR", comment: ""),
                                            style: .plain, target: self,
-                                           action: #selector(handleClearHistory))
+                                           action: ObjC.selector("handleClearHistory"))
         clearHistory.accessibilityLabel = NSLocalizedString("BUTTON_CLEAR", comment: "")
         return clearHistory
     }
@@ -1501,7 +1502,7 @@ extension MediaCategoryViewController {
                                                                 regroupButton])
     }
 
-    @objc func executeSortAction(with sortingCriteria: VLCMLSortingCriteria, desc: Bool) {
+    @ObjCMethod func executeSortAction(with sortingCriteria: VLCMLSortingCriteria, desc: Bool) {
         model.sort(by: sortingCriteria, desc: desc)
         userDefaults.set(desc,
                          forKey: "\(kVLCSortDescendingDefault)\(model.name)")
@@ -1510,7 +1511,7 @@ extension MediaCategoryViewController {
         reloadData()
     }
 
-    @objc func handleClearHistory() {
+    @ObjCMethod func handleClearHistory() {
         let cancelAction: UIAlertAction = UIAlertAction(title: NSLocalizedString("BUTTON_CANCEL", comment: ""), style: .cancel)
 
         let clearAction: UIAlertAction = UIAlertAction(title: NSLocalizedString("BUTTON_CLEAR", comment: ""), style: .destructive) { _ in
@@ -1527,18 +1528,18 @@ extension MediaCategoryViewController {
         present(alertController, animated: true)
     }
 
-    @objc func handleSelectAll() {
+    @ObjCMethod func handleSelectAll() {
         isAllSelected = !isAllSelected
         editController.selectAll()
         selectAllBarButton.image = isAllSelected ? UIImage(named: "allSelected")
         : UIImage(named: "emptySelectAll")
     }
 
-    @objc func handleEditingInsideCollection() {
+    @ObjCMethod func handleEditingInsideCollection() {
         isEditing = !isEditing
         navigationItem.rightBarButtonItems = isEditing ? [UIBarButtonItem(barButtonSystemItem: .done,
                                                                           target: self,
-                                                                          action: #selector(handleEditingInsideCollection))]
+                                                                          action: ObjC.selector("handleEditingInsideCollection"))]
         : rightBarButtonItems()
         navigationItem.leftBarButtonItems = leftBarButtonItem()
         if navigationController?.viewControllers.last is ArtistViewController || navigationController?.viewControllers.last is CollectionCategoryViewController {
@@ -1551,8 +1552,9 @@ extension MediaCategoryViewController {
 // MARK: - VLCRendererDiscovererManagerDelegate
 
 #if os(iOS)
+@ObjCExtension("VLCRendererDiscovererManagerDelegate")
 extension MediaCategoryViewController: VLCRendererDiscovererManagerDelegate {
-    @objc func addedRendererItem() {
+    @ObjCMethod func addedRendererItem() {
         updateBarButtonItems()
 
         if let delegate = delegate as? MediaViewController {
@@ -1560,7 +1562,7 @@ extension MediaCategoryViewController: VLCRendererDiscovererManagerDelegate {
         }
     }
 
-    @objc func removedRendererItem() {
+    @ObjCMethod func removedRendererItem() {
         updateBarButtonItems()
 
         if let delegate = delegate as? MediaViewController,
@@ -1573,12 +1575,13 @@ extension MediaCategoryViewController: VLCRendererDiscovererManagerDelegate {
 
 // MARK: - UISearchBarDelegate
 
-extension MediaCategoryViewController: UISearchControllerDelegate, UISearchResultsUpdating {
-    func willPresentSearchController(_ searchController: UISearchController) {
+@ObjCExtension("UISearchControllerDelegate")
+extension MediaCategoryViewController {
+    @ObjCMethod("willPresentSearchController:") func willPresentSearchController(_ searchController: UISearchController) {
         searchBarTextDidBeginEditing(searchController.searchBar)
     }
 
-    func didPresentSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("didPresentSearchController:") func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
 
         if #unavailable(iOS 26.0) {
@@ -1592,7 +1595,7 @@ extension MediaCategoryViewController: UISearchControllerDelegate, UISearchResul
         }
     }
 
-    func didDismissSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("didDismissSearchController:") func didDismissSearchController(_ searchController: UISearchController) {
         if searchDataSource.isSearching {
             searchBarCancelButtonClicked(searchController.searchBar)
         }
@@ -1602,7 +1605,7 @@ extension MediaCategoryViewController: UISearchControllerDelegate, UISearchResul
         }
     }
 
-    func updateSearchResults(for searchController: UISearchController) {
+    @ObjCMethod("updateSearchResultsForSearchController:") func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text ?? ""
 
         guard searchDataSource.isSearching, searchText != searchDataSource.searchString else {
@@ -1612,7 +1615,7 @@ extension MediaCategoryViewController: UISearchControllerDelegate, UISearchResul
         searchBar(searchController.searchBar, textDidChange: searchText)
     }
 
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    @ObjCMethod("searchBarTextDidBeginEditing:") func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchDataSource.shouldReloadFor(searchString: "")
         reloadData()
         searchDataSource.isSearching = true
@@ -1620,7 +1623,7 @@ extension MediaCategoryViewController: UISearchControllerDelegate, UISearchResul
         handleFABButtonVisibility()
     }
 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    @ObjCMethod("searchBarCancelButtonClicked:") func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         // Empty the text field and reset the research
         searchBar.text = ""
@@ -1634,19 +1637,19 @@ extension MediaCategoryViewController: UISearchControllerDelegate, UISearchResul
         handleFABButtonVisibility()
     }
 
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    @ObjCMethod("searchBarSearchButtonClicked:") func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         delegate?.enableCategorySwitching(for: self, enable: true)
     }
 
-    @objc private func handleSearchButton() {
+    @ObjCMethod private func handleSearchButton() {
         navigationItem.searchController = searchController
         DispatchQueue.main.async { [weak self] in
             self?.searchController.isActive = true
         }
     }
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    @ObjCMethod("searchBar:textDidChange:") func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchDataSource.shouldReloadFor(searchString: searchText)
 
         guard let tabSearchDataSource = activeTabSearchDataSource else {
@@ -2109,8 +2112,9 @@ private extension MediaCategoryViewController {
 
 // MARK: - UICollectionViewDelegate
 
+@ObjCExtension("Extension4")
 extension MediaCategoryViewController {
-    override func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+    @ObjCMethod("collectionView:shouldBeginMultipleSelectionInteractionAtIndexPath:") func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
         // Set collectionView.isEditing to true only if the gesture is triggered properly
         if collectionView.panGestureRecognizer.numberOfTouches == 2 && !isEmptyCollectionView() {
             return true
@@ -2119,7 +2123,7 @@ extension MediaCategoryViewController {
         return false
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:didBeginMultipleSelectionInteractionAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
         // Put the collection view into editing mode.
         delegate?.setEditingStateChanged(for: self, editing: true)
     }
@@ -2196,11 +2200,11 @@ extension MediaCategoryViewController {
         navigationController?.pushViewController(collectionViewController, animated: true)
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedItem(at: indexPath)
     }
 
-    override func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:contextMenuConfigurationForItemAtIndexPath:point:") func collectionView(_ collectionView: UICollectionView,
                                  contextMenuConfigurationForItemAt indexPath: IndexPath,
                                  point: CGPoint) -> UIContextMenuConfiguration? {
         let modelContent = getObject(at: indexPath)
@@ -2250,7 +2254,7 @@ extension MediaCategoryViewController {
         return configuration
     }
 
-    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+    @ObjCMethod("collectionView:willPerformPreviewActionForMenuWithConfiguration:animator:") func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         guard let indexPath = configuration.identifier as? IndexPath else { return }
 
         if animator.previewViewController is VideoPreviewController {
@@ -2263,7 +2267,7 @@ extension MediaCategoryViewController {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    @ObjCMethod("collectionView:layout:referenceSizeForHeaderInSection:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 
         if isSectioned {
             return .init(width: collectionView.safeAreaLayoutGuide.layoutFrame.width, height: 40)
@@ -2276,7 +2280,7 @@ extension MediaCategoryViewController {
         return artworkHeaderLayout.getHeaderSize(with: collectionView.frame.size.width)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+    @ObjCMethod("collectionView:layout:referenceSizeForFooterInSection:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard let model = model as? CollectionModel, showsArtworkHeader else {
             return .zero
         }
@@ -2287,16 +2291,17 @@ extension MediaCategoryViewController {
 
 // MARK: - UICollectionViewDataSource
 
+@ObjCExtension("Extension5")
 extension MediaCategoryViewController {
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    @ObjCMethod("numberOfSectionsInCollectionView:") func numberOfSections(in collectionView: UICollectionView) -> Int {
         return isSectioned ? currentDataSetGroupedByTitle.count : 1
     }
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return isSectioned ? currentDataSetGroupedByTitle[section].items.count : currentDataSet.count
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let mediaCell = collectionView.dequeueReusableCell(withReuseIdentifier:model.cellType.defaultReuseIdentifier, for: indexPath) as? BaseCollectionViewCell else {
             assertionFailure("you forgot to register the cell or the cell is not a subclass of BaseCollectionViewCell")
             return UICollectionViewCell()
@@ -2373,7 +2378,7 @@ extension MediaCategoryViewController {
         return playingMedia.identifier() == media.identifier()
     }
 
-    @objc private func updateNowPlayingIndicators() {
+    @ObjCMethod private func updateNowPlayingIndicators() {
         guard let collectionView = collectionView,
               !isShowingTabSearchResults else {
             return
@@ -2425,7 +2430,7 @@ extension MediaCategoryViewController {
         return headerView
     }
 
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    @ObjCMethod("collectionView:viewForSupplementaryElementOfKind:atIndexPath:") func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader else {
             if kind == UICollectionView.elementKindSectionFooter,
                let collectionModel = model as? CollectionModel, usesArtworkHeader,
@@ -2452,8 +2457,9 @@ extension MediaCategoryViewController {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension MediaCategoryViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+@ObjCExtension("UICollectionViewDelegateFlowLayout")
+extension MediaCategoryViewController {
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if cachedCellSize == .zero {
             let toWidth = collectionView.safeAreaLayoutGuide.layoutFrame.width
             let safeAreaInsets = collectionView.window?.safeAreaInsets ?? collectionView.safeAreaInsets
@@ -2462,7 +2468,7 @@ extension MediaCategoryViewController: UICollectionViewDelegateFlowLayout {
         return cachedCellSize
     }
 
-    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:willDisplayCell:forItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let totalCount = model.anyfiles.count
         var position = indexPath.row
         if isSectioned {
@@ -2475,23 +2481,23 @@ extension MediaCategoryViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
+    @ObjCMethod("viewSafeAreaInsetsDidChange") func viewSafeAreaInsetsDidChange() {
+        callSuper("viewSafeAreaInsetsDidChange")
         parent?.view.setNeedsLayout()
         cachedCellSize = .zero
         collectionView?.collectionViewLayout.invalidateLayout()
         updateEmptyViewLayoutMargins()
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    @ObjCMethod("collectionView:layout:insetForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: model.cellType.edgePadding, left: model.cellType.edgePadding, bottom: model.cellType.edgePadding, right: model.cellType.edgePadding)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    @ObjCMethod("collectionView:layout:minimumLineSpacingForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return model.cellType.edgePadding
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    @ObjCMethod("collectionView:layout:minimumInteritemSpacingForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return model.cellType.interItemPadding
     }
 }
@@ -2723,6 +2729,7 @@ extension MediaCategoryViewController: MediaLibraryBaseModelObserver {
 
 // MARK: - Player
 
+@ObjCExtension("Extension6")
 extension MediaCategoryViewController {
     func play(media: VLCMLMedia, at indexPath: IndexPath) {
         let playbackController = PlaybackService.sharedInstance()
@@ -2797,12 +2804,12 @@ extension MediaCategoryViewController {
 
     private func addPlaybackWillStopObserver() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.playlistPlaybackWillStop(_:)),
+                                               selector: ObjC.selector("playlistPlaybackWillStop:"),
                                                name: NSNotification.Name(rawValue: VLCPlaybackServicePlaybackWillStop),
                                                object: nil)
     }
 
-    @objc func playlistPlaybackWillStop(_ notification: NSNotification) {
+    @ObjCMethod func playlistPlaybackWillStop(_ notification: NSNotification) {
         // Checking playlist info existed in queue dictionary, this handling indicating last media when playing action is done through queue options[appendToQueue, playNextAtQueue]
         if let lastPlayed = notification.userInfo?[VLCLastPlaylistPlayedMedia] as? VLCMLMedia {
             let currentPlaylistMediaQueue = playbackCache.getCurrentPlaylistMediasQueue()
@@ -2935,6 +2942,7 @@ extension MediaCategoryViewController: MediaCollectionViewCellEnqueueDelegate {
 
 // MARK: - Floating Action Button
 
+@ObjCExtension("Extension7")
 extension MediaCategoryViewController {
     private func configureFABButton() {
         guard let action = fabAction else { return }
@@ -2971,7 +2979,7 @@ extension MediaCategoryViewController {
         fabButton.setImage(image, for: .normal)
     }
 
-    @objc private func fabButtonPressed() {
+    @ObjCMethod private func fabButtonPressed() {
         let playbackService = PlaybackService.sharedInstance()
         switch fabAction {
         case .shuffleAudio:
@@ -3037,13 +3045,14 @@ extension MediaCategoryViewController {
 
 // MARK: Index section title
 
+@ObjCExtension("Extension8")
 extension MediaCategoryViewController {
-    override func indexTitles(for collectionView: UICollectionView) -> [String]? {
+    @ObjCMethod("indexTitlesForCollectionView:") func indexTitles(for collectionView: UICollectionView) -> [String]? {
         guard isSectioned else { return nil }
         return currentDataSetGroupedByTitle.map { $0.key }
     }
 
-    override func collectionView(_ collectionView: UICollectionView, indexPathForIndexTitle title: String, at index: Int) -> IndexPath {
+    @ObjCMethod("collectionView:indexPathForIndexTitle:atIndex:") func collectionView(_ collectionView: UICollectionView, indexPathForIndexTitle title: String, at index: Int) -> IndexPath {
         return IndexPath(item: 0, section: index)
     }
 }
