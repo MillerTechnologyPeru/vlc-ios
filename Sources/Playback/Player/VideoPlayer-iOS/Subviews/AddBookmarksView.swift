@@ -16,7 +16,8 @@ protocol AddBookmarksViewDelegate: AnyObject {
     func addBookmarksViewAddBookmark()
 }
 
-class AddBookmarksView: UIView {
+@ObjCImplementation
+class AddBookmarksView: UIViewMethods {
     private let closeButton = UIButton()
     private let addButton = UIButton()
     private let titleLabel = UILabel()
@@ -28,18 +29,18 @@ class AddBookmarksView: UIView {
     weak var delegate: AddBookmarksViewDelegate?
 
     init(frame: CGRect, tableView: UITableView) {
-        super.init(frame: frame)
+        objcInit("initWithFrame:", frame)
         bookmarksTableView = tableView
         commonInit()
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         commonInit()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         commonInit()
     }
 
@@ -74,11 +75,11 @@ class AddBookmarksView: UIView {
         closeButton.setImage(UIImage(named: "close")?.withRenderingMode(.alwaysTemplate), for: .normal)
         closeButton.imageView?.contentMode = .scaleAspectFit
         closeButton.layer.cornerRadius = 12
-        closeButton.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        closeButton.addTarget(self, action: ObjC.selector("closeView"), for: .touchUpInside)
 
         addButton.setImage(UIImage(named: "add-bookmark")?.withRenderingMode(.alwaysTemplate), for: .normal)
         addButton.imageView?.contentMode = .scaleAspectFit
-        addButton.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+        addButton.addTarget(self, action: ObjC.selector("addBookmark"), for: .touchUpInside)
     }
 
     private func setupSeparator() {
@@ -139,11 +140,11 @@ class AddBookmarksView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
 
-    @objc private func closeView() {
+    @ObjCMethod private func closeView() {
         delegate?.addBookmarksViewDidClose()
     }
 
-    @objc private func addBookmark() {
+    @ObjCMethod private func addBookmark() {
         delegate?.addBookmarksViewAddBookmark()
     }
 
