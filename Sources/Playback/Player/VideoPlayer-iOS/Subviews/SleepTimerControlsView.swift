@@ -16,7 +16,8 @@ protocol SleepTimerControlsViewDelegate: AnyObject {
     func sleepTimerControlsViewDidRequestDismissal(_ controlsView: SleepTimerControlsView)
 }
 
-final class SleepTimerControlsView: UIView {
+@ObjCImplementation
+final class SleepTimerControlsView: UIViewMethods {
     private enum Metrics {
         static let horizontalPadding: CGFloat = 14
         static let verticalPadding: CGFloat = 10
@@ -76,7 +77,7 @@ final class SleepTimerControlsView: UIView {
         button.setImage(UIImage(systemName: "arrow.counterclockwise", withConfiguration: configuration), for: .normal)
         button.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
         button.accessibilityLabel = NSLocalizedString("BUTTON_RESET", comment: "")
-        button.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapReset"), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -98,7 +99,7 @@ final class SleepTimerControlsView: UIView {
         let button = UIButton(type: .custom)
         button.tag = index
         button.accessibilityLabel = Self.spokenFormatter.string(from: TimeInterval(minutes * 60))
-        button.addTarget(self, action: #selector(didTapPreset(_:)), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapPreset:"), for: .touchUpInside)
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumControlHeight).isActive = true
         return button
     }
@@ -114,7 +115,7 @@ final class SleepTimerControlsView: UIView {
 
     private lazy var stopAfterButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.addTarget(self, action: #selector(didTapStopAfter), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("didTapStopAfter"), for: .touchUpInside)
         button.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumControlHeight).isActive = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -124,7 +125,7 @@ final class SleepTimerControlsView: UIView {
 
     init(isAudioPlayer: Bool) {
         self.isAudioPlayer = isAudioPlayer
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         translatesAutoresizingMaskIntoConstraints = false
         overrideUserInterfaceStyle = .dark
 
@@ -133,31 +134,28 @@ final class SleepTimerControlsView: UIView {
         updateInterface()
         updatePresetButtons(force: true)
 
-        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(requestDismissal))
+        let swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: ObjC.selector("requestDismissal"))
         swipeDownRecognizer.direction = .down
         addGestureRecognizer(swipeDownRecognizer)
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(sleepTimerChanged),
+                                       selector: ObjC.selector("sleepTimerChanged"),
                                        name: Notification.Name(VLCPlaybackServiceSleepTimerDidChange),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(reduceTransparencyChanged),
+                                       selector: ObjC.selector("reduceTransparencyChanged"),
                                        name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(darkerSystemColorsChanged),
+                                       selector: ObjC.selector("darkerSystemColorsChanged"),
                                        name: UIAccessibility.darkerSystemColorsStatusDidChangeNotification,
                                        object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
+    @ObjCMethod("didMoveToWindow") func didMoveToWindow() {
+        callSuper("didMoveToWindow")
         refreshTimer?.invalidate()
         refreshTimer = nil
         guard window != nil else {
@@ -166,21 +164,21 @@ final class SleepTimerControlsView: UIView {
 
         refreshTimer = Timer.scheduledTimer(timeInterval: 1,
                                             target: self,
-                                            selector: #selector(refreshTimerFired),
+                                            selector: ObjC.selector("refreshTimerFired"),
                                             userInfo: nil,
                                             repeats: true)
         updateInterface()
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    @ObjCMethod("traitCollectionDidChange:") func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        callSuper("traitCollectionDidChange:", previousTraitCollection)
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             updatePresetAxis()
             superview?.setNeedsLayout()
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
+    @ObjCMethod("accessibilityPerformEscape") func accessibilityPerformEscape() -> Bool {
         requestDismissal()
         return true
     }
@@ -356,22 +354,22 @@ final class SleepTimerControlsView: UIView {
 
     // MARK: - Actions
 
-    @objc private func requestDismissal() {
+    @ObjCMethod private func requestDismissal() {
         delegate?.sleepTimerControlsViewDidRequestDismissal(self)
     }
 
-    @objc private func didTapReset() {
+    @ObjCMethod private func didTapReset() {
         playbackService.cancelSleepTimer()
         playbackService.stopAfterCurrentItem = false
         announceState()
     }
 
-    @objc private func didTapPreset(_ sender: UIButton) {
+    @ObjCMethod private func didTapPreset(_ sender: UIButton) {
         playbackService.scheduleSleepTimer(withInterval: TimeInterval(Self.presetMinutes[sender.tag] * 60))
         announceState()
     }
 
-    @objc private func didTapStopAfter() {
+    @ObjCMethod private func didTapStopAfter() {
         playbackService.stopAfterCurrentItem = !playbackService.stopAfterCurrentItem
         announceState()
     }
@@ -383,22 +381,22 @@ final class SleepTimerControlsView: UIView {
         UIAccessibility.post(notification: .announcement, argument: title + " " + value)
     }
 
-    @objc private func sleepTimerChanged() {
+    @ObjCMethod private func sleepTimerChanged() {
         updateInterface()
     }
 
-    @objc private func refreshTimerFired() {
+    @ObjCMethod private func refreshTimerFired() {
         updateInterface()
     }
 
-    @objc private func reduceTransparencyChanged() {
+    @ObjCMethod private func reduceTransparencyChanged() {
         installBackgroundEffect()
         updateInterface()
         updatePresetButtons(force: true)
         updateStopAfterButton(force: true)
     }
 
-    @objc private func darkerSystemColorsChanged() {
+    @ObjCMethod private func darkerSystemColorsChanged() {
         updateInterface()
         updatePresetButtons(force: true)
         updateStopAfterButton(force: true)
