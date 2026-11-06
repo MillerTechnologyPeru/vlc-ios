@@ -11,10 +11,12 @@
  *****************************************************************************/
 import UIKit
 
-@objc(VLCAppearanceManager)
-class AppearanceManager: NSObject {
+@ObjCImplementation("VLCAppearanceManager")
+class AppearanceManager: NSObjectMethods {
+    init() { objcInit() }
 
-    @objc class func setupAppearance(theme: PresentationTheme = PresentationTheme.current) {
+
+    @ObjCMethod class func setupAppearance(theme: PresentationTheme = PresentationTheme.current) {
 #if !os(tvOS)
         // Change the keyboard for UISearchBar
         UITextField.appearance().keyboardAppearance = theme.isDark ? .dark : .light
@@ -56,7 +58,7 @@ class AppearanceManager: NSObject {
 #endif
     }
 
-    @objc class func setupUserInterfaceStyle(theme: PresentationTheme = PresentationTheme.current) {
+    @ObjCMethod class func setupUserInterfaceStyle(theme: PresentationTheme = PresentationTheme.current) {
 #if !os(tvOS)
         let style: UIUserInterfaceStyle
         if UserDefaults.standard.integer(forKey: kVLCSettingAppTheme) == kVLCSettingAppThemeSystem {
@@ -74,7 +76,7 @@ class AppearanceManager: NSObject {
 #endif
     }
 
-    @objc class func navigationbarAppearance() -> UINavigationBarAppearance {
+    @ObjCMethod class func navigationbarAppearance() -> UINavigationBarAppearance {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
         navBarAppearance.backgroundColor = PresentationTheme.current.colors.navigationbarColor
@@ -83,7 +85,7 @@ class AppearanceManager: NSObject {
         return navBarAppearance
     }
 
-    @objc class func navigationBarArtworkAppearance() -> UINavigationBarAppearance {
+    @ObjCMethod class func navigationBarArtworkAppearance() -> UINavigationBarAppearance {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithTransparentBackground()
         navBarAppearance.backgroundColor = .clear
