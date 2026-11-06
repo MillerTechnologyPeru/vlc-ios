@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastDirectoryFeedInfoCell: UITableViewCell {
+@ObjCImplementation
+class PodcastDirectoryFeedInfoCell: UITableViewCellMethods {
     static let reuseIdentifier = "PodcastDirectoryFeedInfoCell"
 
     private static let dateFormatter: DateFormatter = {
@@ -45,13 +46,13 @@ class PodcastDirectoryFeedInfoCell: UITableViewCell {
 
     private var summaryText: NSMutableAttributedString?
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        objcInit("initWithStyle:reuseIdentifier:", style, reuseIdentifier)
         setupUI()
     }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
         setupUI()
     }
 
@@ -77,7 +78,7 @@ class PodcastDirectoryFeedInfoCell: UITableViewCell {
 
         applyTheme()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applyTheme),
+                                               selector: ObjC.selector("applyTheme"),
                                                name: .VLCThemeDidChangeNotification,
                                                object: nil)
     }
@@ -129,7 +130,7 @@ class PodcastDirectoryFeedInfoCell: UITableViewCell {
         summaryTextView.isHidden = false
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
 
         backgroundColor = colors.background
