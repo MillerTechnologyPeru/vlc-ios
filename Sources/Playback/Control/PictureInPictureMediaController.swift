@@ -13,12 +13,12 @@
 import Foundation
 import VLCKit
 
-@objc(VLCPictureInPictureMediaController)
-final class PictureInPictureMediaController: NSObject {
+@ObjCImplementation("VLCPictureInPictureMediaController")
+final class PictureInPictureMediaController: NSObjectMethods {
     private let mediaPlayer: VLCMediaPlayer
-    @objc(initWithMediaPlayer:)
     init(_ mediaPlayer: VLCMediaPlayer) {
         self.mediaPlayer = mediaPlayer
+        objcInit()
     }
 }
 
