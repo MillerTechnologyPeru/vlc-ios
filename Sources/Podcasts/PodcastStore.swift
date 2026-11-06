@@ -14,17 +14,18 @@
 import UIKit
 import VLCMediaLibraryKit
 
-@objc protocol PodcastStoreObserver {
+protocol PodcastStoreObserver {
     func podcastStore(_ store: PodcastStore, didUpdateEpisodeWithId episodeId: String)
 }
 
-@objc enum PodcastSubscriptionState: Int {
+enum PodcastSubscriptionState: Int {
     case available
     case pending
     case subscribed
 }
 
-final class PodcastStore: NSObject {
+@ObjCImplementation
+final class PodcastStore: NSObjectMethods {
     private let episodeObservable = VLCObservable<PodcastStoreObserver>()
 
     private let subscriptionModel: PodcastSubscriptionModel
@@ -77,10 +78,10 @@ final class PodcastStore: NSObject {
     private static let episodeSortCriteriaKey = "\(kVLCSortDefault)podcastEpisodes"
     private static let episodeSortDescendingKey = "\(kVLCSortDescendingDefault)podcastEpisodes"
 
-    @objc init(mediaLibraryService: MediaLibraryService) {
+    init(mediaLibraryService: MediaLibraryService) {
         self.mediaLibraryService = mediaLibraryService
         subscriptionModel = PodcastSubscriptionModel(medialibrary: mediaLibraryService)
-        super.init()
+        objcInit("init")
         mediaLibraryService.subscriptionCacher.delegate = self
         subscriptionModel.delegate = self
         mediaLibraryService.observable.addObserver(self)
@@ -91,16 +92,16 @@ final class PodcastStore: NSObject {
                      VLCPlaybackServicePlaybackDidResume,
                      VLCPlaybackServicePlaybackDidStop] {
             notificationCenter.addObserver(self,
-                                           selector: #selector(playbackStateDidChange),
+                                           selector: ObjC.selector("playbackStateDidChange"),
                                            name: Notification.Name(name),
                                            object: nil)
         }
         notificationCenter.addObserver(self,
-                                       selector: #selector(applicationDidEnterBackground),
+                                       selector: ObjC.selector("applicationDidEnterBackground"),
                                        name: UIApplication.didEnterBackgroundNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(applicationDidBecomeActive),
+                                       selector: ObjC.selector("applicationDidBecomeActive"),
                                        name: UIApplication.didBecomeActiveNotification,
                                        object: nil)
 
@@ -109,11 +110,11 @@ final class PodcastStore: NSObject {
         }
     }
 
-    @objc private func applicationDidEnterBackground() {
+    @ObjCMethod private func applicationDidEnterBackground() {
         activationPending = true
     }
 
-    @objc private func applicationDidBecomeActive() {
+    @ObjCMethod private func applicationDidBecomeActive() {
         guard activationPending else {
             return
         }
@@ -126,7 +127,7 @@ final class PodcastStore: NSObject {
         }
     }
 
-    @objc private func playbackStateDidChange() {
+    @ObjCMethod private func playbackStateDidChange() {
         let playingEpisodeId = nowPlayingEpisodeId
         guard let episodeId = playingEpisodeId ?? lastPlayedEpisodeId else {
             return
@@ -138,11 +139,11 @@ final class PodcastStore: NSObject {
         notifyReload()
     }
 
-    @objc func addObserver(_ observer: MediaLibraryBaseModelObserver) {
+    @ObjCMethod func addObserver(_ observer: MediaLibraryBaseModelObserver) {
         subscriptionModel.observable.addObserver(observer)
     }
 
-    @objc func removeObserver(_ observer: MediaLibraryBaseModelObserver) {
+    @ObjCMethod func removeObserver(_ observer: MediaLibraryBaseModelObserver) {
         subscriptionModel.observable.removeObserver(observer)
     }
 
@@ -268,8 +269,7 @@ final class PodcastStore: NSObject {
         return cachedShowsById[showId]
     }
 
-    @objc(subscriptionStateForFeedURL:)
-    func subscriptionState(forFeedURL feedURL: URL) -> PodcastSubscriptionState {
+    @ObjCMethod("subscriptionStateForFeedURL:") func subscriptionState(forFeedURL feedURL: URL) -> PodcastSubscriptionState {
         if pendingFeedURLs.contains(feedURL) {
             return .pending
         }
