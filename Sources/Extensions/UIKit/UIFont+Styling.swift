@@ -21,7 +21,7 @@ extension UIFont {
     }
 
     /// Returns a semi-bold version of `self`
-    @objc public var semibolded: UIFont {
+    public var semibolded: UIFont {
         let newDescriptor = fontDescriptor.addingAttributes([
             .traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.semibold]
         ])
@@ -34,7 +34,7 @@ extension UIFont {
         return UIFont(descriptor: newDescriptor, size: 0)
     }
 
-    @objc class func preferredCustomFont(forTextStyle textStyle: UIFont.TextStyle) -> UIFont {
+    @ObjCMethod class func preferredCustomFont(forTextStyle textStyle: UIFont.TextStyle) -> UIFont {
         let systemFontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
 
         return UIFont.systemFont(ofSize: systemFontDescriptor.pointSize)
