@@ -20,7 +20,8 @@ protocol FavoriteSectionHeaderDelegate {
     func reloadData()
 }
 
-class FavoriteHeaderContentView: UIView {
+@ObjCImplementation
+class FavoriteHeaderContentView: UIViewMethods {
     var delegate: FavoriteSectionHeaderDelegate?
     var section: Int = -1
     
@@ -45,11 +46,11 @@ class FavoriteHeaderContentView: UIView {
         button.setTitle(NSLocalizedString("BUTTON_RENAME", comment: ""), for: .normal)
         #if os(iOS)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.addTarget(self, action: #selector(renameButtonAction(_:)), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("renameButtonAction:"), for: .touchUpInside)
         button.setTitleColor(UIColor.orange, for: .normal)
         #else
         button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .medium)
-        button.addTarget(self, action: #selector(renameButtonAction(_:)), for: .primaryActionTriggered)
+        button.addTarget(self, action: ObjC.selector("renameButtonAction:"), for: .primaryActionTriggered)
         button.setTitleColor(UIColor.orange, for: .focused)
         #endif
         return button
@@ -61,8 +62,8 @@ class FavoriteHeaderContentView: UIView {
     var buttonPadding: CGFloat = 20
     #endif
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         addSubview(renameButton)
         addSubview(hostnameLabel)
 
@@ -74,11 +75,8 @@ class FavoriteHeaderContentView: UIView {
         ])
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
-    @objc func renameButtonAction(_ sender: UIButton) {
+    @ObjCMethod func renameButtonAction(_ sender: UIButton) {
         delegate?.renameSection(sectionIndex: self.section)
     }
 }
