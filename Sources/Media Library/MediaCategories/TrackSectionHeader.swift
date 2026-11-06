@@ -12,7 +12,8 @@
 
 import UIKit
 
-class TrackSectionHeader: UICollectionReusableView {
+@ObjCImplementation
+class TrackSectionHeader: UICollectionReusableViewMethods {
 
     static var headerID = "trackSectionHeaderID"
 
@@ -30,8 +31,8 @@ class TrackSectionHeader: UICollectionReusableView {
         return dividerView
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
 
         addSubview(titleLabel)
         addSubview(dividerView)
@@ -49,20 +50,17 @@ class TrackSectionHeader: UICollectionReusableView {
             dividerView.heightAnchor.constraint(equalToConstant: 1)
         ])
 
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .VLCThemeDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("updateTheme"), name: .VLCThemeDidChangeNotification, object: nil)
 
         updateTheme()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func update(sectionTitle: String) {
         titleLabel.text = sectionTitle
     }
 
-    @objc private func updateTheme() {
+    @ObjCMethod private func updateTheme() {
         backgroundColor = PresentationTheme.current.colors.background
         dividerView.backgroundColor = PresentationTheme.current.colors.separatorColor
     }
