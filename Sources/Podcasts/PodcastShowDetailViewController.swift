@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastShowDetailViewController: UIViewController {
+@ObjCImplementation(protocols: ["UISearchResultsUpdating", "UISearchControllerDelegate", "UITableViewDataSource", "UITableViewDelegate"], extensions: ["UISearchResultsUpdating", "UITableViewDataSource"])
+class PodcastShowDetailViewController: UIViewControllerMethods {
     private enum PodcastShowSection: Int, CaseIterable {
         case header
         case episodes
@@ -141,7 +142,7 @@ class PodcastShowDetailViewController: UIViewController {
 
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: ObjC.selector("handleRefresh"), for: .valueChanged)
         return refreshControl
     }()
 
@@ -159,15 +160,12 @@ class PodcastShowDetailViewController: UIViewController {
 
     init(show: PodcastShow) {
         self.show = show
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         navigationItem.largeTitleDisplayMode = .never
 
         view.addSubview(tableView)
@@ -183,39 +181,39 @@ class PodcastShowDetailViewController: UIViewController {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(applyTheme),
+                                       selector: ObjC.selector("applyTheme"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(contentSizeCategoryDidChange),
+                                       selector: ObjC.selector("contentSizeCategoryDidChange"),
                                        name: UIContentSizeCategory.didChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(playbackStateDidChange),
+                                       selector: ObjC.selector("playbackStateDidChange"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidStart),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(playbackStateDidChange),
+                                       selector: ObjC.selector("playbackStateDidChange"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidPause),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(playbackStateDidChange),
+                                       selector: ObjC.selector("playbackStateDidChange"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidResume),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(playbackStateDidChange),
+                                       selector: ObjC.selector("playbackStateDidChange"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidStop),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(refreshDidEnd),
+                                       selector: ObjC.selector("refreshDidEnd"),
                                        name: .VLCPodcastsRefreshDidEnd,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsShown),
+                                       selector: ObjC.selector("miniPlayerIsShown"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerDisplayMiniPlayer),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsHidden),
+                                       selector: ObjC.selector("miniPlayerIsHidden"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerHideMiniPlayer),
                                        object: nil)
 
@@ -235,24 +233,24 @@ class PodcastShowDetailViewController: UIViewController {
                                                            action: nil)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         PlaybackService.sharedInstance().playerDisplayController.isMiniPlayerVisible
             ? miniPlayerIsShown() : miniPlayerIsHidden()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
         let headerIndexPath = IndexPath(row: 0, section: PodcastShowSection.header.rawValue)
         headerRowMinY = tableView.rectForRow(at: headerIndexPath).minY
         updateNavigationTitleVisibility()
     }
 
-    @objc private func miniPlayerIsShown() {
+    @ObjCMethod private func miniPlayerIsShown() {
         tableView.setMiniPlayerInset(true)
     }
 
-    @objc private func miniPlayerIsHidden() {
+    @ObjCMethod private func miniPlayerIsHidden() {
         tableView.setMiniPlayerInset(false)
     }
 
@@ -281,12 +279,12 @@ class PodcastShowDetailViewController: UIViewController {
         title = shouldBeVisible ? show.name : nil
     }
 
-    @objc private func contentSizeCategoryDidChange() {
+    @ObjCMethod private func contentSizeCategoryDidChange() {
         episodeRowHeight = PodcastEpisodeRowCell.height
         tableView.reloadData()
     }
 
-    @objc private func playbackStateDidChange() {
+    @ObjCMethod private func playbackStateDidChange() {
         updatePlayingEpisode()
     }
 
@@ -299,13 +297,13 @@ class PodcastShowDetailViewController: UIViewController {
         reconfigureRows(forEpisodeIds: [previousEpisodeId, playingEpisodeId].compactMap { $0 })
     }
 
-    @objc private func handleRefresh() {
+    @ObjCMethod private func handleRefresh() {
         if !store.refreshSubscription(showId: show.id) {
             refreshControl.endRefreshing()
         }
     }
 
-    @objc private func refreshDidEnd() {
+    @ObjCMethod private func refreshDidEnd() {
         refreshControl.endRefreshing()
         reloadEpisodes()
     }
@@ -323,7 +321,7 @@ class PodcastShowDetailViewController: UIViewController {
 
         if #unavailable(iOS 26.0, visionOS 26.0) {
             let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self,
-                                               action: #selector(didTapSearch))
+                                               action: ObjC.selector("didTapSearch"))
             searchButton.accessibilityLabel = NSLocalizedString("SEARCH", comment: "")
             rightBarButtonItems.insert(searchButton, at: 0)
         }
@@ -342,7 +340,7 @@ class PodcastShowDetailViewController: UIViewController {
         definesPresentationContext = true
     }
 
-    @objc private func didTapSearch() {
+    @ObjCMethod private func didTapSearch() {
         navigationItem.searchController = searchController
         DispatchQueue.main.async { [weak self] in
             self?.searchController.isActive = true
@@ -461,7 +459,7 @@ class PodcastShowDetailViewController: UIViewController {
         store.removeEpisodeObserver(self)
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         view.backgroundColor = colors.background
         tableView.backgroundColor = colors.background
@@ -556,16 +554,17 @@ extension PodcastShowDetailViewController: PodcastEpisodeRowCellDelegate {
 
 // MARK: - UISearchResultsUpdating / UISearchControllerDelegate
 
-extension PodcastShowDetailViewController: UISearchResultsUpdating, UISearchControllerDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
+@ObjCExtension("UISearchResultsUpdating")
+extension PodcastShowDetailViewController {
+    @ObjCMethod("updateSearchResultsForSearchController:") func updateSearchResults(for searchController: UISearchController) {
         applySearchQuery(searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "")
     }
 
-    func didPresentSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("didPresentSearchController:") func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
     }
 
-    func willDismissSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("willDismissSearchController:") func willDismissSearchController(_ searchController: UISearchController) {
         if #unavailable(iOS 26.0, visionOS 26.0) {
             navigationItem.searchController = nil
         }
@@ -610,12 +609,13 @@ extension PodcastShowDetailViewController: MediaLibraryBaseModelObserver {
 
 // MARK: - UITableViewDataSource / UITableViewDelegate
 
-extension PodcastShowDetailViewController: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
+@ObjCExtension("UITableViewDataSource")
+extension PodcastShowDetailViewController {
+    @ObjCMethod("numberOfSectionsInTableView:") func numberOfSections(in tableView: UITableView) -> Int {
         return PodcastShowSection.allCases.count
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch PodcastShowSection(rawValue: section) {
         case .header:
             return isSearching ? 0 : 1
@@ -624,7 +624,7 @@ extension PodcastShowDetailViewController: UITableViewDataSource, UITableViewDel
         }
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    @ObjCMethod("tableView:viewForHeaderInSection:") func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard PodcastShowSection(rawValue: section) == .episodes else {
             return nil
         }
@@ -640,24 +640,24 @@ extension PodcastShowDetailViewController: UITableViewDataSource, UITableViewDel
         return header
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    @ObjCMethod("tableView:heightForRowAtIndexPath:") func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return PodcastShowSection(rawValue: indexPath.section) == .header ? UITableView.automaticDimension
                                                                          : episodeRowHeight
     }
 
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    @ObjCMethod("tableView:estimatedHeightForRowAtIndexPath:") func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return PodcastShowSection(rawValue: indexPath.section) == .header ? 320 : episodeRowHeight
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    @ObjCMethod("tableView:heightForHeaderInSection:") func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return PodcastShowSection(rawValue: section) == .episodes ? UITableView.automaticDimension : .leastNormalMagnitude
     }
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    @ObjCMethod("tableView:heightForFooterInSection:") func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch PodcastShowSection(rawValue: indexPath.section) {
         case .header:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PodcastShowHeaderCell.reuseIdentifier,
@@ -679,7 +679,7 @@ extension PodcastShowDetailViewController: UITableViewDataSource, UITableViewDel
         }
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
         guard PodcastShowSection(rawValue: indexPath.section) == .episodes else {
@@ -690,11 +690,11 @@ extension PodcastShowDetailViewController: UITableViewDataSource, UITableViewDel
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidScroll:") func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateNavigationTitleVisibility()
     }
 
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:willDisplayCell:forRowAtIndexPath:") func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard PodcastShowSection(rawValue: indexPath.section) == .episodes else {
             return
         }
