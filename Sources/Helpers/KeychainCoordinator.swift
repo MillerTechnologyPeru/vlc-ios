@@ -16,10 +16,10 @@
 import Foundation
 import LocalAuthentication
 
-@objc(VLCKeychainCoordinator)
-class KeychainCoordinator: NSObject {
+@ObjCImplementation("VLCKeychainCoordinator", extensions: ["Extension"])
+class KeychainCoordinator: NSObjectMethods {
     // Shared instance of passcodeService
-    @objc static let passcodeService = KeychainCoordinator(serviceIdentifier: "org.videolan.vlc-ios.passcode")
+    static let passcodeService = KeychainCoordinator(serviceIdentifier: "org.videolan.vlc-ios.passcode")
 
     let serviceIdentifier: String
 
@@ -28,14 +28,15 @@ class KeychainCoordinator: NSObject {
 
     init(serviceIdentifier: String) {
         self.serviceIdentifier = serviceIdentifier
+        objcInit()
     }
 
-    @objc var hasSecret: Bool {
+    var hasSecret: Bool {
         // If there is a passcode in keychain, passcode is enabled
         return secretFromKeychain != nil
     }
 
-    @objc var isApplicationLocked: Bool {
+    var isApplicationLocked: Bool {
         applicationLockController != nil
     }
 
@@ -61,12 +62,13 @@ class KeychainCoordinator: NSObject {
         secret == secretFromKeychain
     }
 
-    @objc var secretLength: Int {
+    var secretLength: Int {
         secretFromKeychain?.count ?? 0
     }
 }
 
 // MARK: - Helper methods
+@ObjCExtension("Extension")
 extension KeychainCoordinator {
     func setSecret(isCancellable: Bool = true, completion: @escaping (Bool) -> Void) {
         showPasscodeController(action: .set, isCancellable: isCancellable) { [weak self] success, secret in
@@ -90,7 +92,7 @@ extension KeychainCoordinator {
     }
 
     /// If ``PasscodeLockController/cancellable`` is `false`, **completion** always takes `true` because it will be called only on success case.
-    @objc func validateSecret(allowBiometricAuthentication: Bool = false, isCancellable: Bool = false, completion: @escaping (Bool) -> Void) {
+    @ObjCMethod func validateSecret(allowBiometricAuthentication: Bool = false, isCancellable: Bool = false, completion: @escaping (Bool) -> Void) {
         guard hasSecret else {
             return
         }
@@ -102,7 +104,7 @@ extension KeychainCoordinator {
         }
     }
 
-    @objc func lockApplication(allowBiometricAuthentication: Bool, completion: @escaping () -> Void) {
+    @ObjCMethod func lockApplication(allowBiometricAuthentication: Bool, completion: @escaping () -> Void) {
         actionsAfterUnlock.append(completion)
         guard applicationLockController == nil,
               let presentingViewController = UIApplication.shared.dismissPresentedScreensAbovePlayer() else {
