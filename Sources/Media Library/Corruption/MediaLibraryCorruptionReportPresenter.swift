@@ -12,7 +12,10 @@
 import UIKit
 import MessageUI
 
-class MediaLibraryCorruptionReportPresenter: NSObject {
+@ObjCImplementation
+class MediaLibraryCorruptionReportPresenter: NSObjectMethods {
+    init() { objcInit() }
+
     static let shared = MediaLibraryCorruptionReportPresenter()
 
     private static let supportEmail = "ios-support@videolan.org"
@@ -93,12 +96,12 @@ class MediaLibraryCorruptionReportPresenter: NSObject {
 
         isWaitingForActivation = true
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive),
+                                               selector: ObjC.selector("applicationDidBecomeActive"),
                                                name: UIApplication.didBecomeActiveNotification,
                                                object: nil)
     }
 
-    @objc private func applicationDidBecomeActive() {
+    @ObjCMethod private func applicationDidBecomeActive() {
         isWaitingForActivation = false
         presentIfNeeded()
     }
