@@ -16,7 +16,8 @@ protocol MoveToRootHeaderDelegate: AnyObject {
     func moveToRootHeader(didTapHeader header: MoveToRootHeader)
 }
 
-class MoveToRootHeader: UICollectionReusableView {
+@ObjCImplementation
+class MoveToRootHeader: UICollectionReusableViewMethods {
 
     static var headerID = "moveToRootHeaderID"
 
@@ -44,11 +45,11 @@ class MoveToRootHeader: UICollectionReusableView {
 
     weak var delegate: MoveToRootHeaderDelegate?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         accessibilityLabel = NSLocalizedString("MEDIA_GROUP_MOVE_TO_ROOT_HINT", comment: "")
 
-        let tap = UITapGestureRecognizer(target: self, action:#selector(self.didTapHeader(_:)))
+        let tap = UITapGestureRecognizer(target: self, action:ObjC.selector("didTapHeader:"))
         self.addGestureRecognizer(tap)
 
         addSubview(container)
@@ -67,11 +68,8 @@ class MoveToRootHeader: UICollectionReusableView {
         ])
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    @objc func didTapHeader(_ sender: UITapGestureRecognizer) {
+    @ObjCMethod func didTapHeader(_ sender: UITapGestureRecognizer) {
         delegate?.moveToRootHeader(didTapHeader: self)
     }
 }
