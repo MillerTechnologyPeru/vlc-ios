@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastEpisodeDetailViewController: UIViewController {
+@ObjCImplementation(protocols: ["UITextViewDelegate"], extensions: ["UITextViewDelegate"])
+class PodcastEpisodeDetailViewController: UIViewControllerMethods {
     private static let horizontalPadding: CGFloat = 20
     private static let verticalGap: CGFloat = 14
     private static let artworkSize: CGFloat = 180
@@ -98,15 +99,12 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.episode = episode
         self.episodeId = episode.id
         self.show = show
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         navigationItem.largeTitleDisplayMode = .never
 
         setupUI()
@@ -114,31 +112,31 @@ class PodcastEpisodeDetailViewController: UIViewController {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(applyTheme),
+                                       selector: ObjC.selector("applyTheme"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(refresh),
+                                       selector: ObjC.selector("refresh"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidStart),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(refresh),
+                                       selector: ObjC.selector("refresh"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidPause),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(refresh),
+                                       selector: ObjC.selector("refresh"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidResume),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(refresh),
+                                       selector: ObjC.selector("refresh"),
                                        name: Notification.Name(VLCPlaybackServicePlaybackDidStop),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsShown),
+                                       selector: ObjC.selector("miniPlayerIsShown"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerDisplayMiniPlayer),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsHidden),
+                                       selector: ObjC.selector("miniPlayerIsHidden"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerHideMiniPlayer),
                                        object: nil)
 
@@ -147,17 +145,17 @@ class PodcastEpisodeDetailViewController: UIViewController {
         refresh()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         PlaybackService.sharedInstance().playerDisplayController.isMiniPlayerVisible
             ? miniPlayerIsShown() : miniPlayerIsHidden()
     }
 
-    @objc private func miniPlayerIsShown() {
+    @ObjCMethod private func miniPlayerIsShown() {
         scrollView.setMiniPlayerInset(true)
     }
 
-    @objc private func miniPlayerIsHidden() {
+    @ObjCMethod private func miniPlayerIsHidden() {
         scrollView.setMiniPlayerInset(false)
     }
 
@@ -220,7 +218,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         ])
     }
 
-    @objc private func refresh() {
+    @ObjCMethod private func refresh() {
         if let updated = store.episode(withId: episodeId, showId: show.id) {
             episode = updated
         }
@@ -265,7 +263,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         overflowButton.accessibilityLabel = NSLocalizedString("BUTTON_MENU", comment: "")
 
         playBarButton.target = self
-        playBarButton.action = #selector(didTapPlay)
+        playBarButton.action = ObjC.selector("didTapPlay")
         playBarButton.accessibilityLabel = NSLocalizedString("PLAY_PAUSE_BUTTON", comment: "")
 
         navigationItem.rightBarButtonItems = [playBarButton, overflowButton]
@@ -408,7 +406,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         return Float(Double(seconds * 1000) / Double(episode.durationValue))
     }
 
-    @objc private func didTapPlay() {
+    @ObjCMethod private func didTapPlay() {
         if store.nowPlayingEpisodeId == episodeId {
             store.togglePlayPause()
         } else {
@@ -479,7 +477,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         }
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         let colors = PresentationTheme.current.colors
         view.backgroundColor = colors.background
         scrollView.backgroundColor = colors.background
@@ -493,8 +491,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
 
 // MARK: - UITextViewDelegate
 
-extension PodcastEpisodeDetailViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange,
+@ObjCExtension("UITextViewDelegate")
+extension PodcastEpisodeDetailViewController {
+    @ObjCMethod("textView:shouldInteractWithURL:inRange:interaction:") func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange,
                   interaction: UITextItemInteraction) -> Bool {
         guard let seconds = PodcastEpisodeDetailViewController.seekSeconds(from: URL) else {
             return true
@@ -505,7 +504,7 @@ extension PodcastEpisodeDetailViewController: UITextViewDelegate {
         return false
     }
 
-    @available(iOS 17.0, *)
+    @ObjCMethod("textView:primaryActionForTextItem:defaultAction:") @available(iOS 17.0, *)
     func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem,
                   defaultAction: UIAction) -> UIAction? {
         guard case .link(let url) = textItem.content,
