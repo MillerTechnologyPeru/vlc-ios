@@ -14,6 +14,7 @@
 import Foundation
 import UIKit
 
+@ObjCImplementation
 class MovieCollectionViewCell: BaseCollectionViewCell {
     @IBOutlet weak var checkboxImageView: UIImageView!
 
@@ -86,8 +87,8 @@ class MovieCollectionViewCell: BaseCollectionViewCell {
         }
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    @ObjCMethod("awakeFromNib") func awakeFromNib() {
+        callSuper("awakeFromNib")
         thumbnailView.accessibilityIgnoresInvertColors = true
 
         clipsToBounds = true
@@ -100,10 +101,10 @@ class MovieCollectionViewCell: BaseCollectionViewCell {
         groupLastPlayedLabel.textColor = PresentationTheme.current.colors.orangeUI
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(themeDidChange),
+        notificationCenter.addObserver(self, selector: ObjC.selector("themeDidChange"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
-        notificationCenter.addObserver(self, selector: #selector(dynamicFontSizeChange),
+        notificationCenter.addObserver(self, selector: ObjC.selector("dynamicFontSizeChange"),
                                        name: UIContentSizeCategory.didChangeNotification,
                                        object: nil)
         selectionOverlay.layer.cornerRadius = itemCornerRadius
@@ -129,7 +130,7 @@ class MovieCollectionViewCell: BaseCollectionViewCell {
         additionalMediaOverlay.layer.cornerRadius = groupCornerRadius
     }
 
-    @objc fileprivate func themeDidChange() {
+    @ObjCMethod fileprivate func themeDidChange() {
         let colors = PresentationTheme.current.colors
         backgroundColor = colors.background
         titleLabel?.textColor = colors.cellTextColor
@@ -151,7 +152,7 @@ class MovieCollectionViewCell: BaseCollectionViewCell {
         thumbnailsBackground.backgroundColor = colors.thumbnailBackgroundColor
     }
 
-    @objc fileprivate func dynamicFontSizeChange() {
+    @ObjCMethod fileprivate func dynamicFontSizeChange() {
         titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         newLabel.font = UIFont.preferredCustomFont(forTextStyle: .subheadline).bolded
         groupTitleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -319,8 +320,8 @@ class MovieCollectionViewCell: BaseCollectionViewCell {
         return CGSize(width: cellWidth, height: cellWidth * aspectRatio + titleHeight * 2 + newHeight + (3 * 3))
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    @ObjCMethod("prepareForReuse") func prepareForReuse() {
+        callSuper("prepareForReuse")
         titleLabel.text = ""
         accessibilityValue = nil
         descriptionLabel.text = ""
