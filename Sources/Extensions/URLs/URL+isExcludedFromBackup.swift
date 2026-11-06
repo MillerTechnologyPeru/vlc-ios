@@ -59,8 +59,8 @@ extension URL {
 
 }
 
-@objc extension NSURL {
-    @objc func isExcludedFromBackup() -> Bool {
+extension NSURL {
+    @ObjCMethod func isExcludedFromBackup() -> Bool {
         if let path = path {
             let url = URL(fileURLWithPath: path)
             return url.isExcludedFromBackup()
@@ -68,7 +68,7 @@ extension URL {
         return false
     }
 
-    @objc func setExcludedFromBackup(_ excluded: Bool, recursive: Bool = false, onlyFirstLevel: Bool = false, _ completion: (() -> Void)? = nil) {
+    @ObjCMethod func setExcludedFromBackup(_ excluded: Bool, recursive: Bool = false, onlyFirstLevel: Bool = false, _ completion: (() -> Void)? = nil) {
         if let path = path {
             var url = URL(fileURLWithPath: path)
             url.setExcludedFromBackup(excluded, recursive: recursive, onlyFirstLevel: onlyFirstLevel, completion)
