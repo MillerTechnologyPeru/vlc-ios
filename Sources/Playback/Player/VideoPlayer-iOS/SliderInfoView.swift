@@ -30,7 +30,10 @@ protocol SliderInfoViewDelegate {
     func sliderInfoViewDidReceiveTouch(_ sliderInfoView: SliderInfoView)
 }
 
-class SliderInfoView: UIView {
+@ObjCImplementation
+class SliderInfoView: UIViewMethods {
+    init() { objcInit() }
+
     var delegate: SliderInfoViewDelegate?
 
     var iconNames: [String] = []
@@ -101,6 +104,7 @@ class SliderInfoView: UIView {
     }
 }
 
+@ObjCImplementation
 class BrightnessControlView: SliderInfoView {
 #if os(iOS)
     init() {
@@ -112,7 +116,7 @@ class BrightnessControlView: SliderInfoView {
             levelSlider.thumbImage = UIImage()
         }
         self.iconNames = ["brightnessLow", "brightnessLow", "brightnessMedium", "brightnessHigh"]
-        levelSlider.addTarget(self, action: #selector(self.onLuminosityChange), for: .valueChanged)
+        levelSlider.addTarget(self, action: ObjC.selector("onLuminosityChange"), for: .valueChanged)
 
         levelSlider.isAccessibilityElement = true
         levelSlider.accessibilityLabel = NSLocalizedString("BRIGHTNESS_SLIDER", comment: "")
@@ -123,23 +127,20 @@ class BrightnessControlView: SliderInfoView {
         levelSlider.accessibilityTraits = []
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private var currentScreen: UIScreen? {
         return window?.windowScene?.screen
     }
 
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
+    @ObjCMethod("didMoveToWindow") func didMoveToWindow() {
+        callSuper("didMoveToWindow")
 
         if let brightness = currentScreen?.brightness {
             update(level: Float(brightness))
         }
     }
 
-    @objc func onLuminosityChange() {
+    @ObjCMethod func onLuminosityChange() {
         currentScreen?.brightness = CGFloat(levelSlider.value)
         update(level: levelSlider.value)
     }
@@ -154,6 +155,7 @@ class BrightnessControlView: SliderInfoView {
 #endif
 }
 
+@ObjCImplementation
 class VolumeControlView: SliderInfoView {
     private let volumeView: MPVolumeView?
     private(set) var isBeingTouched: Bool = false
@@ -168,9 +170,9 @@ class VolumeControlView: SliderInfoView {
             levelSlider.thumbImage = UIImage()
         }
 
-        levelSlider.addTarget(self, action: #selector(self.onVolumeChange), for: .valueChanged)
-        levelSlider.addTarget(self, action: #selector(self.onTouchStarted), for: .touchDown)
-        levelSlider.addTarget(self, action: #selector(self.onTouchEnded), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        levelSlider.addTarget(self, action: ObjC.selector("onVolumeChange"), for: .valueChanged)
+        levelSlider.addTarget(self, action: ObjC.selector("onTouchStarted"), for: .touchDown)
+        levelSlider.addTarget(self, action: ObjC.selector("onTouchEnded"), for: [.touchUpInside, .touchUpOutside, .touchCancel])
         self.iconNames = ["noSound", "lowSound", "mediumSound", "highSound"]
 
         levelSlider.isAccessibilityElement = true
@@ -182,20 +184,17 @@ class VolumeControlView: SliderInfoView {
         levelSlider.accessibilityTraits = []
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
-    @objc func onVolumeChange() {
+    @ObjCMethod func onVolumeChange() {
         volumeView?.setVolume(levelSlider.value)
         update(level: levelSlider.value)
     }
 
-    @objc func onTouchStarted() {
+    @ObjCMethod func onTouchStarted() {
         isBeingTouched = true
     }
 
-    @objc func onTouchEnded() {
+    @ObjCMethod func onTouchEnded() {
         isBeingTouched = false
     }
 
