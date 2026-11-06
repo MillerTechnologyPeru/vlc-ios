@@ -12,51 +12,54 @@
 
 import UIKit
 
-final class AutoRepeatButton: UIButton {
+@ObjCImplementation
+final class AutoRepeatButton: UIButtonMethods {
+    init() { objcInit() }
+
     private var repeatTimer: Timer?
     private var trackingStartTime: CFTimeInterval = 0
     private var hasRepeated = false
 
-    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        let shouldTrack = super.beginTracking(touch, with: event)
+    @ObjCMethod("beginTrackingWithTouch:withEvent:") func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        let shouldTrack = (callSuper("beginTrackingWithTouch:withEvent:", touch, event) as Bool)
         trackingStartTime = CACurrentMediaTime()
         hasRepeated = false
         scheduleRepeat(after: 0.5)
         return shouldTrack
     }
 
-    override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        super.endTracking(touch, with: event)
+    @ObjCMethod("endTrackingWithTouch:withEvent:") func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        callSuper("endTrackingWithTouch:withEvent:", touch, event)
         stopRepeating()
         if !hasRepeated && isTouchInside {
             sendActions(for: .valueChanged)
         }
     }
 
-    override func cancelTracking(with event: UIEvent?) {
-        super.cancelTracking(with: event)
+    @ObjCMethod("cancelTrackingWithEvent:") func cancelTracking(with event: UIEvent?) {
+        callSuper("cancelTrackingWithEvent:", event)
         stopRepeating()
     }
 
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
+    @ObjCMethod("didMoveToWindow") func didMoveToWindow() {
+        callSuper("didMoveToWindow")
         if window == nil {
             stopRepeating()
         }
     }
 
-    override func accessibilityActivate() -> Bool {
+    @ObjCMethod("accessibilityActivate") func accessibilityActivate() -> Bool {
         sendActions(for: .valueChanged)
         return true
     }
 
     private func scheduleRepeat(after interval: TimeInterval) {
-        let timer = Timer(timeInterval: interval, target: self, selector: #selector(repeatTimerFired), userInfo: nil, repeats: false)
+        let timer = Timer(timeInterval: interval, target: self, selector: ObjC.selector("repeatTimerFired"), userInfo: nil, repeats: false)
         RunLoop.main.add(timer, forMode: .common)
         repeatTimer = timer
     }
 
-    @objc private func repeatTimerFired() {
+    @ObjCMethod private func repeatTimerFired() {
         guard isTracking else {
             stopRepeating()
             return
