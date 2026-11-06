@@ -25,7 +25,8 @@ protocol AudioPlayerViewDelegate: AnyObject {
     func audioPlayerViewDelegateDidLongPressPlaybackSpeedButton(_ audioPlayerView: AudioPlayerView)
 }
 
-class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
+@ObjCImplementation(protocols: ["UIGestureRecognizerDelegate"])
+class AudioPlayerView: UIViewMethods {
     // MARK: - Properties
 
     private lazy var backgroundView: UIView = UIView()
@@ -97,7 +98,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         shuffleButton.contentMode = .scaleAspectFit
         shuffleButton.imageView?.contentMode = .scaleAspectFit
         shuffleButton.tintColor = .white
-        shuffleButton.addTarget(self, action: #selector(handleShuffleButton(_:)), for: .touchUpInside)
+        shuffleButton.addTarget(self, action: ObjC.selector("handleShuffleButton:"), for: .touchUpInside)
         shuffleButton.accessibilityLabel = NSLocalizedString("SHUFFLE", comment: "")
         shuffleButton.accessibilityHint = NSLocalizedString("SHUFFLE_HINT", comment: "")
         return shuffleButton
@@ -109,7 +110,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         backwardButton.contentMode = .scaleAspectFit
         backwardButton.imageView?.contentMode = .scaleAspectFit
         backwardButton.tintColor = .white
-        backwardButton.addTarget(self, action: #selector(handleBackwardButton), for: .touchUpInside)
+        backwardButton.addTarget(self, action: ObjC.selector("handleBackwardButton:"), for: .touchUpInside)
         backwardButton.accessibilityLabel = NSLocalizedString("BACKWARD_BUTTON", comment: "")
         backwardButton.accessibilityHint = NSLocalizedString("BACKWARD_HINT", comment: "")
         backwardButton.isHidden = true
@@ -122,7 +123,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         previousButton.contentMode = .scaleAspectFit
         previousButton.imageView?.contentMode = .scaleAspectFit
         previousButton.tintColor = .white
-        previousButton.addTarget(self, action: #selector(handlePreviousButton(_:)), for: .touchUpInside)
+        previousButton.addTarget(self, action: ObjC.selector("handlePreviousButton:"), for: .touchUpInside)
         previousButton.accessibilityLabel = NSLocalizedString("PREVIOUS_BUTTON", comment: "")
         previousButton.accessibilityHint = NSLocalizedString("PREVIOUS_HINT", comment: "")
         return previousButton
@@ -130,12 +131,12 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
     
     private lazy var playbackSpeedButton: UIButton = {
         let playbackButton = UIButton(type: .system)
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressPlaybackSpeedButton(_:)))
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: ObjC.selector("handleLongPressPlaybackSpeedButton:"))
         playbackButton.contentMode = .scaleAspectFit
         playbackButton.imageView?.contentMode = .scaleAspectFit
         playbackButton.tintColor = .white
         playbackButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        playbackButton.addTarget(self, action: #selector(handlePlaybackSpeedButton(_:)), for: .touchUpInside)
+        playbackButton.addTarget(self, action: ObjC.selector("handlePlaybackSpeedButton:"), for: .touchUpInside)
         longPressGestureRecognizer.minimumPressDuration = 0.5
         longPressGestureRecognizer.delaysTouchesBegan = true
         longPressGestureRecognizer.delegate = self
@@ -149,7 +150,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         playButton.contentMode = .scaleAspectFit
         playButton.imageView?.contentMode = .scaleAspectFit
         playButton.tintColor = .white
-        playButton.addTarget(self, action: #selector(handlePlayButton(_:)), for: .touchUpInside)
+        playButton.addTarget(self, action: ObjC.selector("handlePlayButton:"), for: .touchUpInside)
         playButton.accessibilityLabel = NSLocalizedString("PLAY_PAUSE_BUTTON", comment: "")
         playButton.accessibilityHint = NSLocalizedString("PLAY_PAUSE_HINT", comment: "")
         return playButton
@@ -161,7 +162,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         nextButton.contentMode = .scaleAspectFit
         nextButton.imageView?.contentMode = .scaleAspectFit
         nextButton.tintColor = .white
-        nextButton.addTarget(self, action: #selector(handleNextButton(_:)), for: .touchUpInside)
+        nextButton.addTarget(self, action: ObjC.selector("handleNextButton:"), for: .touchUpInside)
         nextButton.accessibilityLabel = NSLocalizedString("NEXT_BUTTON", comment: "")
         nextButton.accessibilityHint = NSLocalizedString("NEXT_HINT", comment: "")
         return nextButton
@@ -173,7 +174,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         forwardButton.contentMode = .scaleAspectFit
         forwardButton.imageView?.contentMode = .scaleAspectFit
         forwardButton.tintColor = .white
-        forwardButton.addTarget(self, action: #selector(handleForwardButton), for: .touchUpInside)
+        forwardButton.addTarget(self, action: ObjC.selector("handleForwardButton:"), for: .touchUpInside)
         forwardButton.accessibilityLabel = NSLocalizedString("FORWARD_BUTTON", comment: "")
         forwardButton.accessibilityHint = NSLocalizedString("FORWARD_HINT", comment: "")
         forwardButton.isHidden = true
@@ -186,7 +187,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         repeatButton.contentMode = .scaleAspectFit
         repeatButton.imageView?.contentMode = .scaleAspectFit
         repeatButton.tintColor = .white
-        repeatButton.addTarget(self, action: #selector(handleRepeatButton(_:)), for: .touchUpInside)
+        repeatButton.addTarget(self, action: ObjC.selector("handleRepeatButton:"), for: .touchUpInside)
         repeatButton.accessibilityLabel = NSLocalizedString("REPEAT_MODE", comment: "")
         repeatButton.accessibilityHint = NSLocalizedString("REPEAT_HINT", comment: "")
         return repeatButton
@@ -274,17 +275,14 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Init
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupViews()
         setupLabels()
-        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("themeDidChange"),
                                                name: .VLCThemeDidChangeNotification, object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     // MARK: - Public methods
 
@@ -413,8 +411,8 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         updateLabelHeights()
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    @ObjCMethod("layoutSubviews") func layoutSubviews() {
+        callSuper("layoutSubviews")
         updateContentInsets()
         updateLabelHeights()
     }
@@ -690,7 +688,7 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         if #available(iOS 26.0, *) {
             let style: UIBlurEffect.Style = PresentationTheme.current.isDark ? .systemUltraThinMaterialDark : .systemUltraThinMaterialLight
             blurView.effect = UIBlurEffect(style: style)
@@ -995,39 +993,39 @@ class AudioPlayerView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Buttons handlers
 
-    @objc func handleShuffleButton(_ sender: Any) {
+    @ObjCMethod func handleShuffleButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapShuffleButton(self)
     }
 
-    @objc func handleBackwardButton(_ sender: Any) {
+    @ObjCMethod func handleBackwardButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapBackwardButton(self)
     }
 
-    @objc func handlePreviousButton(_ sender: Any) {
+    @ObjCMethod func handlePreviousButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapPreviousButton(self)
     }
 
-    @objc func handlePlayButton(_ sender: Any) {
+    @ObjCMethod func handlePlayButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapPlayButton(self)
     }
 
-    @objc func handleNextButton(_ sender: Any) {
+    @ObjCMethod func handleNextButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapNextButton(self)
     }
 
-    @objc func handleForwardButton(_ sender: Any) {
+    @ObjCMethod func handleForwardButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapForwardButton(self)
     }
 
-    @objc func handleRepeatButton(_ sender: Any) {
+    @ObjCMethod func handleRepeatButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapRepeatButton(self)
     }
     
-    @objc func handlePlaybackSpeedButton(_ sender: Any) {
+    @ObjCMethod func handlePlaybackSpeedButton(_ sender: Any) {
         delegate?.audioPlayerViewDelegateDidTapPlaybackSpeedButton(self)
     }
     
-    @objc func handleLongPressPlaybackSpeedButton(_ sender: UILongPressGestureRecognizer) {
+    @ObjCMethod func handleLongPressPlaybackSpeedButton(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.audioPlayerViewDelegateDidLongPressPlaybackSpeedButton(self)
         }
