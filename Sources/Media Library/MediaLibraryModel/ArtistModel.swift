@@ -168,19 +168,19 @@ extension VLCMLArtist: MediaCollectionModel {
 }
 
 extension VLCMLArtist {
-    @objc func numberOfTracksString() -> String {
+    @ObjCMethod func numberOfTracksString() -> String {
         let tracksCount = tracksCount()
         let tracksString = tracksCount == 1 ? NSLocalizedString("TRACK", comment: "") : NSLocalizedString("TRACKS", comment: "")
         return String(format: tracksString, locale: Locale.current, tracksCount)
     }
 
-    @objc func numberOfAlbumsString() -> String {
+    @ObjCMethod func numberOfAlbumsString() -> String {
         let albumCount = albumsCount()
         let albumsString = albumCount == 1 ? NSLocalizedString("NB_ALBUM_FORMAT", comment: "") : NSLocalizedString("NB_ALBUMS_FORMAT", comment: "")
         return String(format: albumsString, locale: Locale.current, albumCount)
     }
 
-    @objc func artistName() -> String {
+    @ObjCMethod func artistName() -> String {
         if identifier() == UnknownArtistID {
             return NSLocalizedString("UNKNOWN_ARTIST", comment: "")
         } else if identifier() == VariousArtistID {
@@ -190,7 +190,7 @@ extension VLCMLArtist {
         }
     }
 
-    @objc func accessibilityText() -> String? {
+    @ObjCMethod func accessibilityText() -> String? {
         return artistName() + " " + numberOfTracksString()
     }
 }
