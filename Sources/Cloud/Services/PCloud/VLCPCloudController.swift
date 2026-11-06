@@ -11,7 +11,7 @@ import PCloudSDKSwift
 
 class VLCPCloudController: VLCCloudStorageController {
 
-    @objc static let pCloudInstance: VLCPCloudController = VLCPCloudController()
+    static let pCloudInstance: VLCPCloudController = VLCPCloudController()
 
     var folderID: UInt64 = Folder.root
     var folderFiles: [Content] = []
@@ -116,7 +116,7 @@ class VLCPCloudController: VLCCloudStorageController {
         }).start()
     }
 
-    @objc func thumbnailURL(forFileID fileID: NSNumber, completion: @escaping (URL?) -> Void) {
+    @ObjCMethod func thumbnailURL(forFileID fileID: NSNumber, completion: @escaping (URL?) -> Void) {
         guard let pCloudInstance = pCloudInstance else {
             completion(nil)
             return
