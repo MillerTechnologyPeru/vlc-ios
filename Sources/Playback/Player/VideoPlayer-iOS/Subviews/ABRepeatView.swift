@@ -18,7 +18,8 @@ protocol ABRepeatViewDelegate: AnyObject {
     func abRepeatViewHideIcon(_ option: OptionsNavigationBarIdentifier)
 }
 
-@objc class ABRepeatMarkView: UIView {
+@ObjCImplementation
+class ABRepeatMarkView: UIViewMethods {
     private let imageView: UIImageView
     private var position: Float = 0.0
 
@@ -27,13 +28,10 @@ protocol ABRepeatViewDelegate: AnyObject {
     init(icon: UIImage?) {
         imageView = UIImageView(image: icon)
         imageView.tintColor = PresentationTheme.currentExcludingWhite.colors.orangeUI
-        super.init(frame: .zero)
+        objcInit("initWithFrame:", .zero)
         setupIcon()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func setupIcon() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +53,8 @@ protocol ABRepeatViewDelegate: AnyObject {
     }
 }
 
-class ABRepeatView: UIView {
+@ObjCImplementation
+class ABRepeatView: UIViewMethods {
     lazy var aMarkView: UIView = {
         let aMarkView = UIView(frame: frame)
         aMarkView.layer.cornerRadius = 5.0
@@ -67,7 +66,7 @@ class ABRepeatView: UIView {
         let aMarkButton = UIButton(type: .custom)
         aMarkButton.setTitle(NSLocalizedString("SELECT_A_MARK", comment: ""), for: .normal)
         aMarkButton.accessibilityHint = NSLocalizedString("SELECT_A_MARK_HINT", comment: "")
-        aMarkButton.addTarget(self, action: #selector(handleAMarkSelection(_:)), for: .touchUpInside)
+        aMarkButton.addTarget(self, action: ObjC.selector("handleAMarkSelection:"), for: .touchUpInside)
         aMarkButton.translatesAutoresizingMaskIntoConstraints = false
         return aMarkButton
     }()
@@ -84,23 +83,20 @@ class ABRepeatView: UIView {
         let bMarkButton = UIButton(type: .custom)
         bMarkButton.setTitle(NSLocalizedString("SELECT_B_MARK", comment: ""), for: .normal)
         bMarkButton.accessibilityHint = NSLocalizedString("SELECT_B_MARK_HINT", comment: "")
-        bMarkButton.addTarget(self, action: #selector(handleBMarkSelection(_:)), for: .touchUpInside)
+        bMarkButton.addTarget(self, action: ObjC.selector("handleBMarkSelection:"), for: .touchUpInside)
         bMarkButton.translatesAutoresizingMaskIntoConstraints = false
         return bMarkButton
     }()
 
     weak var delegate: ABRepeatViewDelegate?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         setupViews()
         setupButtons()
         setupTheme()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     private func setupViews() {
         layer.cornerRadius = 5.0
@@ -150,13 +146,13 @@ class ABRepeatView: UIView {
         bMarkButton.setTitleColor(colors.orangeUI, for: .normal)
     }
 
-    @objc func handleAMarkSelection(_ sender: Any) {
+    @ObjCMethod func handleAMarkSelection(_ sender: Any) {
         aMarkView.isHidden = true
         bMarkView.isHidden = false
         delegate?.abRepeatViewDidSelectAMark()
     }
 
-    @objc func handleBMarkSelection(_ sender: Any) {
+    @ObjCMethod func handleBMarkSelection(_ sender: Any) {
         bMarkView.isHidden = true
         delegate?.abRepeatViewDidSelectBMark()
         delegate?.abRepeatViewShowIcon(.abRepeat)
