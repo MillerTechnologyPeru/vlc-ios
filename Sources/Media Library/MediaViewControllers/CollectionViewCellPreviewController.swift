@@ -33,7 +33,8 @@ class PreviewElement {
     }
 }
 
-class CollectionViewCellPreviewController: UIViewController {
+@ObjCImplementation(extensions: ["Extension"])
+class CollectionViewCellPreviewController: UIViewControllerMethods {
     private let titleHeight: CGFloat = 25
     private let subtitleHeight: CGFloat = 23
     private let metadataHeight: CGFloat = 20
@@ -87,7 +88,7 @@ class CollectionViewCellPreviewController: UIViewController {
 
     init(thumbnail: UIImage, with modelContent: VLCMLObject?) {
         self.previewElements = []
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
 
         let infos = previewInformation(from: modelContent)
         for info in infos {
@@ -100,12 +101,12 @@ class CollectionViewCellPreviewController: UIViewController {
         backThumbnailView.image = thumbnail
 
         ratio = thumbnail.size.height / thumbnail.size.width
-        NotificationCenter.default.addObserver(self, selector: #selector(themeDidChange),
+        NotificationCenter.default.addObserver(self, selector: ObjC.selector("themeDidChange"),
                                                name: .VLCThemeDidChangeNotification, object: nil)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
 
         view.backgroundColor = PresentationTheme.current.colors.background
 
@@ -122,9 +123,6 @@ class CollectionViewCellPreviewController: UIViewController {
         addActionImage()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 // MARK: - Private setup
@@ -309,8 +307,9 @@ extension CollectionViewCellPreviewController {
 
 // MARK: - Theme management
 
-@objc extension CollectionViewCellPreviewController {
-    @objc func themeDidChange() {
+@ObjCExtension("Extension")
+extension CollectionViewCellPreviewController {
+    @ObjCMethod func themeDidChange() {
         view.backgroundColor = PresentationTheme.current.colors.background
         blurView.effect = UIBlurEffect(style: PresentationTheme.current.colors.blurStyle)
         for element in previewElements {
