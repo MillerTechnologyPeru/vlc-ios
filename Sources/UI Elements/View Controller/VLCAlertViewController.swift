@@ -14,7 +14,8 @@ import UIKit
 
 typealias AlertAction = (UIAlertAction) -> Void
 
-@objcMembers class VLCAlertButton: NSObject {
+@ObjCImplementation
+class VLCAlertButton: NSObjectMethods {
     let title: String
     let style: UIAlertAction.Style
     let action: AlertAction?
@@ -22,6 +23,7 @@ typealias AlertAction = (UIAlertAction) -> Void
         self.title = title
         self.style = style
         self.action = action
+        objcInit()
     }
 
     // For Objc
@@ -30,7 +32,7 @@ typealias AlertAction = (UIAlertAction) -> Void
     }
 }
 
-@objcMembers class VLCAlertViewController: UIAlertController {
+class VLCAlertViewController: UIAlertController {
 
     static func alertViewManager(title: String,
                                  errorMessage: String? = nil,
