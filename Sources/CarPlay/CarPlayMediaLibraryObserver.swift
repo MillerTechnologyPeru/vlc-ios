@@ -12,20 +12,24 @@
 
 import Foundation
 
-@objc protocol CPMediaLibraryObserverDelegate: AnyObject {
-    @objc func templatesNeedUpdate()
+protocol CPMediaLibraryObserverDelegate: AnyObject {
+    func templatesNeedUpdate()
 }
 
-class CarPlayMediaLibraryObserver: NSObject {
-    @objc weak var observerDelegate: CPMediaLibraryObserverDelegate?
+@ObjCImplementation(extensions: ["MediaLibraryObserver"])
+class CarPlayMediaLibraryObserver: NSObjectMethods {
+    init() { objcInit() }
+
+    weak var observerDelegate: CPMediaLibraryObserverDelegate?
 }
 
+@ObjCExtension("MediaLibraryObserver")
 extension CarPlayMediaLibraryObserver: MediaLibraryObserver {
-    @objc func observeLibrary() {
+    @ObjCMethod func observeLibrary() {
         VLCAppCoordinator.sharedInstance().mediaLibraryService.observable.addObserver(self)
     }
 
-    @objc func unobserveLibrary() {
+    @ObjCMethod func unobserveLibrary() {
         VLCAppCoordinator.sharedInstance().mediaLibraryService.observable.removeObserver(self)
     }
 
