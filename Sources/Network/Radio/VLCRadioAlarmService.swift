@@ -51,34 +51,36 @@ struct PlayRadioStationAlarmIntent: LiveActivityIntent {
 }
 #endif
 
-@objc(VLCRadioAlarmError)
 enum VLCRadioAlarmError: Int, Error {
     case authorizationDenied = 1
     case schedulingFailed = 2
     case unsupported = 3
 }
 
-@objc(VLCRadioAlarmInfo)
-class VLCRadioAlarmInfo: NSObject {
-    @objc let hour: Int
-    @objc let minute: Int
+@ObjCImplementation("VLCRadioAlarmInfo")
+class VLCRadioAlarmInfo: NSObjectMethods {
+    let hour: Int
+    let minute: Int
     /// Calendar weekdays, 1 = Sunday … 7 = Saturday. An empty array means the alarm fires once.
-    @objc let weekdays: [NSNumber]
+    let weekdays: [NSNumber]
 
     init(hour: Int, minute: Int, weekdays: [NSNumber]) {
         self.hour = hour
         self.minute = minute
         self.weekdays = weekdays
+        objcInit()
     }
 }
 
-@objc(VLCRadioAlarmService)
-class VLCRadioAlarmService: NSObject {
-    @objc static let shared = VLCRadioAlarmService()
+@ObjCImplementation("VLCRadioAlarmService")
+class VLCRadioAlarmService: NSObjectMethods {
+    init() { objcInit() }
+
+    static let shared = VLCRadioAlarmService()
 
     // MARK: - queries
 
-    @objc func alarm(forURL url: URL) -> VLCRadioAlarmInfo? {
+    @ObjCMethod func alarm(forURL url: URL) -> VLCRadioAlarmInfo? {
 #if canImport(AlarmKit)
         if #available(iOS 26.1, *) {
             let identifier = VLCRadioAlarmService.identifier(for: url)
@@ -102,7 +104,7 @@ class VLCRadioAlarmService: NSObject {
         return nil
     }
 
-    @objc func urlsWithAlarms(forFavorites favorites: [VLCFavorite],
+    @ObjCMethod func urlsWithAlarms(forFavorites favorites: [VLCFavorite],
                               completion: @escaping (Set<URL>) -> Void) {
 #if canImport(AlarmKit)
         if #available(iOS 26.1, *) {
@@ -123,7 +125,7 @@ class VLCRadioAlarmService: NSObject {
         completion([])
     }
 
-    @objc func localizedAlarmDescription(forURL url: URL) -> String? {
+    @ObjCMethod func localizedAlarmDescription(forURL url: URL) -> String? {
         guard let info = alarm(forURL: url) else {
             return nil
         }
@@ -154,7 +156,7 @@ class VLCRadioAlarmService: NSObject {
 
     // MARK: - scheduling
 
-    @objc func scheduleAlarm(forFavorite favorite: VLCFavorite,
+    @ObjCMethod func scheduleAlarm(forFavorite favorite: VLCFavorite,
                              hour: Int,
                              minute: Int,
                              weekdays: [NSNumber],
@@ -180,7 +182,7 @@ class VLCRadioAlarmService: NSObject {
         }
     }
 
-    @objc func removeAlarm(forURL url: URL) {
+    @ObjCMethod func removeAlarm(forURL url: URL) {
 #if canImport(AlarmKit)
         if #available(iOS 26.1, *) {
             try? AlarmManager.shared.cancel(id: VLCRadioAlarmService.identifier(for: url))
