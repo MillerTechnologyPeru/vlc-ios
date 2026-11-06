@@ -17,12 +17,11 @@ extension VLCNetworkListCell {
     private static let podcastArtworkRadius: CGFloat = 9
     private static let podcastVerticalPadding: CGFloat = 8
 
-    @objc static var podcastFeedHeight: CGFloat {
+    static var podcastFeedHeight: CGFloat {
         return podcastArtworkSize + 2 * podcastVerticalPadding
     }
 
-    @objc(configureWithPodcastFeed:subscriptionState:)
-    func configure(podcastFeed feed: VLCPodcastIndexFeed, subscriptionState state: PodcastSubscriptionState) {
+    @ObjCMethod("configureWithPodcastFeed:subscriptionState:") func configure(podcastFeed feed: VLCPodcastIndexFeed, subscriptionState state: PodcastSubscriptionState) {
         title = feed.title
         subtitle = feed.subtitle
         thumbnailView.setImage(nil, placeholderName: feed.title)
@@ -35,8 +34,7 @@ extension VLCNetworkListCell {
         apply(podcastSubscriptionState: state)
     }
 
-    @objc(applyPodcastSubscriptionState:)
-    func apply(podcastSubscriptionState state: PodcastSubscriptionState) {
+    @ObjCMethod("applyPodcastSubscriptionState:") func apply(podcastSubscriptionState state: PodcastSubscriptionState) {
         switch state {
         case .available:
             accessoryView = nil
