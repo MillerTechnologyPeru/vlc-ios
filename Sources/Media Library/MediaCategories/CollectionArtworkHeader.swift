@@ -8,7 +8,8 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-class CollectionArtworkHeader: UICollectionReusableView {
+@ObjCImplementation
+class CollectionArtworkHeader: UICollectionReusableViewMethods {
     // MARK: - Properties
 
     static var headerID = "headerID"
@@ -29,8 +30,8 @@ class CollectionArtworkHeader: UICollectionReusableView {
 
     // MARK: - Initializers
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        objcInit("initWithFrame:", frame)
         backgroundColor = PresentationTheme.current.colors.background
         setupImageView()
         setupTitleLabel()
@@ -39,9 +40,6 @@ class CollectionArtworkHeader: UICollectionReusableView {
         setupConstraints()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     // MARK: - Private methods
 
@@ -76,7 +74,7 @@ class CollectionArtworkHeader: UICollectionReusableView {
         applyGlassStyle(to: playAllButton,
                         image: UIImage(named: "iconPlay")?.withRenderingMode(.alwaysTemplate),
                         size: buttonSize)
-        playAllButton.addTarget(self, action: #selector(handlePlayAll(sender:)), for: .touchUpInside)
+        playAllButton.addTarget(self, action: ObjC.selector("handlePlayAllSender:"), for: .touchUpInside)
     }
 
     private func setupShuffleButton() {
@@ -87,7 +85,7 @@ class CollectionArtworkHeader: UICollectionReusableView {
         applyGlassStyle(to: playShuffleButton,
                         image: UIImage(named: "shuffle"),
                         size: buttonSize)
-        playShuffleButton.addTarget(self, action: #selector(handlePlayAllShuffle(sender:)), for: .touchUpInside)
+        playShuffleButton.addTarget(self, action: ObjC.selector("handlePlayAllShuffleSender:"), for: .touchUpInside)
     }
 
     private func applyGlassStyle(to button: UIButton, image: UIImage?, size: CGFloat) {
@@ -187,11 +185,11 @@ class CollectionArtworkHeader: UICollectionReusableView {
 
     // MARK: - Actions
 
-    @objc func handlePlayAll(sender: UIButton) {
+    @ObjCMethod func handlePlayAll(sender: UIButton) {
         playAll(shuffle: false)
     }
 
-    @objc func handlePlayAllShuffle(sender: UIButton) {
+    @ObjCMethod func handlePlayAllShuffle(sender: UIButton) {
         playAll(shuffle: true)
     }
 }
