@@ -12,7 +12,10 @@
 
 import Foundation
 
-class VLCLabelCell: UICollectionViewCell {
+@ObjCImplementation
+class VLCLabelCell: UICollectionViewCellMethods {
+    init() { objcInit() }
+
     static let cellIdentifier = "VLCLabelCell"
     @IBOutlet weak var iconLabel: UILabel!
 
@@ -227,7 +230,7 @@ class VLCPagingViewController<ButtonBarCellType: UICollectionViewCell>: PagerTab
 
     // MARK: - UICollectionViewDelegateFlowLayut
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    @ObjCMethod func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         guard let cellWidthValue = cachedCellWidths?[indexPath.row] else {
             fatalError("cachedCellWidths for \(indexPath.row) must not be nil")
         }
