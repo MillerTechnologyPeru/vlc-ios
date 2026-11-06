@@ -10,7 +10,6 @@
  * Refer to the COPYING file of the official project for license.
 *****************************************************************************/
 
-@objc(VLCVideoPlayerControlsDelegate)
 protocol VideoPlayerControlsDelegate: AnyObject {
     // MARK: - Left Controls
 
@@ -23,7 +22,7 @@ protocol VideoPlayerControlsDelegate: AnyObject {
     func videoPlayerControlsDelegateDidTapBackward(_ videoPlayerControls: VideoPlayerControls)
     func videoPlayerControlsDelegateDidTapPreviousMedia(_ videoPlayerControls: VideoPlayerControls)
     func videoPlayerControlsDelegateDidTapPlayPause(_ videoPlayerControls: VideoPlayerControls)
-    @objc optional func videoPlayerControlsDelegateDidLongPressPlayPauseBegan(_ videoPlayerControls: VideoPlayerControls)
+    optional func videoPlayerControlsDelegateDidLongPressPlayPauseBegan(_ videoPlayerControls: VideoPlayerControls)
     func videoPlayerControlsDelegateDidLongPressPlayPauseEnded(_ videoPlayerControls: VideoPlayerControls)
     func videoPlayerControlsDelegateDidTapNextMedia(_ videoPlayerControls: VideoPlayerControls)
     func videoPlayerControlsDelegateDidTapForward(_ videoPlayerControls: VideoPlayerControls)
@@ -38,7 +37,8 @@ protocol VideoPlayerControlsDelegate: AnyObject {
 }
 
 
-class VideoPlayerControls: UIView {
+@ObjCImplementation(extensions: ["Extension"])
+class VideoPlayerControls: UIViewMethods {
 
     // MARK: - IB properties
 
@@ -74,8 +74,8 @@ class VideoPlayerControls: UIView {
 
     weak var delegate: VideoPlayerControlsDelegate?
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    init?(coder: NSCoder) {
+        objcInit("initWithCoder:", coder)
     }
 
     func setupAccessibility() {
@@ -166,7 +166,7 @@ class VideoPlayerControls: UIView {
     }
 
     func setupLongPressGestureRecognizer() {
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleAspectRatioLongPress(_:)))
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: ObjC.selector("handleAspectRatioLongPress:"))
         aspectRatioButton.addGestureRecognizer(longPressGesture)
     }
 
@@ -262,12 +262,13 @@ extension VideoPlayerControls {
 
 // MARK: - Right Controls
 
+@ObjCExtension("Extension")
 extension VideoPlayerControls {
     @IBAction func handleAspectRatioButton(_ sender: Any) {
         delegate?.videoPlayerControlsDelegateDidTapAspectRatio(self)
     }
 
-    @objc func handleAspectRatioLongPress(_ sender: UILongPressGestureRecognizer) {
+    @ObjCMethod func handleAspectRatioLongPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.videoPlayerControlsDelegateDidLongPressAspectRatio(self)
         }
