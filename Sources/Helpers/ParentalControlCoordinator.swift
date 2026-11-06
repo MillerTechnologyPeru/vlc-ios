@@ -13,14 +13,15 @@
 import UIKit
 import LocalAuthentication
 
-class ParentalControlCoordinator: NSObject {
+@ObjCImplementation
+class ParentalControlCoordinator: NSObjectMethods {
 
-    @objc static let parentalControlService = KeychainCoordinator(serviceIdentifier: "org.videolan.vlc-ios.parentalControl")
+    static let parentalControlService = KeychainCoordinator(serviceIdentifier: "org.videolan.vlc-ios.parentalControl")
 
     // MARK: - Singleton
     static let shared = ParentalControlCoordinator()
 
-    @objc class func sharedInstance() -> ParentalControlCoordinator {
+    @ObjCMethod class func sharedInstance() -> ParentalControlCoordinator {
         return shared
     }
 
@@ -34,10 +35,10 @@ class ParentalControlCoordinator: NSObject {
     private let timestampKey = "ParentalControlLastUnlockTimestamp"
 
     // MARK: - Initializer
-    override init() {
-        super.init()
+    init() {
+        objcInit("init")
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillEnterForeground),
+                                               selector: ObjC.selector("applicationWillEnterForeground"),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
     }
@@ -71,7 +72,7 @@ class ParentalControlCoordinator: NSObject {
         }
     }
 
-    @objc public func authorizeIfParentalControlIsEnabled(action: @escaping @convention(block) () -> Void, fail: (@convention(block) () -> Void)? = nil) {
+    @ObjCMethod public func authorizeIfParentalControlIsEnabled(action: @escaping @convention(block) () -> Void, fail: (@convention(block) () -> Void)? = nil) {
         if isEnabled {
             authenticate { success in
                 if success {
@@ -117,7 +118,7 @@ class ParentalControlCoordinator: NSObject {
         UserDefaults.standard.removeObject(forKey: timestampKey)
     }
 
-    @objc func applicationWillEnterForeground() {
+    @ObjCMethod func applicationWillEnterForeground() {
         if isEnabled && !isParentalControlUnlocked {
             clearTimestamp()
         }
