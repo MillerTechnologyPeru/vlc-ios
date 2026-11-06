@@ -13,6 +13,7 @@
 
 // MARK: - MovieCategoryViewController
 
+@ObjCImplementation
 class MovieCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService) {
         let model = MediaGroupViewModel(medialibrary: mediaLibraryService)
@@ -23,6 +24,7 @@ class MovieCategoryViewController: MediaCategoryViewController {
 
 // MARK: - ShowEpisodeCategoryViewController
 
+@ObjCImplementation
 class ShowEpisodeCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService) {
         let model = ShowEpisodeModel(medialibrary: mediaLibraryService)
@@ -33,9 +35,10 @@ class ShowEpisodeCategoryViewController: MediaCategoryViewController {
 
 // MARK: - PlaylistCategoryViewController
 
+@ObjCImplementation
 class PlaylistCategoryViewController: MediaCategoryViewController {
     private lazy var createPlaylistButton: UIBarButtonItem = {
-        let createPlaylistButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(handleCreatePlaylist))
+        let createPlaylistButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: ObjC.selector("handleCreatePlaylist"))
         return createPlaylistButton
     }()
 
@@ -52,7 +55,7 @@ class PlaylistCategoryViewController: MediaCategoryViewController {
         return createPlaylistButton
     }
 
-    @objc func handleCreatePlaylist() {
+    @ObjCMethod func handleCreatePlaylist() {
         let addToCollectionViewController = AddToCollectionViewController()
         addToCollectionViewController.delegate = self
         addToCollectionViewController.mlCollection = playlistModel.medialibrary.playlists()
@@ -89,6 +92,7 @@ extension PlaylistCategoryViewController: AddToCollectionViewControllerDelegate 
 
 // MARK: - TrackCategoryViewController
 
+@ObjCImplementation
 class TrackCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService) {
         let model = TrackModel(medialibrary: mediaLibraryService)
@@ -108,6 +112,7 @@ class TrackCategoryViewController: MediaCategoryViewController {
 
 // MARK: - GenreCategoryViewController
 
+@ObjCImplementation
 class GenreCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService) {
         let model = GenreModel(medialibrary: mediaLibraryService)
@@ -123,6 +128,7 @@ class GenreCategoryViewController: MediaCategoryViewController {
 
 // MARK: - ArtistCategoryViewController
 
+@ObjCImplementation
 class ArtistCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService) {
         let model = ArtistModel(medialibrary: mediaLibraryService)
@@ -138,6 +144,7 @@ class ArtistCategoryViewController: MediaCategoryViewController {
 
 // MARK: - FolderViewController
 
+@ObjCImplementation
 class FolderViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService, isAudio: Bool, folder: VLCMLFolder?) {
         let model = FolderModel(medialibrary: mediaLibraryService, isAudio: isAudio, folder: folder)
@@ -153,6 +160,7 @@ class FolderViewController: MediaCategoryViewController {
 
 // MARK: - AlbumCategoryViewController
 
+@ObjCImplementation
 class AlbumCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService) {
         let model = AlbumModel(medialibrary: mediaLibraryService)
@@ -168,6 +176,7 @@ class AlbumCategoryViewController: MediaCategoryViewController {
 
 // MARK: - ArtistAlbumCategoryViewController
 
+@ObjCImplementation
 class ArtistAlbumCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService, mediaCollection: VLCMLArtist) {
         let model = AlbumModel(medialibrary: mediaLibraryService, artist: mediaCollection)
@@ -178,6 +187,7 @@ class ArtistAlbumCategoryViewController: MediaCategoryViewController {
 
 // MARK: - HistoryCategoryViewController
 
+@ObjCImplementation
 class HistoryCategoryViewController: MediaCategoryViewController {
     init(_ mediaLibraryService: MediaLibraryService, mediaType: VLCMLMediaType) {
         let model = HistoryModel(medialibrary: mediaLibraryService, mediaType: mediaType)
@@ -188,9 +198,10 @@ class HistoryCategoryViewController: MediaCategoryViewController {
 
 // MARK: - CollectionCategoryViewController
 
+@ObjCImplementation
 class CollectionCategoryViewController: MediaCategoryViewController {
     private lazy var playAllButton: UIBarButtonItem = {
-        let playAllButton = UIBarButtonItem(image: UIImage(named: "iconPlay"), style: .plain, target: self, action: #selector(handlePlayAll))
+        let playAllButton = UIBarButtonItem(image: UIImage(named: "iconPlay"), style: .plain, target: self, action: ObjC.selector("handlePlayAll"))
         playAllButton.accessibilityLabel = NSLocalizedString("PLAY_ALL_BUTTON", comment: "")
         playAllButton.accessibilityHint = NSLocalizedString("PLAY_ALL_HINT", comment: "")
         return playAllButton
@@ -206,7 +217,7 @@ class CollectionCategoryViewController: MediaCategoryViewController {
         return playAllButton
     }
 
-    @objc private func handlePlayAll() {
+    @ObjCMethod private func handlePlayAll() {
         if let model = model as? CollectionModel,
            let collection = model.mediaCollection as? VLCMLArtist {
             let playbackService = PlaybackService.sharedInstance()
