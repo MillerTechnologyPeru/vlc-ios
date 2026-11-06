@@ -80,27 +80,25 @@ enum ActionSheetCellIdentifier: String, CustomStringConvertible, CaseIterable {
     }
 }
 
-@objc(VLCMediaPlayerActionSheetDataSource)
 protocol MediaPlayerActionSheetDataSource {
     var configurableCellModels: [ActionSheetCellModel] { get }
 }
 
-@objc(VLCMediaPlayerActionSheetDelegate)
 protocol MediaPlayerActionSheetDelegate {
     func mediaPlayerActionSheetHeaderTitle() -> String?
-    @objc optional func mediaPlayerDidToggleSwitch(for cell: ActionSheetCell, state: Bool)
+    optional func mediaPlayerDidToggleSwitch(for cell: ActionSheetCell, state: Bool)
 }
 
-@objc(VLCMediaPlayerActionSheet)
+@ObjCImplementation("VLCMediaPlayerActionSheet")
 class MediaPlayerActionSheet: ActionSheet {
     
     // MARK: Private Instance Properties
     private weak var currentChildView: UIView?
-    @objc weak var mediaPlayerActionSheetDelegate: MediaPlayerActionSheetDelegate?
-    @objc weak var mediaPlayerActionSheetDataSource: MediaPlayerActionSheetDataSource?
+    weak var mediaPlayerActionSheetDelegate: MediaPlayerActionSheetDelegate?
+    weak var mediaPlayerActionSheetDataSource: MediaPlayerActionSheetDataSource?
     
     private lazy var leftToRightGesture: UIPanGestureRecognizer = {
-        let leftToRight = UIPanGestureRecognizer(target: self, action: #selector(draggedRight(panGesture:)))
+        let leftToRight = UIPanGestureRecognizer(target: self, action: ObjC.selector("draggedRightPanGesture:"))
         return leftToRight
     }()
 
@@ -148,7 +146,7 @@ class MediaPlayerActionSheet: ActionSheet {
             child.addGestureRecognizer(self.leftToRightGesture)
             self.currentChildView = child
 
-            self.headerView.previousButton.addTarget(self, action: #selector(self.removeCurrentChild), for: .touchUpInside)
+            self.headerView.previousButton.addTarget(self, action: ObjC.selector("removeCurrentChild"), for: .touchUpInside)
         }
     }
 
@@ -169,7 +167,7 @@ class MediaPlayerActionSheet: ActionSheet {
         }
     }
 
-    @objc func removeCurrentChild() {
+    @ObjCMethod func removeCurrentChild() {
         if let current = currentChildView {
             remove(childView: current)
         }
@@ -189,7 +187,7 @@ class MediaPlayerActionSheet: ActionSheet {
     }
 
     /// Animates the removal of the `currentChildViewController` when it is dragged from its left edge to the right
-    @objc private func draggedRight(panGesture: UIPanGestureRecognizer) {
+    @ObjCMethod private func draggedRight(panGesture: UIPanGestureRecognizer) {
         if let current = currentChildView {
 
             let translation = panGesture.translation(in: view)
@@ -281,9 +279,6 @@ class MediaPlayerActionSheet: ActionSheet {
         setTheme()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func shouldDisablePanGesture(_ disable: Bool) {
         leftToRightGesture.isEnabled = !disable
