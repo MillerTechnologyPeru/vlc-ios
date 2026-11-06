@@ -38,7 +38,8 @@ protocol LibraryTabSearchDataSourceDelegate: AnyObject {
 
 // MARK: - LibraryTabSearchDataSource
 
-class LibraryTabSearchDataSource: NSObject {
+@ObjCImplementation(protocols: ["UICollectionViewDataSource", "UICollectionViewDelegateFlowLayout"], extensions: ["UICollectionViewDataSource", "UICollectionViewDelegateFlowLayout"])
+class LibraryTabSearchDataSource: NSObjectMethods {
     // MARK: Properties
 
     let scope: LibrarySearchScope
@@ -74,7 +75,7 @@ class LibraryTabSearchDataSource: NSObject {
     init(scope: LibrarySearchScope, mediaLibraryService: MediaLibraryService) {
         self.scope = scope
         self.mediaLibraryService = mediaLibraryService
-        super.init()
+        objcInit("init")
     }
 
     // MARK: Public methods
@@ -196,16 +197,17 @@ private extension LibraryTabSearchDataSource {
 
 // MARK: - UICollectionViewDataSource
 
-extension LibraryTabSearchDataSource: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+@ObjCExtension("UICollectionViewDataSource")
+extension LibraryTabSearchDataSource {
+    @ObjCMethod("numberOfSectionsInCollectionView:") func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections.objectAtIndex(index: section)?.items.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.defaultReuseIdentifier,
                                                             for: indexPath) as? MediaCollectionViewCell else {
             assertionFailure("LibraryTabSearchDataSource: MediaCollectionViewCell is not registered.")
@@ -237,7 +239,7 @@ extension LibraryTabSearchDataSource: UICollectionViewDataSource {
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:viewForSupplementaryElementOfKind:atIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
@@ -254,8 +256,9 @@ extension LibraryTabSearchDataSource: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension LibraryTabSearchDataSource: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+@ObjCExtension("UICollectionViewDelegateFlowLayout")
+extension LibraryTabSearchDataSource {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
         guard let section = sections.objectAtIndex(index: indexPath.section),
@@ -266,11 +269,11 @@ extension LibraryTabSearchDataSource: UICollectionViewDelegateFlowLayout {
         delegate?.libraryTabSearchDataSource(self, didSelect: item, in: section)
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewWillBeginDragging:") func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         delegate?.libraryTabSearchDataSourceWillBeginDragging(self)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.safeAreaLayoutGuide.layoutFrame.width
@@ -282,32 +285,32 @@ extension LibraryTabSearchDataSource: UICollectionViewDelegateFlowLayout {
         return cachedCellSize
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:referenceSizeForHeaderInSection:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.safeAreaLayoutGuide.layoutFrame.width, height: sectionHeaderHeight)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:referenceSizeForFooterInSection:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         return .zero
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:insetForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         let padding = MediaCollectionViewCell.edgePadding
         return UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:minimumLineSpacingForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return MediaCollectionViewCell.edgePadding
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:minimumInteritemSpacingForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return MediaCollectionViewCell.interItemPadding
