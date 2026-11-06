@@ -11,12 +11,10 @@
 
 import UIKit
 
-@objc(VLCZoomTransitionEndpoint)
 protocol ZoomTransitionEndpoint: NSObjectProtocol {
     var zoomTransitionArtworkView: VLCArtworkImageView? { get }
 }
 
-@objc(VLCZoomTransitionDataSource)
 protocol ZoomTransitionDataSource: NSObjectProtocol {
     func miniPlayerZoomTransitionEndpoint() -> ZoomTransitionEndpoint?
 }
@@ -36,21 +34,22 @@ private extension VLCArtworkImageView {
     }
 }
 
-class MiniPlayerZoomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+@ObjCImplementation(protocols: ["UIViewControllerAnimatedTransitioning"])
+class MiniPlayerZoomAnimator: NSObjectMethods {
     private weak var miniPlayerEndpoint: ZoomTransitionEndpoint?
     private let presenting: Bool
 
     init(miniPlayerEndpoint: ZoomTransitionEndpoint, presenting: Bool) {
         self.miniPlayerEndpoint = miniPlayerEndpoint
         self.presenting = presenting
-        super.init()
+        objcInit("init")
     }
 
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    @ObjCMethod("transitionDuration:") func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.45
     }
 
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    @ObjCMethod("animateTransition:") func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if presenting {
             animatePresentation(using: transitionContext)
         } else {
@@ -177,16 +176,16 @@ class MiniPlayerZoomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     }
 }
 
-@objc(VLCMiniPlayerZoomTransitioningDelegate)
-class MiniPlayerZoomTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+@ObjCImplementation("VLCMiniPlayerZoomTransitioningDelegate", protocols: ["UIViewControllerTransitioningDelegate"])
+class MiniPlayerZoomTransitioningDelegate: NSObjectMethods {
     private weak var dataSource: ZoomTransitionDataSource?
 
-    @objc init(dataSource: ZoomTransitionDataSource) {
+    init(dataSource: ZoomTransitionDataSource) {
         self.dataSource = dataSource
-        super.init()
+        objcInit("init")
     }
 
-    func animationController(forPresented presented: UIViewController,
+    @ObjCMethod("animationControllerForPresentedController:presentingController:sourceController:") func animationController(forPresented presented: UIViewController,
                              presenting: UIViewController,
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         guard let miniPlayerEndpoint = dataSource?.miniPlayerZoomTransitionEndpoint(),
@@ -197,7 +196,7 @@ class MiniPlayerZoomTransitioningDelegate: NSObject, UIViewControllerTransitioni
         return MiniPlayerZoomAnimator(miniPlayerEndpoint: miniPlayerEndpoint, presenting: true)
     }
 
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    @ObjCMethod("animationControllerForDismissedController:") func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         guard let miniPlayerEndpoint = dataSource?.miniPlayerZoomTransitionEndpoint(),
               miniPlayerEndpoint.zoomTransitionArtworkView?.hasArtwork == true,
               artworkView(of: dismissed)?.hasArtwork == true else {
