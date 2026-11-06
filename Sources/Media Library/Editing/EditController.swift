@@ -19,7 +19,8 @@ protocol EditControllerDelegate: AnyObject {
     func editControllerUpdateIsAllSelected(with allSelected: Bool)
 }
 
-class EditController: UIViewController {
+@ObjCImplementation(protocols: ["UICollectionViewDelegate", "UICollectionViewDataSource", "UICollectionViewDragDelegate", "UICollectionViewDropDelegate", "UICollectionViewDelegateFlowLayout"], extensions: ["UICollectionViewDelegate", "UICollectionViewDataSource", "UICollectionViewDragDelegate", "UICollectionViewDropDelegate", "UICollectionViewDelegateFlowLayout"])
+class EditController: UIViewControllerMethods {
     // Cache selectedIndexPath separately to indexPathsForSelectedItems in order to have persistance
     private var selectedCellIndexPaths = Set<IndexPath>()
     private let model: MediaLibraryBaseModel
@@ -47,12 +48,9 @@ class EditController: UIViewController {
         self.presentingView = presentingView
         self.editActions = EditActions(model: model, mediaLibraryService: mediaLibraryService)
         self.searchDataSource = searchDataSource
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     func resetSelections(resetUI: Bool) {
         for indexPath in selectedCellIndexPaths {
@@ -303,8 +301,9 @@ extension EditController: EditToolbarDelegate {
 
 // MARK: - UICollectionViewDelegate
 
-extension EditController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+@ObjCExtension("UICollectionViewDelegate")
+extension EditController {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedCellIndexPaths.insert(indexPath)
         collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
 
@@ -331,7 +330,7 @@ extension EditController: UICollectionViewDelegate {
         delegate?.editControllerSetNavigationItemTitle(with: title)
     }
 
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    @ObjCMethod("collectionView:didDeselectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         selectedCellIndexPaths.remove(indexPath)
         collectionView.deselectItem(at: indexPath, animated: false)
 
@@ -358,7 +357,7 @@ extension EditController: UICollectionViewDelegate {
         delegate?.editControllerSetNavigationItemTitle(with: title)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    @ObjCMethod("collectionView:layout:referenceSizeForHeaderInSection:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         guard let model = model as? CollectionModel else {
             return .init(width: 0, height: 0)
         }
@@ -374,12 +373,13 @@ extension EditController: UICollectionViewDelegate {
 
 // MARK: - UICollectdiionViewDataSource
 
-extension EditController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+@ObjCExtension("UICollectionViewDataSource")
+extension EditController {
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return currentDataSet.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: model.cellType.defaultReuseIdentifier,
                                                          for: indexPath) as? BaseCollectionViewCell {
             cell.isSelected = selectedCellIndexPaths.contains(indexPath)
@@ -415,7 +415,7 @@ extension EditController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    @ObjCMethod("collectionView:viewForSupplementaryElementOfKind:atIndexPath:") func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader else {
             return UICollectionReusableView()
         }
@@ -432,7 +432,7 @@ extension EditController: UICollectionViewDataSource {
         return UICollectionReusableView()
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidScroll:") func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let delegate = delegate as? MediaCategoryViewController {
             delegate.scrollViewDidScroll(scrollView)
         }
@@ -441,8 +441,9 @@ extension EditController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDragDelegate
 
-extension EditController: UICollectionViewDragDelegate {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDragDelegate")
+extension EditController {
+    @ObjCMethod("collectionView:itemsForBeginningDragSession:atIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
         guard canReorder,
@@ -453,12 +454,12 @@ extension EditController: UICollectionViewDragDelegate {
         return [UIDragItem(itemProvider: NSItemProvider())]
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dragSessionIsRestrictedToDraggingApplication:") func collectionView(_ collectionView: UICollectionView,
                         dragSessionIsRestrictedToDraggingApplication session: UIDragSession) -> Bool {
         return true
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dragPreviewParametersForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         return dragPreviewParameters()
     }
@@ -466,12 +467,13 @@ extension EditController: UICollectionViewDragDelegate {
 
 // MARK: - UICollectionViewDropDelegate
 
-extension EditController: UICollectionViewDropDelegate {
-    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+@ObjCExtension("UICollectionViewDropDelegate")
+extension EditController {
+    @ObjCMethod("collectionView:canHandleDropSession:") func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.localDragSession != nil
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dropSessionDidUpdate:withDestinationIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         dropSessionDidUpdate session: UIDropSession,
                         withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         guard collectionView.hasActiveDrag, canReorder else {
@@ -481,7 +483,7 @@ extension EditController: UICollectionViewDropDelegate {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+    @ObjCMethod("collectionView:performDropWithCoordinator:") func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         guard let collectionModel = model as? CollectionModel,
               let item = coordinator.items.first,
               let sourceIndexPath = item.sourceIndexPath else {
@@ -518,7 +520,7 @@ extension EditController: UICollectionViewDropDelegate {
         coordinator.drop(item.dragItem, toItemAt: IndexPath(row: newRows[sourceIndexPath.row], section: section))
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:dropPreviewParametersForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         dropPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
         return dragPreviewParameters()
     }
@@ -526,15 +528,16 @@ extension EditController: UICollectionViewDropDelegate {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension EditController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDelegateFlowLayout")
+extension EditController {
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         model.cellType.cellSizeForWidth(collectionView.safeAreaLayoutGuide.layoutFrame.width,
                                         safeAreaInsets: collectionView.safeAreaInsets)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:insetForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: model.cellType.edgePadding,
@@ -543,13 +546,13 @@ extension EditController: UICollectionViewDelegateFlowLayout {
                             right: model.cellType.edgePadding)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:minimumLineSpacingForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return model.cellType.edgePadding
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:minimumInteritemSpacingForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return model.cellType.interItemPadding
