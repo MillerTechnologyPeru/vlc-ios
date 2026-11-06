@@ -12,7 +12,10 @@
 
 import Foundation
 
-class PagerTabStripViewController: UIViewController, UIScrollViewDelegate {
+@ObjCImplementation(protocols: ["UIScrollViewDelegate"])
+class PagerTabStripViewController: UIViewControllerMethods {
+    init() { objcInit() }
+
 
     var containerView: UIScrollView!
 
@@ -52,8 +55,8 @@ class PagerTabStripViewController: UIViewController, UIScrollViewDelegate {
         return .none
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
 
         containerView = UIScrollView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
 
@@ -76,14 +79,14 @@ class PagerTabStripViewController: UIViewController, UIScrollViewDelegate {
         childController.didMove(toParent: self)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         isViewAppearing = true
         children.forEach { $0.beginAppearanceTransition(true, animated: animated) }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
         lastSize = containerView.bounds.size
         updateIfNeeded()
         let needToUpdateCurrentChild = preCurrentIndex != currentIndex
@@ -94,18 +97,18 @@ class PagerTabStripViewController: UIViewController, UIScrollViewDelegate {
         children.forEach { $0.endAppearanceTransition() }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    @ObjCMethod("viewWillDisappear:") func viewWillDisappear(_ animated: Bool) {
+        callSuper("viewWillDisappear:", animated)
         children.forEach { $0.beginAppearanceTransition(false, animated: animated) }
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
+        callSuper("viewDidDisappear:", animated)
         children.forEach { $0.endAppearanceTransition() }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
         updateIfNeeded()
         updateChildSafeAreaInsets()
     }
@@ -283,20 +286,20 @@ class PagerTabStripViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: - UIScrollViewDelegate
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidScroll:") func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if containerView == scrollView {
             updateContent()
             lastContentOffset = scrollView.contentOffset.x
         }
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewWillBeginDragging:") func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if containerView == scrollView {
             lastPageNumber = pageFor(contentOffset: scrollView.contentOffset.x)
         }
     }
 
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    @ObjCMethod("scrollViewDidEndScrollingAnimation:") func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if containerView == scrollView {
             pagerTabStripChildViewControllersForScrolling = nil
             (navigationController?.view ?? view).isUserInteractionEnabled = true
@@ -306,8 +309,8 @@ class PagerTabStripViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: - Orientation
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
+    @ObjCMethod("viewWillTransitionToSize:withTransitionCoordinator:") func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        callSuper("viewWillTransitionToSize:withTransitionCoordinator:", size, coordinator)
         isViewRotating = true
         pageBeforeRotate = currentIndex
         coordinator.animate(alongsideTransition: nil) { [weak self] _ in
