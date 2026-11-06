@@ -66,7 +66,7 @@ extension UINavigationController {
                                                name: .VLCThemeDidChangeNotification, object: nil)
     }
 
-    @objc func themeDidChange() {
+    @ObjCMethod func themeDidChange() {
 #if !os(tvOS)
         if #available(iOS 26.0, *) {
             let textColor = PresentationTheme.current.colors.navigationbarTextColor
