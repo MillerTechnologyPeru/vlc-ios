@@ -23,7 +23,8 @@ protocol AddToCollectionViewControllerDelegate: AnyObject {
                                                       addToCollectionViewController: AddToCollectionViewController)
 }
 
-class AddToCollectionViewController: UIViewController {
+@ObjCImplementation(protocols: ["UICollectionViewDelegateFlowLayout", "UICollectionViewDelegate", "UICollectionViewDataSource"], extensions: ["UICollectionViewDelegateFlowLayout", "UICollectionViewDelegate", "UICollectionViewDataSource"])
+class AddToCollectionViewController: UIViewControllerMethods {
     @IBOutlet private weak var newCollectionButton: UIButton!
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
@@ -42,40 +43,37 @@ class AddToCollectionViewController: UIViewController {
 
     weak var delegate: AddToCollectionViewControllerDelegate?
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.isTranslucent = false
         collectionView.reloadData()
     }
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        objcInit("initWithNibName:bundle:", nibNameOrNil, nibBundleOrNil)
         initViews()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(themeDidChange),
+                                               selector: ObjC.selector("themeDidChange"),
                                                name: .VLCThemeDidChangeNotification,
                                                object: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return PresentationTheme.current.colors.statusBarStyle
     }
 
-    override func viewSafeAreaInsetsDidChange() {
+    @ObjCMethod("viewSafeAreaInsetsDidChange") func viewSafeAreaInsetsDidChange() {
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    @objc private func themeDidChange() {
+    @ObjCMethod private func themeDidChange() {
         view.backgroundColor = PresentationTheme.current.colors.background
         collectionView.backgroundColor = PresentationTheme.current.colors.background
 #if os(iOS)
@@ -83,7 +81,7 @@ class AddToCollectionViewController: UIViewController {
 #endif
     }
 
-    @objc private func dismissView() {
+    @ObjCMethod private func dismissView() {
         dismiss(animated: true, completion: nil)
     }
 
@@ -177,7 +175,7 @@ private extension AddToCollectionViewController {
                                                                                     comment: ""),
                                                            style: .done,
                                                            target: self,
-                                                           action: #selector(dismissView))
+                                                           action: ObjC.selector("dismissView"))
     }
 
     private func setupNewCollectionButton(for type: MediaCollectionModel.Type) {
@@ -218,21 +216,22 @@ private extension AddToCollectionViewController {
 
 // MARK: - UICollectionViewFlowLayout
 
-extension AddToCollectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
+@ObjCExtension("UICollectionViewDelegateFlowLayout")
+extension AddToCollectionViewController {
+    @ObjCMethod("collectionView:layout:sizeForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return MediaCollectionViewCell.cellSizeForWidth(collectionView.bounds.size.width,
                                                         safeAreaInsets: collectionView.safeAreaInsets)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:layout:insetForSectionAtIndex:") func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: sidePadding, bottom: 0, right: sidePadding)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    @ObjCMethod("collectionView:layout:referenceSizeForHeaderInSection:") func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         guard collectionModelType is VLCMLMediaGroup.Type else { return .zero }
         return CGSize(width: collectionView.frame.width, height: MediaCollectionViewCell.getDefaultConstant())
     }
@@ -240,8 +239,9 @@ extension AddToCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UICollectionViewDelegate
 
-extension AddToCollectionViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+@ObjCExtension("UICollectionViewDelegate")
+extension AddToCollectionViewController {
+    @ObjCMethod("collectionView:didSelectItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row <= mlCollection.count else {
             assertionFailure("AddToPlaylistViewController: didSelectItemAt: IndexPath out of range.")
             return
@@ -253,22 +253,23 @@ extension AddToCollectionViewController: UICollectionViewDelegate {
 
 // MARK: - UICollectionViewDataSource
 
-extension AddToCollectionViewController: UICollectionViewDataSource {
+@ObjCExtension("UICollectionViewDataSource")
+extension AddToCollectionViewController {
 
     func reloadData() {
         self.collectionView.reloadData()
     }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    @ObjCMethod("numberOfSectionsInCollectionView:") func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:numberOfItemsInSection:") func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return mlCollection.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    @ObjCMethod("collectionView:cellForItemAtIndexPath:") func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MediaCollectionViewCell.defaultReuseIdentifier,
                                                             for: indexPath) as? MediaCollectionViewCell else {
@@ -287,7 +288,7 @@ extension AddToCollectionViewController: UICollectionViewDataSource {
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    @ObjCMethod("collectionView:viewForSupplementaryElementOfKind:atIndexPath:") func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard collectionModelType is VLCMLMediaGroup.Type,
               kind == UICollectionView.elementKindSectionHeader,
               let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MoveToRootHeader.headerID, for: indexPath) as? MoveToRootHeader
