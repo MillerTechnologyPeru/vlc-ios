@@ -22,7 +22,10 @@ struct PodcastFeedRequest {
     }
 }
 
-final class PodcastFeedURLHandler: NSObject, VLCURLHandler {
+@ObjCImplementation
+final class PodcastFeedURLHandler: NSObjectMethods, VLCURLHandler {
+    init() { objcInit() }
+
     var movieURL: URL?
     var subURL: URL?
     var successCallback: URL?
@@ -38,7 +41,7 @@ final class PodcastFeedURLHandler: NSObject, VLCURLHandler {
     private weak var confirmationAlert: UIAlertController?
     private var activationObserver: NSObjectProtocol?
 
-    @objc func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func canHandleOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         if let scheme = url.scheme?.lowercased(), PodcastFeedURLHandler.feedSchemes.contains(scheme) {
             return true
         }
@@ -47,7 +50,7 @@ final class PodcastFeedURLHandler: NSObject, VLCURLHandler {
             && PodcastFeedURLHandler.feedPathExtensions.contains(url.pathExtension.lowercased())
     }
 
-    @objc func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
+    @ObjCMethod func performOpen(url: URL, options: [UIApplication.OpenURLOptionsKey: AnyObject]) -> Bool {
         guard !url.isFileURL else {
             resolveDocument(at: url)
             return true
@@ -308,7 +311,10 @@ final class PodcastFeedURLHandler: NSObject, VLCURLHandler {
     }
 }
 
-private class PodcastFeedDocumentParser: NSObject {
+@ObjCImplementation
+private class PodcastFeedDocumentParser: NSObjectMethods {
+    init() { objcInit() }
+
     fileprivate var feedURLs: [URL] = []
     fileprivate var selfLinkURL: URL?
     fileprivate var isParsingFeed = false
