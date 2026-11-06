@@ -24,9 +24,10 @@ enum PasscodeAction {
     case enter
 }
 
-class PasscodeLockController: UIViewController {
+@ObjCImplementation(extensions: ["Extension", "Extension2"])
+class PasscodeLockController: UIViewControllerMethods {
     // MARK: - Properties
-    @objc static private(set) var isEvaluatingBiometricAuthentication = false
+    static private(set) var isEvaluatingBiometricAuthentication = false
 
     private let notificationCenter = NotificationCenter.default
 
@@ -55,13 +56,9 @@ class PasscodeLockController: UIViewController {
         self.keychainService = keychainService
         self.completionHandler = completionHandler
 
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     deinit {
         notificationCenter.removeObserver(self)
@@ -121,7 +118,7 @@ class PasscodeLockController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
 
         button.setTitle(NSLocalizedString("Passcode Options", comment: ""), for: .normal)
-        button.addTarget(self, action: #selector(showPasscodeOptionsAlert), for: .touchUpInside)
+        button.addTarget(self, action: ObjC.selector("showPasscodeOptionsAlert"), for: .touchUpInside)
 
         return button
     }()
@@ -150,33 +147,33 @@ class PasscodeLockController: UIViewController {
 
     // MARK: - Gestures
     private lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: ObjC.selector("handleTap"))
         return tapGestureRecognizer
     }()
 
     // MARK: - View lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         setup()
         passcodeField.delegate = self
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
 
         // Set passcode length
         passcodeField.maxLength = passcodeLength
         passcodeField.becomeFirstResponder()
     }
 
-    override func viewDidAppear(_: Bool) {
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_: Bool) {
         // The observer isn't triggering on launch
         // So we should also call here
         biometricAuthRequest()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    @ObjCMethod("viewDidDisappear:") func viewDidDisappear(_ animated: Bool) {
+        callSuper("viewDidDisappear:", animated)
 
         // Clear passcode field
         passcodeField.clear()
@@ -194,8 +191,8 @@ class PasscodeLockController: UIViewController {
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @ObjCMethod("viewDidLayoutSubviews") func viewDidLayoutSubviews() {
+        callSuper("viewDidLayoutSubviews")
         coneView.isHidden = coneView.bounds.height < 40
     }
 
@@ -267,7 +264,7 @@ class PasscodeLockController: UIViewController {
     private func setupCancelButton() {
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel,
                                            target: self,
-                                           action: #selector(handleCancel))
+                                           action: ObjC.selector("handleCancel"))
 
         cancelButton.tintColor = PresentationTheme.current.colors.orangeUI
         navigationItem.rightBarButtonItem = cancelButton
@@ -302,48 +299,48 @@ class PasscodeLockController: UIViewController {
     private func setupObservers() {
         // Theme change observer
         notificationCenter.addObserver(self,
-                                       selector: #selector(setupTheme),
+                                       selector: ObjC.selector("setupTheme"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
 
         // Keyboard observers
         notificationCenter.addObserver(self,
-                                       selector: #selector(keyboardWillShow(_:)),
+                                       selector: ObjC.selector("keyboardWillShow:"),
                                        name: UIResponder.keyboardWillShowNotification,
                                        object: nil)
 
         notificationCenter.addObserver(self,
-                                       selector: #selector(keyboardWillHide(_:)),
+                                       selector: ObjC.selector("keyboardWillHide:"),
                                        name: UIResponder.keyboardWillHideNotification,
                                        object: nil)
 
         // Biometric auth observer
         notificationCenter.addObserver(self,
-                                       selector: #selector(biometricAuthRequest),
+                                       selector: ObjC.selector("biometricAuthRequest"),
                                        name: UIApplication.didBecomeActiveNotification,
                                        object: nil)
 
         // Application will terminate observer
         notificationCenter.addObserver(self,
-                                       selector: #selector(handleApplicationWillTerminate),
+                                       selector: ObjC.selector("handleApplicationWillTerminate"),
                                        name: UIApplication.willTerminateNotification,
                                        object: nil)
     }
 
-    @objc private func setupTheme() {
+    @ObjCMethod private func setupTheme() {
         view.backgroundColor = PresentationTheme.current.colors.background
         coneView.image = UIImage(named: PresentationTheme.current.colors.isDark ? "VLCCone26-dark-512x512" : "VLCCone26-512x512")
         messageLabel.textColor = PresentationTheme.current.colors.cellTextColor
         setNavBarAppearance()
     }
 
-    @objc private func handleTap() {
+    @ObjCMethod private func handleTap() {
         if !passcodeField.isFirstResponder {
             passcodeField.becomeFirstResponder()
         }
     }
 
-    @objc private func handleCancel() {
+    @ObjCMethod private func handleCancel() {
         takeCompletionHandler()?(false, nil)
 
 #if os(iOS)
@@ -353,11 +350,11 @@ class PasscodeLockController: UIViewController {
         dismiss(animated: true)
     }
 
-    @objc private func showPasscodeOptionsAlert() {
+    @ObjCMethod private func showPasscodeOptionsAlert() {
         present(passcodeOptionsAlert, animated: true)
     }
 
-    @objc private func handleApplicationWillTerminate() {
+    @ObjCMethod private func handleApplicationWillTerminate() {
         takeCompletionHandler()?(false, nil)
     }
 
@@ -448,13 +445,14 @@ extension PasscodeLockController: PasscodeFieldDelegate {
 
 // MARK: - Biometric Authentication Helpers
 
+@ObjCExtension("Extension")
 extension PasscodeLockController {
     var isBiometricAuthEnabled: Bool {
         let context = LAContext()
         return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
     }
 
-    @objc private func biometricAuthRequest() {
+    @ObjCMethod private func biometricAuthRequest() {
         guard action == .enter, // action is enter
               view.window != nil, // view controller is presented and visible
               isBiometricAuthEnabled, // biometric auth is enabled from system settings
@@ -496,8 +494,9 @@ extension PasscodeLockController {
 
 // MARK: - Keyboard Observer Functions
 
+@ObjCExtension("Extension2")
 extension PasscodeLockController {
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @ObjCMethod func keyboardWillShow(_ notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
             return
         }
@@ -528,7 +527,7 @@ extension PasscodeLockController {
         view.layoutIfNeeded()
     }
 
-    @objc func keyboardWillHide(_: Notification) {
+    @ObjCMethod func keyboardWillHide(_: Notification) {
         // Update passcode options y constraint
         if action == .set {
             passcodeOptionsButtonYConstraint.constant = 0
