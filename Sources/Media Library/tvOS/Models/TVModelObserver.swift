@@ -12,36 +12,40 @@
 
 import Foundation
 
-@objc protocol MediaLibraryDelegate: AnyObject {
-    @objc func refreshCollection()
+protocol MediaLibraryDelegate: AnyObject {
+    func refreshCollection()
 }
 
-class TVModelObserver: NSObject {
-    @objc weak var observerDelegate: MediaLibraryDelegate?
+@ObjCImplementation(extensions: ["MediaLibraryBaseModelObserver"])
+class TVModelObserver: NSObjectMethods {
+    weak var observerDelegate: MediaLibraryDelegate?
 
-    @objc var videoModel: VideoModel? = nil
-    @objc var audioModel: TrackModel? = nil
+    var videoModel: VideoModel? = nil
+    var audioModel: TrackModel? = nil
 
     var playlistModel: PlaylistModel? = nil
 
-    @objc init(observerDelegate: MediaLibraryDelegate? = nil, videoModel: VideoModel, audioModel: TrackModel) {
+    init(observerDelegate: MediaLibraryDelegate? = nil, videoModel: VideoModel, audioModel: TrackModel) {
         self.observerDelegate = observerDelegate
         self.videoModel = videoModel
         self.audioModel = audioModel
+        objcInit()
     }
 
     init(observerDelegate: MediaLibraryDelegate, playlistModel: PlaylistModel) {
         self.playlistModel = playlistModel
         self.observerDelegate = observerDelegate
+        objcInit()
     }
 }
 
+@ObjCExtension("MediaLibraryBaseModelObserver")
 extension TVModelObserver: MediaLibraryBaseModelObserver {
     func mediaLibraryBaseModelReloadView() {
         observerDelegate?.refreshCollection()
     }
 
-    @objc func observeLibrary() {
+    @ObjCMethod func observeLibrary() {
 
         if let video = videoModel {
             video.observable.addObserver(self)
@@ -58,15 +62,15 @@ extension TVModelObserver: MediaLibraryBaseModelObserver {
 
     }
 
-    @objc func loadNextVideoPage() {
+    @ObjCMethod func loadNextVideoPage() {
         videoModel?.getMedia()
     }
 
-    @objc func loadNextAudioPage() {
+    @ObjCMethod func loadNextAudioPage() {
         audioModel?.getMedia()
     }
 
-    @objc func unobserveLibrary() {
+    @ObjCMethod func unobserveLibrary() {
         if let video = videoModel {
             video.observable.removeObserver(self)
         }
