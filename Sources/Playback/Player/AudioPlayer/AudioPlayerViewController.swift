@@ -15,7 +15,6 @@ import UIKit
 import WidgetKit
 #endif
 
-@objc(VLCAudioPlayerViewControllerDelegate)
 protocol AudioPlayerViewControllerDelegate: AnyObject {
     func audioPlayerViewControllerDidMinimize(_ audioPlayerViewController: AudioPlayerViewController)
     func audioPlayerViewControllerDidClose(_ audioPlayerViewController: AudioPlayerViewController)
@@ -23,11 +22,11 @@ protocol AudioPlayerViewControllerDelegate: AnyObject {
     func audioPlayerViewControllerShouldSwitchPlayer(_ audioPlayerViewController: AudioPlayerViewController)
 }
 
-@objc(VLCAudioPlayerViewController)
+@ObjCImplementation("VLCAudioPlayerViewController", protocols: ["UIGestureRecognizerDelegate"], extensions: ["UIGestureRecognizerDelegate"])
 class AudioPlayerViewController: PlayerViewController {
     // MARK: - Properties
 
-    @objc weak var delegate: AudioPlayerViewControllerDelegate?
+    weak var delegate: AudioPlayerViewControllerDelegate?
 
     private var isQueueHidden: Bool = true
 
@@ -54,7 +53,7 @@ class AudioPlayerViewController: PlayerViewController {
         let moreOptionsButton = UIButton(type: .custom)
         moreOptionsButton.setImage(UIImage(named: "iconMoreOptions"), for: .normal)
         moreOptionsButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        moreOptionsButton.addTarget(self, action: #selector(handleMoreOptionsButton), for: .touchUpInside)
+        moreOptionsButton.addTarget(self, action: ObjC.selector("handleMoreOptionsButton"), for: .touchUpInside)
         moreOptionsButton.accessibilityIdentifier = VLCAccessibilityIdentifier.moreOptions
         return moreOptionsButton
     }()
@@ -62,7 +61,7 @@ class AudioPlayerViewController: PlayerViewController {
     // MARK: - Init
 
 #if os(iOS)
-    @objc init(mediaLibraryService: MediaLibraryService,
+    init(mediaLibraryService: MediaLibraryService,
                rendererDiscovererManager: VLCRendererDiscovererManager,
                playerController: PlayerController) {
         super.init(mediaLibraryService: mediaLibraryService,
@@ -86,7 +85,7 @@ class AudioPlayerViewController: PlayerViewController {
         setupConeLoadingView()
     }
 #else
-    @objc override init(mediaLibraryService: MediaLibraryService, playerController: PlayerController) {
+    override init(mediaLibraryService: MediaLibraryService, playerController: PlayerController) {
         super.init(mediaLibraryService: mediaLibraryService, playerController: playerController)
 
         self.playerController.delegate = self
@@ -105,9 +104,6 @@ class AudioPlayerViewController: PlayerViewController {
     }
 #endif
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -135,7 +131,7 @@ class AudioPlayerViewController: PlayerViewController {
         audioPlayerView.resetCornerRadius()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    @ObjCMethod("viewWillDisappear:") func viewWillDisappear(_ animated: Bool) {
         if playerController.isInterfaceLocked {
             setPlayerInterfaceEnabled(true)
         }
@@ -145,8 +141,8 @@ class AudioPlayerViewController: PlayerViewController {
         previousSeekState = .default
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
+    @ObjCMethod("viewWillTransitionToSize:withTransitionCoordinator:") func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        callSuper("viewWillTransitionToSize:withTransitionCoordinator:", size, coordinator)
 
         let isLandscape = size.width > size.height
         coordinator.animate(alongsideTransition: { [weak self] _ in
@@ -176,12 +172,12 @@ class AudioPlayerViewController: PlayerViewController {
         audioPlayerView.shouldDisplaySecondaryStackView(abs(playbackSpeed - 1) > 0.001)
     }
 
-    @objc func setupQueueViewController(with qvc: QueueViewController) {
+    @ObjCMethod func setupQueueViewController(with qvc: QueueViewController) {
         queueViewController = qvc
         queueViewController?.delegate = nil
     }
 
-    @objc func handleMoreOptionsButton() {
+    @ObjCMethod func handleMoreOptionsButton() {
         present(moreOptionsActionSheet, animated: false) {
             [unowned self] in
             self.moreOptionsActionSheet.interfaceDisabled = self.playerController.isInterfaceLocked
@@ -203,7 +199,7 @@ class AudioPlayerViewController: PlayerViewController {
         rightSwipeRecognizer.delegate = self
     }
 
-    @objc override func handlePinchGesture(recognizer: UIPinchGestureRecognizer) {
+    @ObjCMethod override func handlePinchGesture(recognizer: UIPinchGestureRecognizer) {
         if recognizer.velocity < 0 && playerController.isCloseGestureEnabled {
             delegate?.audioPlayerViewControllerDidMinimize(self)
         }
@@ -354,7 +350,7 @@ class AudioPlayerViewController: PlayerViewController {
         playerController.isInterfaceLocked = !enabled
     }
 
-    @objc override func updatePlayerControls() {
+    @ObjCMethod override func updatePlayerControls() {
         audioPlayerView.shouldEnableSeekButtons(playbackService.mediaList.count == 1)
     }
 }
@@ -628,8 +624,9 @@ extension AudioPlayerViewController: ZoomTransitionEndpoint {
 
 // MARK: - UIGestureRecognizerDelegate
 
-extension AudioPlayerViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+@ObjCExtension("UIGestureRecognizerDelegate")
+extension AudioPlayerViewController {
+    @ObjCMethod("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:") func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if (gestureRecognizer == panRecognizer &&
             (otherGestureRecognizer == leftSwipeRecognizer || otherGestureRecognizer == rightSwipeRecognizer)) ||
