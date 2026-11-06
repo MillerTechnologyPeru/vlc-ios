@@ -10,7 +10,7 @@
  * Refer to the COPYING file of the official project for license.
  *****************************************************************************/
 
-@objc extension UIDevice {
+extension UIDevice {
 
     @available(*, deprecated, message: "read safeAreaInsets from the view's own window instead")
     static var keyWindowSafeAreaInsets: UIEdgeInsets {
@@ -19,7 +19,6 @@
     }
 
     @available(*, deprecated, message: "read safeAreaInsets from the view's own window instead")
-    @objc(VLCDeviceHasSafeArea)
     static var hasSafeArea: Bool {
         return keyWindowSafeAreaInsets.bottom > 0
     }
