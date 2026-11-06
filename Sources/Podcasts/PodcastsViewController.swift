@@ -12,7 +12,8 @@
 
 import UIKit
 
-class PodcastsViewController: UIViewController {
+@ObjCImplementation(protocols: ["UITableViewDataSource", "UITableViewDelegate", "UISearchBarDelegate", "UISearchControllerDelegate"], extensions: ["UITableViewDataSource", "UISearchBarDelegate"])
+class PodcastsViewController: UIViewControllerMethods {
     private enum PodcastSection: Int, CaseIterable {
         case continueListening
         case latestEpisodes
@@ -56,7 +57,7 @@ class PodcastsViewController: UIViewController {
 
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: ObjC.selector("handleRefresh"), for: .valueChanged)
         return refreshControl
     }()
 
@@ -68,13 +69,10 @@ class PodcastsViewController: UIViewController {
     }()
 
     init() {
-        super.init(nibName: nil, bundle: nil)
+        objcInit("initWithNibName:bundle:", nil, nil)
         setupTabBarItem()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     deinit {
         store.removeObserver(self)
@@ -88,8 +86,8 @@ class PodcastsViewController: UIViewController {
         tabBarItem.accessibilityIdentifier = VLCAccessibilityIdentifier.podcasts
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @ObjCMethod("viewDidLoad") func viewDidLoad() {
+        callSuper("viewDidLoad")
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
         definesPresentationContext = true
@@ -114,65 +112,65 @@ class PodcastsViewController: UIViewController {
         applyTheme()
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self,
-                                       selector: #selector(applyTheme),
+                                       selector: ObjC.selector("applyTheme"),
                                        name: .VLCThemeDidChangeNotification,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(refreshDidEnd),
+                                       selector: ObjC.selector("refreshDidEnd"),
                                        name: .VLCPodcastsRefreshDidEnd,
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsShown),
+                                       selector: ObjC.selector("miniPlayerIsShown"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerDisplayMiniPlayer),
                                        object: nil)
         notificationCenter.addObserver(self,
-                                       selector: #selector(miniPlayerIsHidden),
+                                       selector: ObjC.selector("miniPlayerIsHidden"),
                                        name: NSNotification.Name(rawValue: VLCPlayerDisplayControllerHideMiniPlayer),
                                        object: nil)
         store.addObserver(self)
         updateContentVisibility()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    @ObjCMethod("viewWillAppear:") func viewWillAppear(_ animated: Bool) {
+        callSuper("viewWillAppear:", animated)
         PlaybackService.sharedInstance().playerDisplayController.isMiniPlayerVisible
             ? miniPlayerIsShown() : miniPlayerIsHidden()
         updateContentVisibility()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @ObjCMethod("viewDidAppear:") func viewDidAppear(_ animated: Bool) {
+        callSuper("viewDidAppear:", animated)
         popIfEmpty()
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
+    @ObjCMethod("viewWillTransitionToSize:withTransitionCoordinator:") func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        callSuper("viewWillTransitionToSize:withTransitionCoordinator:", size, coordinator)
         coordinator.animate(alongsideTransition: nil) { _ in
             self.tableView.reloadData()
         }
     }
 
-    @objc private func miniPlayerIsShown() {
+    @ObjCMethod private func miniPlayerIsShown() {
         tableView.setMiniPlayerInset(true)
     }
 
-    @objc private func miniPlayerIsHidden() {
+    @ObjCMethod private func miniPlayerIsHidden() {
         tableView.setMiniPlayerInset(false)
     }
 
-    @objc private func handleRefresh() {
+    @ObjCMethod private func handleRefresh() {
         if !store.refreshAllSubscriptions() {
             refreshControl.endRefreshing()
         }
     }
 
-    @objc private func refreshDidEnd() {
+    @ObjCMethod private func refreshDidEnd() {
         refreshControl.endRefreshing()
     }
 
     private func setupNavigationBarButtons() {
         let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self,
-                                            action: #selector(didTapSearch))
+                                            action: ObjC.selector("didTapSearch"))
         searchButton.accessibilityLabel = NSLocalizedString("SEARCH", comment: "")
 
         let addButton = UIBarButtonItem(image: UIImage(systemName: "plus"), menu: addActions().menu())
@@ -209,13 +207,13 @@ class PodcastsViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
 
-    @objc private func applyTheme() {
+    @ObjCMethod private func applyTheme() {
         view.backgroundColor = PresentationTheme.current.colors.background
         tableView.backgroundColor = PresentationTheme.current.colors.background
         subscribeIndicator.color = PresentationTheme.current.colors.cellTextColor
     }
 
-    @objc private func didTapSearch() {
+    @ObjCMethod private func didTapSearch() {
         navigationItem.searchController = searchController
         DispatchQueue.main.async {
             self.searchController.isActive = true
@@ -423,7 +421,8 @@ class PodcastsViewController: UIViewController {
 
 // MARK: - UITableViewDataSource / UITableViewDelegate
 
-extension PodcastsViewController: UITableViewDataSource, UITableViewDelegate {
+@ObjCExtension("UITableViewDataSource")
+extension PodcastsViewController {
     private var visibleSections: [PodcastSection] {
         var sections: [PodcastSection] = []
         if !store.continueListeningEpisodes.isEmpty {
@@ -437,11 +436,11 @@ extension PodcastsViewController: UITableViewDataSource, UITableViewDelegate {
         return sections
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
+    @ObjCMethod("numberOfSectionsInTableView:") func numberOfSections(in tableView: UITableView) -> Int {
         return isSearching ? 1 : visibleSections.count
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @ObjCMethod("tableView:numberOfRowsInSection:") func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching {
             return filteredEpisodes.count
         }
@@ -453,11 +452,11 @@ extension PodcastsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    @ObjCMethod("tableView:titleForHeaderInSection:") func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return nil
     }
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    @ObjCMethod("tableView:viewForHeaderInSection:") func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard !isSearching else {
             return nil
         }
@@ -476,7 +475,7 @@ extension PodcastsViewController: UITableViewDataSource, UITableViewDelegate {
         return header
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @ObjCMethod("tableView:cellForRowAtIndexPath:") func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if isSearching {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PodcastEpisodeCell.reuseIdentifier,
                                                            for: indexPath) as? PodcastEpisodeCell else {
@@ -523,7 +522,7 @@ extension PodcastsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    @ObjCMethod("tableView:heightForRowAtIndexPath:") func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard !isSearching else {
             return UITableView.automaticDimension
         }
@@ -537,7 +536,7 @@ extension PodcastsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    @ObjCMethod("tableView:didSelectRowAtIndexPath:") func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if isSearching {
             openShow(forEpisode: filteredEpisodes[indexPath.row])
@@ -573,23 +572,24 @@ extension PodcastsViewController: MediaLibraryBaseModelObserver {
 
 // MARK: - UISearchBarDelegate / UISearchControllerDelegate
 
-extension PodcastsViewController: UISearchBarDelegate, UISearchControllerDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+@ObjCExtension("UISearchBarDelegate")
+extension PodcastsViewController {
+    @ObjCMethod("searchBar:textDidChange:") func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         performSearch(searchText)
         isSearching = !searchText.isEmpty
         tableView.reloadData()
         updateContentVisibility()
     }
 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    @ObjCMethod("searchBarCancelButtonClicked:") func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         endSearch()
     }
 
-    func didPresentSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("didPresentSearchController:") func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
     }
 
-    func didDismissSearchController(_ searchController: UISearchController) {
+    @ObjCMethod("didDismissSearchController:") func didDismissSearchController(_ searchController: UISearchController) {
         endSearch()
     }
 }
