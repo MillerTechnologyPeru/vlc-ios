@@ -126,7 +126,7 @@ class PlaylistViewController: VLCDeletionCapableViewController {
         ])
     }
 
-    @objc func sortPlaylist(_ sender: UIButton) {
+    @ObjCMethod func sortPlaylist(_ sender: UIButton) {
         sortingHandler.constructSortAlert(playlistView: self)
     }
 
